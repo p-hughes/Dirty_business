@@ -1,5 +1,5 @@
 #setwd("C:/Documents and Settings/Phillip Hughes/Desktop/Rstudio/Vanessa")
-setwd("C:/Users/bmal4866/Desktop/TXTBIN")
+#setwd("C:/Users/bmal4866/Desktop/TXTBIN")
 data<-read.csv ("rpskb1_3.csv")
 plot(data)
 datac<-read.csv ("rpskb1_3_c.csv")
