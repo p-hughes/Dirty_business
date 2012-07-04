@@ -8,7 +8,9 @@
 
 
 #setwd("C:/Users/mnel6409/Seb Dropbox/Dropbox/BIOM Extra Tutorial")
-setwd("C:/Users/bmal4866/Desktop/TXTBIN")
+#setwd("C:/Users/bmal4866/Desktop/TXTBIN")
+setwd("C:/Users/phug7649/Desktop/TXTBIN")
+install.packages("munsell")
 library(munsell)
 
 ##Lets make our hues

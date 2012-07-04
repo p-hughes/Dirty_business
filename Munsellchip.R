@@ -29,9 +29,15 @@ mnsl_US <- droplevels(mnsl_US)
 install.packages("ggplot2")
 library(ggplot2)
 
+##time to diverge from the munsell colour converting software.
+
+x<-read.table("Ctrial.txt", sep=",", header=T)
 
 
-##
+##This x needs to have each row matched with a munsell tile that is closest in colour. 
+##Euclidean distances would be the best method.
+
+
 
 mnsl_hues <- hue_slice(levels(mnsl_US$phcolor_colorhue))
 head(mnsl_US)
