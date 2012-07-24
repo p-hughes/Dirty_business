@@ -1,7 +1,10 @@
-setwd("C:/Users/bmal4866/Desktop/TXTBIN")
+#setwd("C:/Users/bmal4866/Desktop/TXTBIN")
+setwd("C:/Users/phug7649/Desktop/TXTBIN")
 
-#US_data <- read.table("USDATA_390k_col.txt", header=T, sep=",")
-US_data <- read.csv("USDATA_for_r.csv", header=T, sep=",")
+
+
+#US_data <- read.table("T_improved_moist.txt", header=T, sep=",")
+US_data <- read.csv("T_improved_moist.csv", header=T, na.strings="")
 
 #head(US_data,10)
 
@@ -17,7 +20,7 @@ nodup_US_data <- which(!duplicated(sub_US_data))
 
 US_no_dup <- US_data[nodup_US_data,]
 
-write.csv(US_no_dup, "US-nodup.csv", row.names=FALSE)
-write.table(US_no_dup, "US-nodup.txt")
+write.csv(US_no_dup, "Textures.csv", row.names=FALSE)
+write.table(US_no_dup, "Textures.txt")
 
 

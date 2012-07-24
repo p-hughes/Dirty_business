@@ -1,44 +1,16 @@
-setwd("C:/Users/bmal4866/Desktop")
-##s_text<-read.table("s_text.txt",header=T)
-#s_text<-read.table("texture.txt",header=T)
-#s_text<-read.table("text390k_2.txt",sep=",",header=T)
+##This script is to convert data in the US database to the 11 main textures in the texture triangle. Any textures 
+##that are present after an initial texture class are deleted. This provides a rough base line of the 
+##sand/silt/clay fraction which can be used to replace any missing data.
+
+setwd("C:/Users/phug7649/Desktop/txtbin")
+
 
 ##text390k_2 ## another text file i was about to work on before
-s_text<-read.table("text_ndup.txt",sep=",",header=T)
-str(s_text)
-head(s_text)
-t_text<- as.character(s_text$S_text)
-str(s_text)
-?grep
-##Starting to figure out the grep command, not essential########################
-#setInternet2(use=TRUE)
-#grep("[a-z]", letters)
-#grep("[a-z]", LETTERS)
-#grep("[A-Z]", letters)
-#grep("[A-Z]", LETTERS)
-#grep("[A-Z]",t_text)
-#grep("ASHY",t_text)
-#subset(data, data[[2]] %in% c("Company Name 09", "Company Name"), drop = TRUE)
-#subset(data, grepl("^Company Name", data[[2]]), drop = TRUE)
-#getwd()
-#headings<-read.table("Headings.txt",header=T)
-#subset(headings, headings[[1]] %WC% c("headings", "Company Name"), drop = TRUE)
-#subset(data, grepl("^Company Name", data[[2]]), drop = TRUE)
-
-#w <- grep("NOM$", headings$HEADINGS)
-#headings[w,]<-"NOM"
-#x <- grep("WC$", headings$HEADINGS)
-#headings[x,]<-"WC"
-
-#y <- c("WC", "BG", "NOM", "HD")
-
-#for(i in y){
-# w <- grep(paste(i, "$", sep=""), headings$HEADINGS)
-# headings[w,]<-i
-#}
+s_text <- read.table("Subset of Textures_161193.txt", sep=",", header=T)
 
 ################################################################################
 
+##the name of the item to be replaced preceeds the command so any mistakes can easily be corrected.
 
 ##ASHY
 
@@ -51,7 +23,7 @@ n<-grep("-?BR", min_ASH)
 min_ASH_BR <- gsub("-?BR", "", min_ASH)
 table(as.character(min_ASH[n]))
 table(as.character(min_ASH_BR[n]))
-##Check to see if the expression removes what you want
+##Check to see if the expression removes what you want (will not mention this in later iterations)
 
 ##BYV
 
@@ -775,25 +747,66 @@ min_N_mpm <- gsub("mpm-?", "", min_N_spm)
 table(as.character( min_N_spm[n]))
 table(as.character(min_N_mpm[n]))
 
-## SL SL SL
 
-n<-grep("mpm-?", min_N_spm)
-min_N_mpm <- gsub("mpm-?", "", min_N_spm)
-table(as.character( min_N_spm[n]))
-table(as.character(min_N_mpm[n]))
+## Creating the 12 texture classes
+## Caution: the following commands remove everything after the letter. This means that eg CL, a legitimate texture, 
+## will be replaced when using "C" on its own.
+
+## Create SL
+
+n<-grep("SL.+", min_N_spm,perl=T)
+min_N_sl_final <- gsub("SL.+","SL", min_N_spm,perl=T)
+table(as.character( min_N_sl_final[n]))
+table(as.character(min_N_spm[n]))
+
+## create LS
+
+n<-grep("LS.+", min_N_sl_final,perl=T)
+min_N_ls_final <- gsub("LS.+","LS", min_N_sl_final,perl=T)
+table(as.character( min_N_ls_final[n]))
+table(as.character(min_N_sl_final[n]))
+
+#S
+
+n<-grep("^S\\s+.+|^\\s+S\\s+.+", min_N_ls_final,perl=T)
+min_N_s_final <- gsub("^S\\s+.+|^\\s+S\\s+.+","S", min_N_ls_final,perl=T)
+table(as.character( min_N_ls_final[n]))
+table(as.character(min_N_s_final[n]))
+
+##spaces
+
+n<-grep("^\\s+|\\s+$", min_N_s_final,perl=T)
+min_N_space_final <- gsub("^\\s+|\\s+$","", min_N_s_final,perl=T)
+table(as.character( min_N_space_final[n]))
+table(as.character(min_N_s_final[n]))
+
+
+#C
+
+n<-grep("^C\\s+.+", min_N_space_final,perl=T)
+min_N_c_final <- gsub("^C\\s+.+","C", min_N_space_final,perl=T)
+table(as.character( min_N_c_final[n]))
+table(as.character(min_N_space_final[n]))
+
+#L 
+
+n<-grep("^L\\s+.+", min_N_c_final,perl=T)
+min_N_l_final <- gsub("^L\\s+.+","L", min_N_c_final,perl=T)
+table(as.character( min_N_c_final[n]))
+table(as.character(min_N_l_final[n]))
+
+#SIC
+
+n<-grep("SIC\\s.+", min_N_l_final,perl=T)
+min_N_sic_final <- gsub("SIC\\s.+","SIC", min_N_l_final,perl=T)
+table(as.character( min_N_l_final[n]))
+table(as.character(min_N_sic_final[n]))
 
 
 table(as.character(min_N_mpm))
 str(min_N_mpm)
 
-
-
-
-write.table(min_N_SCIL, "text_12.txt")
-
-
-
-
+write.table(min_N_l_final, "text_161913.txt")
 
 ##Convert Textures into sand/silt/clay fractions
 
