@@ -3,9 +3,9 @@
 setwd("C:/Users/phug7649/Desktop/TXTBIN")
 ## This is where the munsell colours are.
 ##install.packages("munsell")
-ctrial <- read.table("Ctrial.txt", header=TRUE, sep=",")
+ctrial <- read.csv("30_1_1_14111.csv", header=TRUE, sep=",")
 Reference <- read.csv("reference.csv", header=TRUE, sep=",")
-
+#ctrial <- read.table("Ctrial.txt", header=TRUE, sep=",")
 library(munsell)
 
 
@@ -67,13 +67,18 @@ for(i in 1:nrow(ctrial)){
   B <- ctrial$Main_B[i]
   y <-euc(Reference,L,A,B)
   
+  
+  
 
   Munsell[i]<- which.min(y)
   
 
 }
   
-Reference[Munsell,]
+out<-Reference[Munsell,]
+
+write.csv(out, "Muns_30_1_1_14111.csv")
+check<-read.csv("Muns_30_1_1_14111.csv")
 
   y<-euc(LAB,1,2,3)    
   which.min

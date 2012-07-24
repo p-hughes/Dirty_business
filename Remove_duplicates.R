@@ -3,8 +3,8 @@ setwd("C:/Users/phug7649/Desktop/TXTBIN")
 
 
 
-#US_data <- read.table("T_improved_moist.txt", header=T, sep=",")
-US_data <- read.csv("T_improved_moist.csv", header=T, na.strings="")
+US_data <- read.table("Texture_improved.txt", header=T, sep=",")
+#US_data <- read.csv("USDATA_for_r.csv", header=T, sep=",")
 
 #head(US_data,10)
 
