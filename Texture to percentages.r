@@ -813,7 +813,7 @@ table(as.character(min_N_sic_final[n]))
 #SI
 
 n<-grep("SI\\s.+", min_N_sic_final,perl=T)
-min_N_si_final <- gsub("SI\\s.+","SI", min_N_s_final,perl=T)
+min_N_si_final <- gsub("SI\\s.+","SI", min_N_sic_final,perl=T)
 table(as.character( min_N_si_final[n]))
 table(as.character(min_N_sic_final[n]))
 
@@ -860,114 +860,6 @@ table(as.character( min_N_sil_final[n]))
 table(as.character(min_N_si_final[n]))
 
 #Space(again)
-
-n<-grep("^\\s+|\\s+$", min_N_si_final,perl=T)
-min_N_space_final <- gsub("^\\s+|\\s+$","", min_N_si_final,perl=T)
-table(as.character( min_N_space_final[n]))
-table(as.character(min_N_si_final[n]))
-
-
-## Create SL
-
-n<-grep("SL.+", min_N_space_final,perl=T)
-min_N_sl_final <- gsub("SL.+","SL", min_N_space_final,perl=T)
-table(as.character( min_N_sl_final[n]))
-table(as.character(min_N_space_final[n]))
-
-## create LS
-
-n<-grep("LS.+", min_N_sl_final,perl=T)
-min_N_ls_final <- gsub("LS.+","LS", min_N_sl_final,perl=T)
-table(as.character( min_N_ls_final[n]))
-table(as.character(min_N_sl_final[n]))
-
-#S
-
-n<-grep("^S\\s+.+|^\\s+S\\s+.+", min_N_ls_final,perl=T)
-min_N_s_final <- gsub("^S\\s+.+|^\\s+S\\s+.+","S", min_N_ls_final,perl=T)
-table(as.character( min_N_ls_final[n]))
-table(as.character(min_N_s_final[n]))
-
-##spaces
-
-n<-grep("^\\s+|\\s+$", min_N_s_final,perl=T)
-min_N_space_final <- gsub("^\\s+|\\s+$","", min_N_s_final,perl=T)
-table(as.character( min_N_space_final[n]))
-table(as.character(min_N_s_final[n]))
-
-
-#C
-
-n<-grep("^C\\s+.+", min_N_space_final,perl=T)
-min_N_c_final <- gsub("^C\\s+.+","C", min_N_space_final,perl=T)
-table(as.character( min_N_c_final[n]))
-table(as.character(min_N_space_final[n]))
-
-#L 
-
-n<-grep("^L\\s+.+", min_N_c_final,perl=T)
-min_N_l_final <- gsub("^L\\s+.+","L", min_N_c_final,perl=T)
-table(as.character( min_N_c_final[n]))
-table(as.character(min_N_l_final[n]))
-
-#SIC
-
-n<-grep("SIC\\s.+", min_N_l_final,perl=T)
-min_N_sic_final <- gsub("SIC\\s.+","SIC", min_N_l_final,perl=T)
-table(as.character( min_N_l_final[n]))
-table(as.character(min_N_sic_final[n]))
-
-#SI
-
-n<-grep("SI\\s.+", min_N_sic_final,perl=T)
-min_N_si_final <- gsub("SI\\s.+","SI", min_N_s_final,perl=T)
-table(as.character( min_N_si_final[n]))
-table(as.character(min_N_sic_final[n]))
-
-#SC
-
-n<-grep("SC\\s.+", min_N_si_final,perl=T)
-min_N_sc_final <- gsub("SC\\s.+","SC", min_N_si_final,perl=T)
-table(as.character( min_N_si_final[n]))
-table(as.character(min_N_sc_final[n]))
-
-#CL
-
-n<-grep("CL\\s.+", min_N_sc_final,perl=T)
-min_N_cl_final <- gsub("CL\\s.+","CL", min_N_sc_final,perl=T)
-table(as.character( min_N_sc_final[n]))
-table(as.character(min_N_cl_final[n]))
-
-#SICL
-
-n<-grep("SICL\\s.+", min_N_cl_final,perl=T)
-min_N_sicl_final <- gsub("SICL\\s.+","SICL", min_N_cl_final,perl=T)
-table(as.character( min_N_sicl_final[n]))
-table(as.character(min_N_cl_final[n]))
-
-#SCL
-
-n<-grep("SCL\\s.+", min_N_sicl_final,perl=T)
-min_N_scl_final <- gsub("SCL\\s.+","SCL", min_N_sicl_final,perl=T)
-table(as.character( min_N_sicl_final[n]))
-table(as.character(min_N_scl_final[n]))
-
-#SIL
-
-n<-grep("SIL\\s.+", min_N_scl_final,perl=T)
-min_N_sil_final <- gsub("SIL\\s.+","SIL", min_N_scl_final,perl=T)
-table(as.character( min_N_sil_final[n]))
-table(as.character(min_N_scl_final[n]))
-
-#SI
-
-n<-grep("SI\\s.+", min_N_sil_final,perl=T)
-min_N_si_final <- gsub("SI\\s.+","SI", min_N_sil_final,perl=T)
-table(as.character( min_N_sil_final[n]))
-table(as.character(min_N_si_final[n]))
-
-##do the loop again!
-
 
 
 
