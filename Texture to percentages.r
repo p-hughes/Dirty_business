@@ -1,21 +1,31 @@
-##This script is to convert data in the US database to the 11 main textures in the texture triangle. Any textures 
-##that are present after an initial texture class are deleted. This provides a rough base line of the 
-##sand/silt/clay fraction which can be used to replace any missing data.
+## This script is to convert data in the US database to the 12 main textures in the US texture triangle.Any duplicate textures 
+## that are present after an initial texture class are deleted. This provides a rough base line of the sand/silt/clay fraction
+## which can be used to replace any missing data.
 
 setwd("C:/Users/phug7649/Desktop/txtbin")
 
-
-##text390k_2 ## another text file i was about to work on before
+##text390k_2 (another text file i was about to work on before)
 s_text <- read.table("Subset of Textures_161193.txt", sep=",", header=T)
 
 ################################################################################
 
 ##the name of the item to be replaced preceeds the command so any mistakes can easily be corrected.
+##The code is in 4 lines.Only 1 line is actually neccesary but the other three are check steps. Heres how it works:
+
+#n<-grep("-?BR", min_ASH)                ## Creates a vector of all the instances of optional "-" followed by "BR"
+#min_ASH_BR <- gsub("-?BR", "", min_ASH) ## Creates an object in which "BR" is substituted (in this case with nothing)
+#table(as.character(min_ASH[n]))         ## Displays the table with reference to the items you wish to modify ("before")
+#table(as.character(min_ASH_BR[n]))      ## Displays the "after table". This only works if something has gone wrong with 
+                                         ## the substitution process.  
+
 
 ##ASHY
 
+text<-s_text[,1]
 n<-grep("ASHY?-", s_text[,1])
 min_ASH <- gsub("ASHY?-", "", s_text[,1])
+table(as.character(min_ASH[n]))
+table(as.character(text[n]))
 
 ##BR
 
@@ -750,7 +760,8 @@ table(as.character(min_N_mpm[n]))
 
 ## Creating the 12 texture classes
 ## Caution: the following commands remove everything after the letter. This means that eg CL, a legitimate texture, 
-## will be replaced when using "C" on its own.
+## will be replaced when using "C" on its own.Special codes from cheatography used but if anything has gone wrong, 
+## THIS IS THE PLACE TO LOOK
 
 ##Spaces
 
@@ -758,7 +769,6 @@ n<-grep("^\\s+|\\s+$", min_N_mpm,perl=T)
 min_N_space_final <- gsub("^\\s+|\\s+$","", min_N_mpm,perl=T)
 table(as.character( min_N_space_final[n]))
 table(as.character(min_N_mpm[n]))
-
 
 ## Create SL
 
@@ -859,16 +869,20 @@ min_N_si_final <- gsub("SI\\s.+","SI", min_N_sil_final,perl=T)
 table(as.character( min_N_sil_final[n]))
 table(as.character(min_N_si_final[n]))
 
-#Space(again)
-
-
-
-
+## Check to see if the final list conforms to the 12 texture classes and 1 NA class
 
 table(as.character(min_N_sil_final))
 str(min_N_mpm)
 
+## If it works, write this to a text file.
+
 write.table(min_N_l_final, "text_161913.txt")
+
+##Yay! instead of manually replacing data for weeks on end, this script should do it in seconds! There are some things
+## that could be done and the next few lines are a wish list. I will do this as my knowledge and confidence in R increases.
+
+
+###############################################   WISH LIST   ############################################################
 
 ##Convert Textures into sand/silt/clay fractions
 
