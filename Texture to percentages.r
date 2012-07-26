@@ -9,7 +9,7 @@ library(plyr)
 ##text390k_2 (another text file i was about to work on before)
 s_text <- read.table("Subset of Textures_161193.txt", sep=",", header=T)
 
-################################################################################
+####REGEX removal###############################################################
 
 ##the name of the item to be replaced preceeds the command so any mistakes can easily be corrected.
 ##The code is in 4 lines.Only 1 line is actually neccesary but the other three are check steps. Heres how it works:
@@ -24,10 +24,11 @@ s_text <- read.table("Subset of Textures_161193.txt", sep=",", header=T)
 ##ASHY
 
 text<-s_text[,1]
-n<-grep("ASHY?-", s_text[,1])
-min_ASH <- gsub("ASHY?-", "", s_text[,1])
+n<-grep("ASHY?-", text)
+min_ASH <- gsub("ASHY?-", "", text)
 table(as.character(min_ASH[n]))
 table(as.character(text[n]))
+##Check to see if the expression removes what you want (will not mention this in later iterations)
 
 ##BR
 
@@ -35,7 +36,7 @@ n<-grep("-?BR", min_ASH)
 min_ASH_BR <- gsub("-?BR", "", min_ASH)
 table(as.character(min_ASH[n]))
 table(as.character(min_ASH_BR[n]))
-##Check to see if the expression removes what you want (will not mention this in later iterations)
+
 
 ##BYV
 
@@ -892,16 +893,16 @@ write.table(min_N_l_final, "text_161913.txt")
 reference_textures <- read.csv("texture-ref.csv")
 
 #ensure that vector of textures is a dataframe
-class <- data.frame(class=min_N_si_final)
+texture_vector <- data.frame(class=min_N_si_final)
 
 #Join texture vector with reference values
-texture_final <- join(class, reference_textures)
+texture_final <- join(texture_vector, reference_textures)
 
 ###CHECKSTEP###
 #Are the vector and the dataframe classes identical? (if TRUE, then yes)
 identical(texture_final["class"], class)
 #Take a look at a sample of the data (10 rows)
-texture_final[sample(nrow(texture_final), 10),]
+texture_final[sample(nrow(texture_final), 10), ]
 ###
 
 #Write output to .txt
