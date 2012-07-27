@@ -1,11 +1,16 @@
+##This is a script that converts textures in soil USDS data into the gravel fraction. 
+##Will work later to make it continuous with the sand/silt/clay fractions.
+
 ##setwd("C:/Users/bmal4866/Desktop")
 ##s_text<-read.table("s_text.txt",header=T)
 #s_text<-read.table("texture.txt",header=T)
 #s_text<-read.table("text390k_2.txt",sep=",",header=T)
-setwd("C:/Users/bmal4866/Desktop/TXTBIN")
+#setwd("C:/Users/bmal4866/Desktop/TXTBIN")
+setwd("C:/Users/phug7649/Desktop/txtbin")
 ##text390k_2 ## another text file i was about to work on before
-s_text<-read.table("399772.txt",sep=",",header=T)
-s_text<-read.table("text_ndup.txt",sep=",",header=T)
+#s_text<-read.table("399772.txt",sep=",",header=T)
+#s_text<-read.table("text_ndup.txt",sep=",",header=T)
+s_text <- read.table("Subset of Textures_161193.txt", sep=",", header=T)
 str(s_text)
 head(s_text)
 t_text<- as.character(s_text$S_text)
@@ -947,7 +952,7 @@ str(min_N_mpm)
 
 
 
-write.table(min_N, "text_gr.txt")
+write.table(min_N, "gr_161193.txt")
 
 
 

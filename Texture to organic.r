@@ -2,11 +2,14 @@
 ##s_text<-read.table("s_text.txt",header=T)
 #s_text<-read.table("texture.txt",header=T)
 #s_text<-read.table("text390k_2.txt",sep=",",header=T)
-setwd("C:/Users/bmal4866/Desktop/TXTBIN")
+#setwd("C:/Users/bmal4866/Desktop/TXTBIN")
+setwd("C:/Users/phug7649/Desktop/txtbin")
 ##text390k_2 ## another text file i was about to work on before
 ##s_text<-read.table("399772.txt",sep=",",header=T)
 ##s_text<-read.table("text_ndup.txt",sep=",",header=T)
-s_text<-read.table("text_nodup_175716.txt",sep=",",header=T)
+#s_text<-read.table("text_nodup_175716.txt",sep=",",header=T)
+s_text <- read.table("Subset of Textures_161193.txt", sep=",", header=T)
+
 str(s_text)
 head(s_text)
 t_text<- as.character(s_text$S_text)
@@ -951,7 +954,7 @@ str(min_N_mpm)
 
 
 
-write.table(min_7575, "text_O.txt")
+write.table(min_7575, "Organic_161193.txt")
 
 
 

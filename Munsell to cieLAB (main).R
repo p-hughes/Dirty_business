@@ -6,7 +6,9 @@ library(munsell); library(plyr)
 #mnsl_US <- read.table("US_MUNS.txt", header=T, sep=",")
 
 ##input file name
-mnsl_US <- read.table("cfix_92132.txt", header=T, sep=",")
+#mnsl_US <- read.table("cfix_92132.txt", header=T, sep=",")
+#mnsl_US <- read.table("Munsell_161193.txt", header=T, sep=",")
+mnsl_US <- read.table("col_fixed_161193.txt", header=T, sep=",")
 
 #Remove all missing values
 mnsl_US[mnsl_US=="*"] <- NA
@@ -33,11 +35,11 @@ names(colconvert) <- c("munsell", "L", "A", "B")
 munsLAB.df <- colconvert[!is.na(colconvert$munsell),]
 
 munsl_cols <- with(mnsl_US, paste(phcolor_colorhue, " ", phcolor_colorvalue, "/", phcolor_colorchroma, sep=""))
-#Remove invalid Munsell colours
+#Remove invalid Munsell colours DO NOT REMOVE!! USE AN IF STATEMENT AND ADD 1 TO THE FINAL COLUMN, THEN RE
 munsl_cols[munsl_cols == "NA NA/NA"] <- NA
 #munsl_cols[!munsl_cols%in%munsLAB.df$munsell] <- NA
 mnsl_CIELAB <- data.frame(ID=1:length(munsl_cols), munsell=munsl_cols)
 
 #Output final CIELAB colours
 final.df <- join(mnsl_CIELAB, munsLAB.df)
-write.table(final.df, "cfix_LAB_92132.txt")
+write.table(final.df, "cielab_fixed_161193.txt")

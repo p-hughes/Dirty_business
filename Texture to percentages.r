@@ -900,10 +900,11 @@ texture_final <- join(texture_vector, reference_textures)
 
 ###CHECKSTEP###
 #Are the vector and the dataframe classes identical? (if TRUE, then yes)
-identical(texture_final["class"], class)
+identical(texture_final["class"], texture_vector)
 #Take a look at a sample of the data (10 rows)
 texture_final[sample(nrow(texture_final), 10), ]
 ###
 
 #Write output to .txt
-write.table(texture_final, "texture_161913.txt")
+#write.table(texture_final, "texture_161913.txt")
+write.csv(texture_final, "texture_161913.csv")
