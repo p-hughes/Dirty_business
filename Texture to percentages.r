@@ -17,7 +17,7 @@ s_text <- read.table("Subset of Textures_161193.txt", sep=",", header=T)
 #n<-grep("-?BR", min_ASH)                ## Creates a vector of all the instances of optional "-" followed by "BR"
 #min_ASH_BR <- gsub("-?BR", "", min_ASH) ## Creates an object in which "BR" is substituted (in this case with nothing)
 #table(as.character(min_ASH[n]))         ## Displays the table with reference to the items you wish to modify ("before")
-#table(as.character(min_ASH_BR[n]))      ## Displays the "after table". This only works if something has gone wrong with 
+#table(as.character(min_ASH_BR[n]))      ## Displays the "after" table. This only works if something has gone wrong with 
                                          ## the substitution process.  
 
 
