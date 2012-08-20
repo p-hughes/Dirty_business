@@ -4,8 +4,8 @@
 ###Set working directory, read in the data###
 
 setwd("C:/Users/phug7649/Desktop/TXTBIN")
-z<-read.table("Alex_Hull.txt", sep=",", na.strings="", header=TRUE)
-
+#z<-read.table("Alex_Hull.txt", sep=",", na.strings="", header=TRUE)
+z<-read.table("1_15 22_161534_top_14410_princ.txt", sep=",", na.strings="", header=TRUE)
 ####Apply values to columns####
 
 z<- na.exclude(z)

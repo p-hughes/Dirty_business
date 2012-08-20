@@ -3,9 +3,10 @@ setwd("C:/Users/phug7649/Desktop/TXTBIN")
 
 
 
-US_data <- read.table("Texture_improved.txt", header=T, sep=",")
+#US_data <- read.table("Texture_improved.txt", header=T, sep=",")
 #US_data <- read.csv("USDATA_for_r.csv", header=T, sep=",")
-
+#US_data <- read.table("Textures_161534_nodes.txt", header=T, sep=",")
+US_data <- read.table("Column_ID2.txt", header=T, sep=",")
 #head(US_data,10)
 
 #min(which(!is.na(US_data$peiid)))
@@ -20,7 +21,7 @@ nodup_US_data <- which(!duplicated(sub_US_data))
 
 US_no_dup <- US_data[nodup_US_data,]
 
-write.csv(US_no_dup, "Textures.csv", row.names=FALSE)
+write.csv(US_no_dup, "Column_ID_ndup.csv", row.names=FALSE)
 write.table(US_no_dup, "Textures.txt")
 
 
