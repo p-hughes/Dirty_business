@@ -5,19 +5,43 @@
 # in and the correlation matrix obtained, the means are removed and then multiplied by the inverse of the correlation 
 # matrix.  Lots of confusion later, we will try to get the iddentity matrix
 
+##Junk column
+#c<-t(x)
+#b<-(solve(a))
+#d<-t(a)
+#solution<-a%*%c
+#solution2<-d%*%x
+#g<-which.max(solution3)
+
 ##1. Get data
 
 setwd("C:/Users/phug7649/Desktop/TXTBIN")
+y<-as.matrix(read.table("whiten.txt", sep=",", na.strings="", header=TRUE))
 
-y<-as.matrix(read.table("Carbon_comp_6094.txt", sep=",", na.strings="", header=TRUE))
+##2. remove means and multiply by the inverse of the corrolation matrix.
+
 x<-(y-colMeans(y))
-a<-(cor(x))
-c<-t(x)
-b<-(solve(a))
-d<-t(a)
-#solution<-a%*%c
-#solution2<-d%*%x
-solution3<-x%*%a
-g<-which.max(solution3)
+a<-(cov(x))
+aa<-solve(a)
+#a<-(cor(x))
+?cov
+
+
+solution3<-x%*%aa
+
+plot(solution3,main="solution3")
+plot(y,main="original data")
+str(solution3)
+for (i in 1:10)
+  
+
+#sprin<- as.matrix(solution3 [,i])
+assign(paste0('S3PRIN_', i), i)
+head(y)
+head(x)
+
+
+
+
 
 
