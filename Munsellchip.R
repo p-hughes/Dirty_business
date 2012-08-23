@@ -3,7 +3,8 @@
 setwd("C:/Users/phug7649/Desktop/TXTBIN")
 ## This is where the munsell colours are.
 ##install.packages("munsell")
-ctrial <- read.csv("30_1_1_14111.csv", header=TRUE, sep=",")
+ctrial <- read.table("LAB_Carbon32.txt", header=TRUE, sep=",")
+ctrial<-na.exclude(ctrial)
 Reference <- read.csv("reference.csv", header=TRUE, sep=",")
 #ctrial <- read.table("Ctrial.txt", header=TRUE, sep=",")
 library(munsell)
@@ -37,8 +38,8 @@ library(ggplot2)
 
 ##time to diverge from the munsell colour converting software.
 
-LAB<-read.table("Ctrial.txt", sep=",", header=T)
-
+#LAB<-read.table("Ctrial.txt", sep=",", header=T)
+LAB<-read.table("LAB_Carbon32.txt", sep=",", header=T)
 ##This x needs to have each row matched with a munsell tile that is closest in colour. 
 ##Euclidean distances would be the best method.
 
@@ -62,9 +63,9 @@ euc <- function(dat, x1, y1, z1){
 Munsell <- rep(NA,nrow(ctrial))
 
 for(i in 1:nrow(ctrial)){
-  L <- ctrial$Main_L[i]
-  A <- ctrial$Main_A[i]
-  B <- ctrial$Main_B[i]
+  L <- ctrial$L[i]
+  A <- ctrial$A[i]
+  B <- ctrial$B[i]
   y <-euc(Reference,L,A,B)
   
   
@@ -77,8 +78,8 @@ for(i in 1:nrow(ctrial)){
   
 out<-Reference[Munsell,]
 
-write.csv(out, "Muns_30_1_1_14111.csv")
-check<-read.csv("Muns_30_1_1_14111.csv")
+write.csv(out, "Muns_Carbon32.csv")
+check<-read.csv("Muns_Carbon32.csv")
 
   y<-euc(LAB,1,2,3)    
   which.min

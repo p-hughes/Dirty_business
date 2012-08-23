@@ -63,7 +63,62 @@ for (i in 1:ncol(y)){
   points(components[compmax[i],1],components[compmax[i],2],col="blue")
 }
 
+
+
+out<-rdist(0,components[,1]) 
+p1<-t(out)
+which.max(p1)
+p1[5017,]
+
+     
+     
 ##yay
+
+## Need to get the furthest point from zero.
+## Need to find the furthest point from that.
+
+##borrowing code from munsellchip.
+
+euc <- function(dat, a1,b1,c1,d1,e1,f1,g1,h1,i1,j1){
+  
+  if(any(length(x1)!=1,length(y1)!=1,length(z1)!=1)) stop("x1, y1, or z1 should be length 1")
+ load.packages(fields)
+  
+  rdist(components)
+  a<-components$Comp.1
+  b<-dat$a.
+  c<-dat$b.
+  d<-dat$L.
+  e<-dat$a.
+  f<-dat$b.
+  g<-dat$L.
+  h<-dat$a.
+  i<-dat$b.a<-dat$L.
+  j<-dat$a.
+  
+  answer <- sqrt((x-x1)^2+(y-y1)^2+(z-z1)^2)
+  
+  return(answer)
+  
+}
+
+#y <- matrix(NA, )
+##refLAB <- munslab.df
+Munsell <- rep(NA,nrow(ctrial))
+
+for(i in 1:nrow(ctrial)){
+  L <- ctrial$L[i]
+  A <- ctrial$A[i]
+  B <- ctrial$B[i]
+  y <-euc(Reference,L,A,B)
+  
+  
+  
+  
+  Munsell[i]<- which.min(y)
+  
+  
+}
 
 
 

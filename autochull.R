@@ -5,7 +5,8 @@
 
 setwd("C:/Users/phug7649/Desktop/TXTBIN")
 #z<-read.table("Alex_Hull.txt", sep=",", na.strings="", header=TRUE)
-z<-read.table("1_15 22_161534_top_14410_princ.txt", sep=",", na.strings="", header=TRUE)
+#z<-read.table("1_15 22_161534_top_14410_princ.txt", sep=",", na.strings="", header=TRUE)
+z<-read.table("Carbon_comp_6094.txt", sep=",", na.strings="", header=TRUE)
 ####Apply values to columns####
 
 z<- na.exclude(z)
@@ -17,15 +18,44 @@ for (j in 1:ncol(combs)){
   
   a<-combs[1,j]
   i<-combs[2,j]
-  
+  zna <-z[,c(1,2)]
   zna <- z[,c(a,i)]
   
   cz <- chull(zna)
   
+  ##added script for the "convex bicycle"
+  
+  czmax<-apply(as.matrix(na.exclude(cz)),2,max)
+  czmin<-apply(as.matrix(na.exclude(cz)),2,min)  
+  ref<-rdist(z[czmax,],z[czmin,])
+  ob2<-ref/2
+  
+  ref2<-rdist(z[czmax,],z[cz,])
+  tref2 <- t(ref2)
+  s<-as.matrix(cz)
+  stref<-merge(s,tref2, by = "row.names", all=TRUE)
+  names(stref)[2:3]<-c("row","distance")
+  
+
+  s$ref2<-tref2
+  
+  new <- stref$distance > as.vector(ob2)
+  ans <- stref[new,]
+  
+  cat(which(!new), "\n")
+  
+  write.csv(ans,file.path(getwd(), "comph", paste0("comph_", a, "_", i, ".csv")))
+  
+  
+
+  
+  
   ##creating individually named files for the output##
   
   png(file.path(getwd(), "chulls", paste0("output_", a, "_", i, ".png")))
-  plot(zna)
+  plot(zna,
+       xlim=c(-15,15),
+       ylim=c(-15,15)) 
   lines(zna[c(cz, cz[1]),], col="red")
   dev.off()
   
