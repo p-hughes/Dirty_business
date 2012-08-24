@@ -25,22 +25,60 @@ for (j in 1:ncol(combs)){
   
   ##added script for the "convex bicycle"
   
-  czmax<-apply(as.matrix(na.exclude(cz)),2,max)
-  czmin<-apply(as.matrix(na.exclude(cz)),2,min)  
-  ref<-rdist(z[czmax,],z[czmin,])
-  ob2<-ref/2
+  #which.max(rdist(z[cz,]))
+  #z[cz,]
+  #head(z)
+  #str(z)
+  #head(cz)
+  #str(odist)
+  #czmax<-apply(z[cz,],2,which.max)
   
-  ref2<-rdist(z[czmax,],z[cz,])
-  tref2 <- t(ref2)
-  s<-as.matrix(cz)
-  stref<-merge(s,tref2, by = "row.names", all=TRUE)
-  names(stref)[2:3]<-c("row","distance")
+  ##sum of rows
+  czr<-z[cz,]
+  czr<-czr^2
+  czrsum<-rowSums(czr)
+  fin<-sqrt(czrsum)
+  finm<-as.matrix(fin)
+  
+  ##max euclidean distance
+  
+  refmax<-which.max(fin)
+  refmin<-which.min(fin)
+  
+  ##distance between refmax and others
+  
+  stref<-abs(finm-refmax)
+  names(stref)[1:2]<-c("row","distance")
+  
+  ob2<-refmax/4
+  new <- stref > as.vector(ob2)
+  
+  
+  ans <- as.matrix(stref[new,])
+  
+  
+  
+  #rownames(group)
+  #odist<-rdist(z[cz,sum()])
+  #cziimax<-which.max(odist)
+  
+  ##czmax<-apply(as.matrix(na.exclude(z[cz,])),2,max)
+ # czmin<-apply(as.matrix(na.exclude(cz)),2,min)  
+  #ref<-rdist(z[czmax,],z[czmin,])
+  
+  
+  
+  #ref2<-rdist(z[czmax,],z[cz,])
+  #tref2 <- t(ref2)
+  #s<-as.matrix(cz)
+  #stref<-merge(s,tref2, by = "row.names", all=TRUE)
+  #names(stref)[2:3]<-c("row","distance")
   
 
-  s$ref2<-tref2
+  #s$ref2<-tref2
   
-  new <- stref$distance > as.vector(ob2)
-  ans <- stref[new,]
+  #new <- stref$distance > as.vector(ob2)
+  #ans <- stref[new,]
   
   cat(which(!new), "\n")
   
