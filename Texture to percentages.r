@@ -1,5 +1,6 @@
-## This script is to convert data in the US database to the 12 main textures in the US texture triangle.Any duplicate textures 
-## that are present after an initial texture class are deleted. This provides a rough base line of the sand/silt/clay fraction
+## This script is to convert data in the US database to the 12 main textures in the US texture triangle.
+## Any duplicate textures that are present after an initial texture class are deleted. 
+## This provides a rough base line of the sand/silt/clay fraction
 ## which can be used to replace any missing data.
 
 setwd("C:/Users/phug7649/Desktop/txtbin")
@@ -7,12 +8,12 @@ setwd("C:/Users/phug7649/Desktop/txtbin")
 library(plyr)
 
 ##text390k_2 (another text file i was about to work on before)
-s_text <- read.table("Subset of Textures_161193.txt", sep=",", header=T)
+s_text <- read.table("Subset of Textures_161193.txt", sep=",", header=TRUE)
 
 ####REGEX removal###############################################################
 
-##the name of the item to be replaced preceeds the command so any mistakes can easily be corrected.
-##The code is in 4 lines.Only 1 line is actually neccesary but the other three are check steps. Heres how it works:
+##The name of the item to be replaced precedes the command so any mistakes can easily be corrected.
+##The code is in 4 lines. Only 1 line is actually necessary but the other three are check steps. Heres how it works:
 
 #n<-grep("-?BR", min_ASH)                ## Creates a vector of all the instances of optional "-" followed by "BR"
 #min_ASH_BR <- gsub("-?BR", "", min_ASH) ## Creates an object in which "BR" is substituted (in this case with nothing)
@@ -23,7 +24,7 @@ s_text <- read.table("Subset of Textures_161193.txt", sep=",", header=T)
 
 ##ASHY
 
-text<-s_text[,1]
+text <- s_text[,1]
 n<-grep("ASHY?-", text)
 min_ASH <- gsub("ASHY?-", "", text)
 table(as.character(min_ASH[n]))
@@ -763,7 +764,7 @@ table(as.character(min_N_mpm[n]))
 
 ## Creating the 12 texture classes
 ## Caution: the following commands remove everything after the letter. This means that eg CL, a legitimate texture, 
-## will be replaced when using "C" on its own.Special codes from cheatography used but if anything has gone wrong, 
+## will be replaced when using "C" on its own. Perl-extended regex has been used but if anything has gone wrong, 
 ## THIS IS THE PLACE TO LOOK
 
 ##Spaces
