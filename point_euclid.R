@@ -3,14 +3,17 @@
 #        : refpoints - A set point. The function finds the Euclidean distance between every point in
 #                      points and this point.
 
-point_euclid <- function(points, refpoint){
+point_euclid <- function(points, refpoint, .message=TRUE){
   
   #If points is only one point, makes it a matrix
   if(NCOL(points)==1L) points <- matrix(points, nrow=1L)
   
   #If you don't provide a refpoint, it assumes you mean  the point (0, 0, ..., 0).
   if(missing(refpoint)){refpoint <- rep(0L, ncol(points))
-                        message("refpoint missing: Assuming origin")}
+                        if(.message) message("refpoint missing: Assuming origin")}
+  #
+  if(!is.data.frame(refpoint) && !is.numeric(refpoint)) stop("refpoint is not numeric or dataframe")
+  if(is.data.frame(refpoint)) refpoint <- as.matrix(refpoint)
   
   #The workhorse
   sqrt(rowSums((points - matrix(rep(refpoint, nrow(points)), nrow=nrow(points)))^2L))
