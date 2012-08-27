@@ -46,10 +46,45 @@ for (j in 1:ncol(combs)){
   
   refmax<-which.max(fin)
   refmin<-which.min(fin)
+  refval<-finm[refmax]
   
   ##distance between refmax and others
+  zref<-z[refmax,]
+  refdist<-as.matrix(rdist(czr,zref, method="euclidean"))
+ 
+  ##greatest difference between all points in the convex hull
+  gdiff<-which(refdist == max(refdist),arr.ind=T)
   
-  stref<-abs(finm-refmax)
+  ##distance between the two points
+  
+  gval<-refdist[gdiff]
+  gval<-as.matrix(gval)
+  gval<-gval[2,1]
+  
+  ##scaling factor
+  
+  scale<-gval/4
+  
+##if scale is greater than distance matrix (refdist), then exclude
+  
+  ##distance to max
+  
+  
+  
+  new <- refdist > as.vector(scale)
+  yay <- as.vector(yay)
+    
+  
+  ##distance to min
+  
+          
+          
+  ?which.max
+  
+  
+  
+  
+  stref<-abs(finm-refval)
   names(stref)[1:2]<-c("row","distance")
   
   ob2<-refmax/2
