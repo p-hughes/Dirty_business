@@ -8,7 +8,10 @@ setwd("C:/Users/phug7649/Desktop/TXTBIN")
 #z<-read.table("1_15 22_161534_top_14410_princ.txt", sep=",", na.strings="", header=TRUE)
 z<-read.table("Carbon_comp_6094.txt", sep=",", na.strings="", header=TRUE)
 ####Apply values to columns####
+getwd()
 
+
+source(file.path(getwd(), "R-scripts", "point_euclid.R"))
 z<- na.exclude(z)
 combs <- combn(seq_len(ncol(z)), 2)
 file.create("bin.csv")
@@ -35,6 +38,8 @@ for (j in 1:ncol(combs)){
   #str(odist)
   #czmax<-apply(z[cz,],2,which.max)
   
+  
+  
   ##sum of rows
   czr<-z[cz,]
   czr<-czr^2
@@ -47,11 +52,12 @@ for (j in 1:ncol(combs)){
   refmax<-which.max(fin)
   refmin<-which.min(fin)
   refval<-finm[refmax]
+  refmax<-max(point_euclid(z[cz,]))
   
   ##distance between refmax and others
   zref<-z[refmax,]
-  refdist<-as.matrix(rdist(czr,zref, method="euclidean"))
- 
+  refdist<-(point_euclid(czr,zref))
+  
   ##greatest difference between all points in the convex hull
   gdiff<-which(refdist == max(refdist),arr.ind=T)
   
@@ -65,7 +71,7 @@ for (j in 1:ncol(combs)){
   
   scale<-gval/4
   
-##if scale is greater than distance matrix (refdist), then exclude
+  ##if scale is greater than distance matrix (refdist), then exclude
   
   ##distance to max
   
@@ -73,12 +79,12 @@ for (j in 1:ncol(combs)){
   
   new <- refdist > as.vector(scale)
   yay <- as.vector(yay)
-    
+  
   
   ##distance to min
   
-          
-          
+  
+  
   ?which.max
   
   
