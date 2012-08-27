@@ -11,7 +11,9 @@ z<-read.table("Carbon_comp_6094.txt", sep=",", na.strings="", header=TRUE)
 
 z<- na.exclude(z)
 combs <- combn(seq_len(ncol(z)), 2)
-  
+file.create("bin.csv")
+bin<-matrix(NA, 1,1) 
+#names(bin)[2:3]<-c("row","distance")
 ###The almighty for loop###
 
 for (j in 1:ncol(combs)){
@@ -50,11 +52,14 @@ for (j in 1:ncol(combs)){
   stref<-abs(finm-refmax)
   names(stref)[1:2]<-c("row","distance")
   
-  ob2<-refmax/4
+  ob2<-refmax/2
   new <- stref > as.vector(ob2)
   
   
   ans <- as.matrix(stref[new,])
+  
+  bin<-rbind(ans,bin)
+ 
   
   
   
@@ -80,9 +85,9 @@ for (j in 1:ncol(combs)){
   #new <- stref$distance > as.vector(ob2)
   #ans <- stref[new,]
   
-  cat(which(!new), "\n")
+#   cat(which(!ans), "\n")
   
-  write.csv(ans,file.path(getwd(), "comph", paste0("comph_", a, "_", i, ".csv")))
+ # write.csv(ans,file.path(getwd(), "comph", paste0("comph_", a, "_", i, ".csv")))
   
   
 
@@ -98,7 +103,7 @@ for (j in 1:ncol(combs)){
   dev.off()
   
   #eval(parse(text=paste('output_',i,a,'<-zna[c(cz, cz[1]),]',sep='')))
-  assign(paste0('output_', i,"_", a), zna[c(cz, cz[1]),])
+#   assign(paste0('output_', i,"_", a), zna[c(cz, cz[1]),])
 }
 
 ###inserting euclidean function ###NOTE### This script only functions for data with column names "Prin1" and "Prin7". I'm working
@@ -137,7 +142,7 @@ ps <- as.matrix(z)
 
 ##this will cause problems...
 
-y<-convhulln(ps, options = "Tv")
+#y<-convhulln(ps, options = "Tv")
 
 
 
