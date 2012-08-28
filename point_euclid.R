@@ -15,8 +15,11 @@ point_euclid <- function(points, refpoint, .message=TRUE){
   if(!is.data.frame(refpoint) && !is.numeric(refpoint)) stop("refpoint is not numeric or dataframe")
   if(is.data.frame(refpoint)) refpoint <- as.matrix(refpoint)
   
+  #Creates a matrix, repeating the refpoint into each row of a matrix
+  refpoint_matrix <- matrix(rep(refpoint, nrow(points)), nrow=nrow(points), ncol=ncol(points), byrow=TRUE)
+  
   #The workhorse
-  sqrt(rowSums((points - matrix(rep(refpoint, nrow(points)), nrow=nrow(points)))^2L))
+  sqrt(rowSums((points - refpoint_matrix)^2L))
   
 }
 
@@ -30,3 +33,7 @@ point_euclid <- function(points, refpoint, .message=TRUE){
 ## x <- matrix(c(1, 2, 3, 1, 2, 3), ncol=2)
 
 ## point_euclid(x, c(5, 5))
+
+#The distance between all the points in `cars` and its 50th row
+
+##point_euclid(cars, cars[,50])
