@@ -12,6 +12,7 @@ getwd()
 
 
 source(file.path(getwd(), "R-scripts", "point_euclid.R"))
+
 z<- na.exclude(z)
 combs <- combn(seq_len(ncol(z)), 2)
 file.create("bin.csv")
@@ -24,7 +25,7 @@ for (j in 1:ncol(combs)){
   a<-combs[1,j]
   i<-combs[2,j]
   zna <-z[,c(1,2)]
-  zna <- z[,c(a,i)]
+  #zna <- z[,c(a,i)]
   
   cz <- chull(zna)
   
@@ -41,30 +42,91 @@ for (j in 1:ncol(combs)){
   
   
   ##sum of rows
+  
   czr<-z[cz,]
   czr<-czr^2
   czrsum<-rowSums(czr)
   fin<-sqrt(czrsum)
   finm<-as.matrix(fin)
   
-  ##max euclidean distance
+  ##row with max euclidean distance from zero
+  refmax<-(which.max(finm))
+ # namesmax<-refmax$names
+ 
+  ##getting maximum value and anchoring it to the row number in the master data set (z)
+  BLARG<-rownames(z[cz,])==cz[refmax]
+  BLARG<-as.matrix(cz[BLARG])
   
-  refmax<-which.max(fin)
-  refmin<-which.min(fin)
+  ##retrieving all the principal component data from that row
+  rowx<-z[BLARG,]
+  
+  ## retrieving all pc data from cz
+  object<-z[cz,]
+  
+  ##getting distances
+  pcdist<-as.matrix(point_euclid(object,rowx))
+  
+  ##yardstick
+  
+  YS<-row.names[2,](which.max(pcdist)) ##boo.
+  
+  ##find yardstick.../4 compare with chull, exclude if yardstick is bigger than distance between points.
+  
+  ##below here there be dragons.There is some code I need which will compare pcdist to the rest of the chull
+  ## and excludes the data. I need to cherrypick that. DONT DELETE UNLESS ABSOLUTELY SJURE THE CODE IS USELESS!
+
+ 
+ 
+  
+  
+  
+  
+  
+  ##same process, minimum values
+  refmin<-which.min(finm)
   refval<-finm[refmax]
-  refmax<-max(point_euclid(z[cz,]))
+ 
   
+  #ref_max<-max(point_euclid(z[cz,]))
+  object<-rownames(z[cz,])
+  
+  ref_max<-max(rdist(z[cz,]))
+  #BLARG<-rownames(z[cz,])=="1550"
+  
+ 
   ##distance between refmax and others
-  zref<-z[refmax,]
-  refdist<-(point_euclid(czr,zref))
   
   ##greatest difference between all points in the convex hull
-  gdiff<-which(refdist == max(refdist),arr.ind=T)
+  
+  czdist<-rdist(rowx,czr[2:11,])
+  czdist<-as.matrix(t(czdist))
+  ans<-which.max(czdist)
+  
+  
   
   ##distance between the two points
   
   gval<-refdist[gdiff]
   gval<-as.matrix(gval)
+  
+  
+  
+  
+  
+  ##????
+  zref<- t(as.matrix(zref))
+  tmp<- dimnames(zref)
+  
+  attributes(zref)
+
+  
+  #refdist<-as.matrix(point_euclid(czr,zref))
+  refdist<-(rdist(czr,zref))
+  
+ 
+ 
+  
+ 
   gval<-gval[2,1]
   
   ##scaling factor
