@@ -1,9 +1,9 @@
 library(plyr)
 
-original_data <- read.csv("original_data.csv")
-princomp_data <- read.csv("princomp_data.csv")
-
-#Function for alply
+# original_data <- read.csv("original_data.csv")
+# princomp_data <- read.csv("princomp_data.csv")
+# 
+# #Function for alply
 
 apply_hull_combination <- function(mat, combns){
   i <- combns[1]
@@ -19,20 +19,20 @@ quick_hull <- function(data_mat){
 
   quick_hull_points <- unique(unlist(hull_list))
   
-  }
-
-sub_hull <- intersect(quick_hull(original_data), quick_hull(princomp_data))
-
-original_sub <- original_data[sub_hull, ]
-princomp_sub <- princomp_data[sub_hull, ]
-
-original_dist <- dist(original_sub)
-
-original.xy <- data.frame(t(combn(rownames(original_sub), 2)), as.numeric(original_dist))
-names(original.xy) <- c("p1", "p2", "distance")
-original.xy_sorted <- original.xy[order(original.xy$distance),]
-
-original.xy_sorted[(nrow(original.xy_sorted)%/%2-5):(nrow(original.xy_sorted)%/%2+5), ]
+}
+# 
+# sub_hull <- intersect(quick_hull(original_data), quick_hull(princomp_data))
+# 
+# original_sub <- original_data[sub_hull, ]
+# princomp_sub <- princomp_data[sub_hull, ]
+# 
+# original_dist <- dist(original_sub)
+# 
+# original.xy <- data.frame(t(combn(rownames(original_sub), 2)), as.numeric(original_dist))
+# names(original.xy) <- c("p1", "p2", "distance")
+# original.xy_sorted <- original.xy[order(original.xy$distance),]
+# 
+# original.xy_sorted[(nrow(original.xy_sorted)%/%2-5):(nrow(original.xy_sorted)%/%2+5), ]
 
 # ##Qhull (really slow) version
 # library(geometry)
