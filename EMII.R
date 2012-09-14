@@ -27,8 +27,16 @@ bin<-matrix(NA, 1,1)
 cz<-quick_hull(z)                               ############
                                                 ##CONTROLS##
                                                 ############
+## there are two control methods atm; the first is to define the length of the yardstick. Provides an undefined number
+## of end-members. the second is to use an equation which most likely is data specific.
+
+##x is the number of end members you want
+eq1 <- function (value) {exp((value + 4.7671)/-64.85)}
+
+factor<-eq1(20)
+
 ys<-10      ##starting parameter for yardstick
-factor<-.5  ##creating the factor by which the yardstick length is modified
+#factor<-1  ##creating the factor by which the yardstick length is modified
   
 ##I want the loop to start here
 
@@ -94,6 +102,10 @@ while (ys>0)
 ## removing duplicates
 a<-rownames(bin)
 s<-as.matrix(unique(a))
+
+##Output
+
+write.csv(s, file = "ems.csv")
 
 
 
