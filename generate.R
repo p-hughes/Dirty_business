@@ -19,17 +19,23 @@ h<-data.frame(id="h",x=rnorm(points, 50,de), y=rnorm(points, 66.7,de))
 i<-data.frame(id="x_ORPH",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
 j<-data.frame(id="y_ORPH",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
 
+colours()
+
 data<-rbind(a,b,c,d,e,f,g,h,i,j)
 plot(data[,2],data[,3],main="soil classification by fuzzy sets",xlab="x",ylab="y",col=0)
 text(data$x,data$y,data[,1])
 hull<-quick_hull(data[,2:3])
 lines(data[c(hull,hull[1]),2:3],col="red")
-hist (data[,3],main="prevelence of fuzzy set in y column",nclass=10)
+hist (data[,3],main="prevelence of fuzzy set in y column",nclass=10,col="cornflowerblue")
+hist (data[,2],main="prevelence of fuzzy set in x column",nclass=10,col="steelblue")
 
 write.csv(data,file="corrected.csv")
 
 library(ggplot2)
-qplot(data=data, x=x, y=y)
+ggplot(data, aes(x=x, y=y, alpha=x))+
+  geom_point(aes(colour=y))+
+  scale_colour_continuous(low="blue", high="orange")+
+  geom_rug()
 text(data$x,data$y,data[,1])
 
 qplot(data=data,y, type=)
