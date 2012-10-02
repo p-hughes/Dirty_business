@@ -1,11 +1,11 @@
 ##for consistent results, set the seed.
 setwd("C:/Users/phug7649/Desktop/TXTBIN")
 
-source("qhull_algorithm.R")
+source(file.path(getwd(), "R-scripts", "qhull_algorithm.R"))
 # dir.create("output")
 # write.csv(women, "output/women.csv")
 set.seed(20120927)
-de<-1
+de<-3
 points<-5
 ends<-1
 a<-data.frame(id="a_EX",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de))
@@ -18,6 +18,7 @@ g<-data.frame(id="g",x=rnorm(points, 70,de), y=rnorm(points, 40,de))
 h<-data.frame(id="h",x=rnorm(points, 50,de), y=rnorm(points, 66.7,de))
 i<-data.frame(id="x_ORPH",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
 j<-data.frame(id="y_ORPH",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
+##Alex/budis suggestion
 
 colours()
 
@@ -26,8 +27,8 @@ plot(data[,2],data[,3],main="soil classification by fuzzy sets",xlab="x",ylab="y
 text(data$x,data$y,data[,1])
 hull<-quick_hull(data[,2:3])
 lines(data[c(hull,hull[1]),2:3],col="red")
-hist (data[,3],main="prevelence of fuzzy set in y column",nclass=10,col="cornflowerblue")
-hist (data[,2],main="prevelence of fuzzy set in x column",nclass=10,col="steelblue")
+hist (data[,3],main="Histogram of y column",nclass=10,col="cornflowerblue")
+hist (data[,2],main="Histogram of x column",nclass=10,col="steelblue")
 
 write.csv(data,file="corrected.csv")
 
