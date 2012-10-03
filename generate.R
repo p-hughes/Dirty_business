@@ -20,6 +20,7 @@ i<-data.frame(id="x_ORPH",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
 j<-data.frame(id="y_ORPH",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
 ##Alex/budis suggestion
 
+
 colours()
 
 data<-rbind(a,b,c,d,e,f,g,h,i,j)
@@ -41,6 +42,34 @@ text(data$x,data$y,data[,1])
 
 qplot(data=data,y, type=)
 ?ggplot2
+
+###Non-normal y column
+set.seed(20120927)
+de<-2
+a<-data.frame(id="a",x=rnorm(1, 2,de), y=rnorm(1, 2,de))
+b<-data.frame(id="b",x=rnorm(20, 20,de), y=rnorm(20, 2,de))
+c<-data.frame(id="c",x=rnorm(3, 40,de), y=rnorm(3, 2,de))
+d<-data.frame(id="d",x=rnorm(5, 2,de), y=rnorm(5, 15,de))
+e<-data.frame(id="e",x=rnorm(30, 20,de), y=rnorm(30, 14,de))
+f<-data.frame(id="f",x=rnorm(10, 36,de), y=rnorm(10, 13,de))
+g<-data.frame(id="g",x=rnorm(20, 30,de), y=rnorm(20, 2,de))
+h<-data.frame(id="h",x=rnorm(25, 10,de), y=rnorm(25, 14,de))
+i<-data.frame(id="a",x=rnorm(17, 15,de), y=rnorm(17, 2,de))
+j<-data.frame(id="a",x=rnorm(15, 33,de), y=rnorm(15, 15,de))
+
+data<-rbind(a,b,c,d,e,f,g,h)
+plot(data[,2],data[,3])
+hist(data[,2])
+hist(data[,3])
+qqnorm(data[,2])
+qqline(data[,2])
+qqnorm(data[,3])
+qqline(data[,3])
+
+plot(data[,2],data[,3])
+NNhull<-quick_hull(data[2:3])
+lines(data[c(NNhull,NNhull[1]),2:3],col="red")
+
 
 # z<-data
 # 
