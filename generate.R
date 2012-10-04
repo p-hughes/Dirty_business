@@ -2,23 +2,24 @@
 setwd("C:/Users/phug7649/Desktop/TXTBIN")
 
 source(file.path(getwd(), "R-scripts", "qhull_algorithm.R"))
+library(ggplot2)
 # dir.create("output")
 # write.csv(women, "output/women.csv")
 set.seed(20120927)
-de<-3
+de<-2
 points<-5
 ends<-1
-a<-data.frame(id="a_EX",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de))
-b<-data.frame(id="b_EX",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de))
-c<-data.frame(id="c_EX",x=rnorm(ends, 50,de), y=rnorm(ends, 95,de))
-d<-data.frame(id="d",x=rnorm(points, 50,de), y=rnorm(points, 15,de))
-e<-data.frame(id="e",x=rnorm(points, 30,de), y=rnorm(points, 40,de))
-f<-data.frame(id="f",x=rnorm(points, 50,de), y=rnorm(points, 40,de))
-g<-data.frame(id="g",x=rnorm(points, 70,de), y=rnorm(points, 40,de))
-h<-data.frame(id="h",x=rnorm(points, 50,de), y=rnorm(points, 66.7,de))
-i<-data.frame(id="x_ORPH",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
-j<-data.frame(id="y_ORPH",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
-##Alex/budis suggestion
+a<-data.frame(id="EM1",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de),class=1)
+b<-data.frame(id="EM2",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de),class=1)
+c<-data.frame(id="EM3",x=rnorm(ends, 50,de), y=rnorm(ends, 95,de),class=1)
+d<-data.frame(id="d",x=rnorm(points, 50,de), y=rnorm(points, 15,de),class=2)
+e<-data.frame(id="e",x=rnorm(points, 30,de), y=rnorm(points, 40,de),class=2)
+f<-data.frame(id="f",x=rnorm(points, 50,de), y=rnorm(points, 40,de),class=2)
+g<-data.frame(id="g",x=rnorm(points, 70,de), y=rnorm(points, 40,de),class=2)
+h<-data.frame(id="h",x=rnorm(points, 50,de), y=rnorm(points, 66.7,de),class=2)
+i<-data.frame(id="EX1",x=rnorm(1, 80,de), y=rnorm(1, 15,de),class=3)
+j<-data.frame(id="EX2",x=rnorm(1, 20,de), y=rnorm(1, 15,de),class=3)
+
 
 
 colours()
@@ -31,18 +32,80 @@ lines(data[c(hull,hull[1]),2:3],col="red")
 hist (data[,3],main="Histogram of y column",nclass=10,col="cornflowerblue")
 hist (data[,2],main="Histogram of x column",nclass=10,col="steelblue")
 
-write.csv(data,file="corrected.csv")
+write.csv(data,file="triangle.csv")
 
-library(ggplot2)
-ggplot(data, aes(x=x, y=y, alpha=x))+
-  geom_point(aes(colour=y))+
-  scale_colour_continuous(low="blue", high="orange")+
-  geom_rug()
-text(data$x,data$y,data[,1])
+##funky plot time
+
+hull<-quick_hull(data[,2:3])
+hull_data <- data[c(hull,hull[1]),]
+
+ggplot(data, aes(x=x, y=y))+
+  #theme_grey()+
+  theme_bw()+
+  geom_text(aes(label=id))+#, colour=factor(class)))+
+#  scale_colour_manual(values=rbgpal(3))+
+#  scale_colour_brewer(palette="Set1")+
+#  geom_rug(aes(colour=factor(class)))+
+  geom_path(data=hull_data,colour="red")+
+  coord_equal()
+
+#text(data$x,data$y,data[,1])
 
 qplot(data=data,y, type=)
 ?ggplot2
 
+##Alex/budis suggestion- A square data set.
+
+set.seed(20120927)
+de<-2
+points<-10
+ends<-1
+
+f<-data.frame(id="EM1",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de))
+g<-data.frame(id="EM2",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de))
+h<-data.frame(id="EM3",x=rnorm(ends, 5,de), y=rnorm(ends, 95,de))
+i<-data.frame(id="EM4",x=rnorm(ends, 95,de), y=rnorm(ends, 95,de))
+
+a<-data.frame(id="a",x=rnorm(points, 50,de), y=rnorm(points, 10,de))
+b<-data.frame(id="b",x=rnorm(points, 10,de), y=rnorm(points, 50,de))
+c<-data.frame(id="c",x=rnorm(points, 50,de), y=rnorm(points, 50,de))
+d<-data.frame(id="d",x=rnorm(points, 90,de), y=rnorm(points, 50,de))
+e<-data.frame(id="e",x=rnorm(points, 50,de), y=rnorm(points, 85,de))
+
+w<-data.frame(id="EX1",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
+y<-data.frame(id="EX2",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
+x<-data.frame(id="EX3",x=rnorm(1, 80,de), y=rnorm(1, 80,de))
+z<-data.frame(id="EX4",x=rnorm(1, 20,de), y=rnorm(1, 80,de))
+
+# cent<-read.table("clipboard",sep=" ")
+# ##centroids from fuzzy k w/extragrades
+#  j<-data.frame(id="X",x= 28,y=-50)
+#  k<-data.frame(id="X",x= 50,y=-50.6074)
+#  l<-data.frame(id="X",x=- 1.35437,y=-4.39542)
+#  m<-data.frame(id="X",x= 70.0477,y= -50.1104)
+#  n<-data.frame(id="X",x= 0,y= 0)
+data<-rbind(a,b,c,d,e,f,g,h,i,w,x,y,z)
+
+##plotting
+
+hull<-quick_hull(data[,2:3])
+hull_data <- data[c(hull,hull[1]),]
+
+ggplot(data, aes(x=x, y=y))+
+  #theme_grey()+
+  theme_bw()+
+  geom_text(aes(label=id))+
+  geom_path(data=hull_data,colour="red")+
+  coord_equal()
+
+hist (data[,3],main="Histogram of y column",nclass=10,col="cornflowerblue")
+hist (data[,2],main="Histogram of x column",nclass=10,col="steelblue")
+
+
+#write.csv(data,file="neg_square.csv")
+#######
+            
+write.csv(data,file="square.csv")
 ###Non-normal y column
 set.seed(20120927)
 de<-2
