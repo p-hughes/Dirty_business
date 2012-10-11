@@ -3,56 +3,57 @@ setwd("C:/Users/phug7649/Desktop/TXTBIN")
 
 source(file.path(getwd(), "R-scripts", "qhull_algorithm.R"))
 library(ggplot2)
-# dir.create("output")
-# write.csv(women, "output/women.csv")
 set.seed(20120927)
-de<-2
-points<-5
-ends<-1
-a<-data.frame(id="EM1",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de),class=1)
-b<-data.frame(id="EM2",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de),class=1)
-c<-data.frame(id="EM3",x=rnorm(ends, 50,de), y=rnorm(ends, 95,de),class=1)
-d<-data.frame(id="d",x=rnorm(points, 50,de), y=rnorm(points, 15,de),class=2)
-e<-data.frame(id="e",x=rnorm(points, 30,de), y=rnorm(points, 40,de),class=2)
-f<-data.frame(id="f",x=rnorm(points, 50,de), y=rnorm(points, 40,de),class=2)
-g<-data.frame(id="g",x=rnorm(points, 70,de), y=rnorm(points, 40,de),class=2)
-h<-data.frame(id="h",x=rnorm(points, 50,de), y=rnorm(points, 66.7,de),class=2)
-i<-data.frame(id="EX1",x=rnorm(1, 80,de), y=rnorm(1, 15,de),class=3)
-j<-data.frame(id="EX2",x=rnorm(1, 20,de), y=rnorm(1, 15,de),class=3)
 
 
 
-colours()
-
-data<-rbind(a,b,c,d,e,f,g,h,i,j)
-plot(data[,2],data[,3],main="soil classification by fuzzy sets",xlab="x",ylab="y",col=0)
-text(data$x,data$y,data[,1])
-hull<-quick_hull(data[,2:3])
-lines(data[c(hull,hull[1]),2:3],col="red")
-hist (data[,3],main="Histogram of y column",nclass=10,col="cornflowerblue")
-hist (data[,2],main="Histogram of x column",nclass=10,col="steelblue")
-
-write.csv(data,file="triangle.csv")
-
-##funky plot time
-
-hull<-quick_hull(data[,2:3])
-hull_data <- data[c(hull,hull[1]),]
-
-ggplot(data, aes(x=x, y=y))+
-  #theme_grey()+
-  theme_bw()+
-  geom_text(aes(label=id))+#, colour=factor(class)))+
-#  scale_colour_manual(values=rbgpal(3))+
-#  scale_colour_brewer(palette="Set1")+
-#  geom_rug(aes(colour=factor(class)))+
-  geom_path(data=hull_data,colour="red")+
-  coord_equal()
-
-#text(data$x,data$y,data[,1])
-
-qplot(data=data,y, type=)
-?ggplot2
+# de<-2
+# points<-5
+# ends<-1
+# a<-data.frame(id="EM1",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de),class=1)
+# b<-data.frame(id="EM2",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de),class=1)
+# c<-data.frame(id="EM3",x=rnorm(ends, 50,de), y=rnorm(ends, 95,de),class=1)
+# d<-data.frame(id="d",x=rnorm(points, 50,de), y=rnorm(points, 15,de),class=2)
+# e<-data.frame(id="e",x=rnorm(points, 30,de), y=rnorm(points, 40,de),class=2)
+# f<-data.frame(id="f",x=rnorm(points, 50,de), y=rnorm(points, 40,de),class=2)
+# g<-data.frame(id="g",x=rnorm(points, 70,de), y=rnorm(points, 40,de),class=2)
+# h<-data.frame(id="h",x=rnorm(points, 50,de), y=rnorm(points, 66.7,de),class=2)
+# i<-data.frame(id="EX1",x=rnorm(1, 80,de), y=rnorm(1, 15,de),class=3)
+# j<-data.frame(id="EX2",x=rnorm(1, 20,de), y=rnorm(1, 15,de),class=3)
+# 
+# 
+# 
+# colours()
+# 
+# data<-rbind(a,b,c,d,e,f,g,h,i,j)
+# plot(data[,2],data[,3],main="soil classification by fuzzy sets",xlab="x",ylab="y",col=0)
+# text(data$x,data$y,data[,1])
+# hull<-quick_hull(data[,2:3])
+# lines(data[c(hull,hull[1]),2:3],col="red")
+# hist (data[,3],main="Histogram of y column",nclass=10,col="cornflowerblue")
+# hist (data[,2],main="Histogram of x column",nclass=10,col="steelblue")
+# 
+# write.csv(data,file="triangle.csv")
+# 
+# ##funky plot time
+# 
+# hull<-quick_hull(data[,2:3])
+# hull_data <- data[c(hull,hull[1]),]
+# 
+# ggplot(data, aes(x=x, y=y))+
+#   #theme_grey()+
+#   theme_bw()+
+#   geom_text(aes(label=id))+#, colour=factor(class)))+
+# #  scale_colour_manual(values=rbgpal(3))+
+# #  scale_colour_brewer(palette="Set1")+
+# #  geom_rug(aes(colour=factor(class)))+
+#   geom_path(data=hull_data,colour="red")+
+#   coord_equal()
+# 
+# #text(data$x,data$y,data[,1])
+# 
+# qplot(data=data,y, type=)
+# ?ggplot2
 
 ##Alex/budis suggestion- A square data set.
 
@@ -77,13 +78,8 @@ y<-data.frame(id="EX2",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
 x<-data.frame(id="EX3",x=rnorm(1, 80,de), y=rnorm(1, 80,de))
 z<-data.frame(id="EX4",x=rnorm(1, 20,de), y=rnorm(1, 80,de))
 
-# cent<-read.table("clipboard",sep=" ")
-# ##centroids from fuzzy k w/extragrades
-#  j<-data.frame(id="X",x= 28,y=-50)
-#  k<-data.frame(id="X",x= 50,y=-50.6074)
-#  l<-data.frame(id="X",x=- 1.35437,y=-4.39542)
-#  m<-data.frame(id="X",x= 70.0477,y= -50.1104)
-#  n<-data.frame(id="X",x= 0,y= 0)
+ 
+
 data<-rbind(a,b,c,d,e,f,g,h,i,w,x,y,z)
 
 ##plotting
@@ -102,10 +98,6 @@ hist (data[,3],main="Histogram of y column",nclass=10,col="cornflowerblue")
 hist (data[,2],main="Histogram of x column",nclass=10,col="steelblue")
 
 write.csv(data,file="square.csv")
-
-
-
-
 
 ggplot(data, aes(x=x, y=y))+
   #theme_grey()+
@@ -186,6 +178,7 @@ data3<-read.table(text="
 25.4550234230729	48.8920780603341
 49.8546504636677	48.9590239074639")
 
+cent<-read.table("clipboard",sep="")
 
 
 
@@ -326,3 +319,10 @@ data3<-read.table(text="
 # # ##Use only if you are performing an analysis on extrogrades.
 # # y<-sz[1:20,]
 # # write.csv(y,file="bend.csv")
+
+# ##centroids from fuzzy k w/extragrades
+#  j<-data.frame(id="X",x= 28,y=-50)
+#  k<-data.frame(id="X",x= 50,y=-50.6074)
+#  l<-data.frame(id="X",x=- 1.35437,y=-4.39542)
+#  m<-data.frame(id="X",x= 70.0477,y= -50.1104)
+#  n<-data.frame(id="X",x= 0,y= 0)
