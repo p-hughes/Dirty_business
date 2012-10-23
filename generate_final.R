@@ -229,3 +229,12 @@ j<-read.table(text="
 
 plot(data[,2:3])
 points(j,pch=4, col='red')
+
+##a quick demonstration of the convex bicycle
+de<-5
+points<-5000
+c<-data.frame(id="c",x=rnorm(points, 50,de), y=rnorm(points, 50,de))
+plot(c[,2],c[,3],main="Cluster",xlab="x",ylab="y")
+cz<-quick_hull(c)
+plot(c[cz,2],c[cz,3])
+which.max(dist(cz[,2],cz[,3]))
