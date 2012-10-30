@@ -235,6 +235,30 @@ de<-5
 points<-5000
 c<-data.frame(id="c",x=rnorm(points, 50,de), y=rnorm(points, 50,de))
 plot(c[,2],c[,3],main="Cluster",xlab="x",ylab="y")
-cz<-quick_hull(c)
+
+ggplot(hull_data, aes(x=x, y=y))+
+  theme_bw()+
+  geom_path(data=hull_data,colour="red")
+
+
+
+c<-data.frame(x=c$x,y=c$y)
+plot(c)
+cz<-chull(c)
+hull_data <- c[c(cz,cz[1]),]
+ggplot(hull_data, aes(x=x, y=y))+
+  theme_bw()+
+  geom_path(data=hull_data,colour="red")  
+#cz<-quick_hull(c)
+
+hull_data <- c[c(cz,cz[1]),]
 plot(c[cz,2],c[cz,3])
+plot(hull_data,type=scatter)
 which.max(dist(cz[,2],cz[,3]))
+
+ggplot(data, aes(x=x, y=y))+
+  #theme_grey()+
+  theme_bw()+
+  geom_text(aes(label=id))+
+  geom_path(data=hull_data,colour="red")+
+  coord_equal()
