@@ -20,10 +20,10 @@ de<-2
 points<-5
 ends<-1
 
-f<-data.frame(id="EM1",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de))
-g<-data.frame(id="EM2",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de))
-h<-data.frame(id="EM3",x=rnorm(ends, 5,de), y=rnorm(ends, 95,de))
-i<-data.frame(id="EM4",x=rnorm(ends, 95,de), y=rnorm(ends, 95,de))
+f<-data.frame(id="EP",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de))
+g<-data.frame(id="EP",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de))
+h<-data.frame(id="EP",x=rnorm(ends, 5,de), y=rnorm(ends, 95,de))
+i<-data.frame(id="EP",x=rnorm(ends, 95,de), y=rnorm(ends, 95,de))
 #i<-data.frame(id="EM4",x=130, y=130)
 
 a<-data.frame(id="a",x=rnorm(points, 50,de), y=rnorm(points, 25,de))
@@ -32,10 +32,10 @@ c<-data.frame(id="c",x=rnorm(points, 50,de), y=rnorm(points, 50,de))
 d<-data.frame(id="d",x=rnorm(points, 75,de), y=rnorm(points, 50,de))
 e<-data.frame(id="e",x=rnorm(points, 50,de), y=rnorm(points, 75,de))
 
-w<-data.frame(id="EX1",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
-y<-data.frame(id="EX2",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
-x<-data.frame(id="EX3",x=rnorm(1, 80,de), y=rnorm(1, 80,de))
-z<-data.frame(id="EX4",x=rnorm(1, 20,de), y=rnorm(1, 80,de))
+w<-data.frame(id="EX",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
+y<-data.frame(id="EX",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
+x<-data.frame(id="EX",x=rnorm(1, 80,de), y=rnorm(1, 80,de))
+z<-data.frame(id="EX",x=rnorm(1, 20,de), y=rnorm(1, 80,de))
 
 data<-rbind(a,b,c,d,e,f,g,h,i,w,x,y,z)
 
@@ -45,9 +45,11 @@ hull<-quick_hull(data[,2:3])
 hull_data <- data[c(hull,hull[1]),]
 
 ggplot(data, aes(x=x, y=y))+
-  #theme_grey()+
-  theme_bw()+
+  theme_grey()+
+  #theme_bw()+
   geom_text(aes(label=id))+
+  scale_colour_brewer(palette="Set1")+
+  #par(lty="dashed",lwd=0.1)+  ##a new addition
   geom_path(data=hull_data,colour="red")+
   coord_equal()
 
@@ -59,10 +61,11 @@ hist (data[,2],main="Histogram of x column",nclass=10,col="steelblue")
 #write.csv(data,file="square.csv")
 
 ggplot(data, aes(x=x, y=y))+
-  #theme_grey()+
-  theme_bw()+
-  geom_text(aes(label=id))+ #include this after "label=id" to set the colours: ,colour=id
-  geom_path(data=hull_data,colour="red")+
+  theme_grey()+
+  #theme_bw()+
+  geom_path(data=hull_data,colour="red", size=2)+
+  scale_colour_brewer(palette="Set1")+
+  geom_text(aes(label=id),size=7)+ #include this after "label=id" to set the colours: ,colour=id
   coord_equal()
 
 #Input centroid data from fuzzy k without extragrades
@@ -82,11 +85,13 @@ datak1<-rbind(kNOEXcent,data)
 #Plot centroids vs data. NOTE: centroid letters randomly assigned and do not match letters assigned in data
 
 ggplot(data, aes(x=x, y=y))+
-  #theme_grey()+
-  theme_bw()+
-  geom_text(aes(label=id))+
-  geom_path(data=hull_data,colour="red")+
-  geom_point(data=kNOEXcent, colour="black", size=4)+
+  theme_grey()+
+  #theme_bw()+
+  geom_path(data=hull_data,colour="red", size=2)+
+  #geom_point(aes(shape=id),color="blue",size=10)+
+  scale_colour_brewer(palette="Set1")+
+  geom_text(aes(label=id), size=7)+
+  geom_point(data=kNOEXcent, colour="blue", size=6,alpha=.7)+
   coord_equal()
 
 ##Input the text output from fuzzy k means with extragrades.
@@ -135,10 +140,11 @@ centroids <- read.csv("output.csv")
 names(centroids)[1] <- "MaxCls"
 
 ggplot(square_mem, aes(x=x, y=y))+  ##, colour=MaxCls
-  theme_bw()+
-  geom_text(aes(label=id))+
-  geom_path(data=hull_data,colour="red")+
-  geom_point(data=centroids, colour="black", size=4)+
+  #theme_bw()+
+  geom_path(data=hull_data,colour="red",size=2)+
+  geom_point(aes(color=MaxCls),size=4)+
+  scale_colour_brewer(palette="Set1")+
+  geom_point(data=centroids, colour="black", size=4,shape=16)+
   coord_equal()
 
 # data<-rbind(centroids,data)
@@ -171,11 +177,11 @@ data3<-cbind(id,data3)
 dataark1<-rbind(data3,data)
 
 ggplot(data, aes(x=x, y=y))+
-  #theme_grey()+
-  theme_bw()+
-  geom_text(aes(label=id))+
-  geom_path(data=hull_data,colour="red")+
-  geom_point(data=data3, colour="black", size=4)+
+  theme_grey()+
+  #theme_bw()+
+  geom_path(data=hull_data,colour="red",size=2)+
+  geom_text(aes(label=id),size=7)+
+  geom_point(data=data3, colour="blue", size=6,alpha=.7)+
   coord_equal()
 
 ggplot(data, aes(x=x, y=y))+
