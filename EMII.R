@@ -12,60 +12,33 @@ setwd("C:/Users/phug7649/Desktop/TXTBIN")
 #z<-read.table("1_15 22_161534_top_14410_princ.txt", sep=",", na.strings="", header=TRUE)
 #z<-read.table("Carbon_comp_6094.txt", sep=",", na.strings="", header=TRUE)
 #z<-read.table("matcomp.txt", sep=",", na.strings="", header=TRUE)
-za<-read.table("extraprin.txt", sep=",", na.strings="", header=TRUE)
-z<-read.table("ed_sur_pc_319_197del.txt",sep=",", na.strings="",header=TRUE) ##row 197 is dodgy. I need to delete, then reorder rows.
+#za<-read.table("extraprin.txt", sep=",", na.strings="", header=TRUE)
+#z<-read.table("ed_sur_pc_319_197del.txt",sep=",", na.strings="",header=TRUE) ##row 197 is dodgy. I need to delete, then reorder rows.
+z<-read.table("Edgeroi_Fit_cut_PC_2073.txt",sep=",", na.strings="",header=TRUE)
+check1<-nrow(z)
 
-##test data
-
-#y<-read.csv("random.csv", header=FALSE)
-
-
-#e<-g
-#d<-runif(6027,min=0,max=1)
-#g[,1]<-d
-#d<-runif(6027,min=0,max=1)
-# y[,2]<-d
-# d<-runif(6027,min=0,max=1)
-# y[,3]<-d
-# d<-runif(6027,min=0,max=1)
-# y[,4]<-d
-# d<-runif(6027,min=0,max=1)
-# y[,5]<-d
-# d<-runif(6027,min=0,max=1)
-# y[,6]<-d
-# d<-runif(6027,min=0,max=1)
-# y[,7]<-d
-# d<-runif(6027,min=0,max=1)
-# y[,8]<-d
-# d<-runif(6027,min=0,max=1)
-# y[,9]<-d
-# d<-runif(6027,min=0,max=1)
-# y[,10]<-d
-
-# x<-as.matrix(quick_hull(y))
-# plot(y[,1],y[,2])
-# w<-y[x,]
-# write.csv(w, file = "testhull.csv")
-# write.csv(y, file = "testdata.csv")
-#View(as.matrix(cz))
-#czm<-as.matrix(z[cz,])
-#write.csv(czm,file="czm.csv")
-
-
-##end test
-
-
-  
-  ####Apply values to columns####
+      ####Apply values to columns####
 
 source(file.path(getwd(), "R-scripts", "point_euclid.R"))
 source(file.path(getwd(), "R-scripts", "qhull_algorithm.R"))
 
-
+##errors sometimes occur if the rows don't line up. This fixes the problem at a cost of disorganising the data
 z<- na.exclude(z)
 row.names(z)<-NULL
-z<-z[,2:11] 
+check2<-nrow(z)
 
+if(check1==check2) print("Rows are in order") else stop("rows are now disorganised. Do you wish to proceed?")
+
+##checking the data is not disorganized.
+nrow(z)
+##the output number should be the same as the number of rows fed into the algorithm.
+
+
+##Here you need to check you have the right number of principal components.
+components<-13
+b<-components+1
+#z<-z[,2:11] 
+z<-z[,2:b]
 ##creating a file to dump values
 file.create("bin.csv")
 bin<-matrix(NA, 1,1) 
@@ -83,8 +56,8 @@ cz<-quick_hull(z)                               ############
 # factor<-eq1(35)
 
 ys<-10      ##starting parameter for yardstick
-factor<-.5  ##creating the factor by which the yardstick length is modified
-YScrit<-1   ##Creating stopping parameter  
+factor<-.8  ##creating the factor by which the yardstick length is modified
+YScrit<-8   ##Creating stopping parameter  
 
 
 ##I want the loop to start here
@@ -152,16 +125,14 @@ while (ys>YScrit)
 a<-rownames(bin)
 s<-as.matrix(unique(a))
 
-##Output
+##Output- row numbers only:
+write.csv(s, file="ed_ep.csv")
 
-write.csv(s, file = "ems.csv")
-
-
+##output row numbers and principle components:
 sz<-z[s,]
-write.csv(sz,file="sz.csv")
-##test accuracy of hull. If data is greater than any hull points 
+write.csv(sz,file="ed_ep.csv")
 
-##matlab code
-##Use only if you are performing an analysis on extrogrades.
+#making a set number of points based on a specific yardstick.
 y<-sz[1:20,]
 write.csv(y,file="bend.csv")
+
