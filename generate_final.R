@@ -45,8 +45,8 @@ hull<-quick_hull(data[,2:3])
 hull_data <- data[c(hull,hull[1]),]
 
 ggplot(data, aes(x=x, y=y))+
-  theme_grey()+
-  #theme_bw()+
+  #theme_grey()+
+  theme_bw()+
   geom_text(aes(label=id))+
   scale_colour_brewer(palette="Set1")+
   #par(lty="dashed",lwd=0.1)+  ##a new addition
@@ -59,15 +59,19 @@ hist (data[,2],main="Histogram of x column",nclass=10,col="steelblue")
 ####################################output here###############################################
 
 #write.csv(data,file="square.csv")
-
-ggplot(data, aes(x=x, y=y))+
-  theme_grey()+
-  #theme_bw()+
+ex1<- ggplot(data, aes(x=x, y=y))+
+  #theme_grey()+
+  theme_bw()+
   geom_path(data=hull_data,colour="red", size=2)+
   scale_colour_brewer(palette="Set1")+
   geom_text(aes(label=id),size=7)+ #include this after "label=id" to set the colours: ,colour=id
+  theme(axis.text.x=element_text(size=20))+
+  theme(axis.text.y=element_text(size=20))+
+  theme(axis.title.x = element_text(size=20))+
+  theme(axis.title.y = element_text(size=20))+
   coord_equal()
 
+  ggsave("ex1.png",ex1, type="cairo")
 #Input centroid data from fuzzy k without extragrades
 kNOEXcent<-read.table(text="
 
@@ -84,15 +88,21 @@ datak1<-rbind(kNOEXcent,data)
 
 #Plot centroids vs data. NOTE: centroid letters randomly assigned and do not match letters assigned in data
 
-ggplot(data, aes(x=x, y=y))+
-  theme_grey()+
-  #theme_bw()+
+ex2<- ggplot(data, aes(x=x, y=y))+
+  #theme_grey()+
+  theme_bw()+
   geom_path(data=hull_data,colour="red", size=2)+
   #geom_point(aes(shape=id),color="blue",size=10)+
   scale_colour_brewer(palette="Set1")+
   geom_text(aes(label=id), size=7)+
   geom_point(data=kNOEXcent, colour="blue", size=6,alpha=.7)+
+  theme(axis.text.x=element_text(size=20))+
+  theme(axis.text.y=element_text(size=20))+
+  theme(axis.title.x = element_text(size=20))+
+  theme(axis.title.y = element_text(size=20))+
   coord_equal()
+
+ggsave("ex2.png",ex2, type="cairo")
 
 ##Input the text output from fuzzy k means with extragrades.
 ##5_class
@@ -139,13 +149,19 @@ square_mem <- cbind(data2[,1:2],data[c("x","y")])
 centroids <- read.csv("output.csv")
 names(centroids)[1] <- "MaxCls"
 
-ggplot(square_mem, aes(x=x, y=y))+  ##, colour=MaxCls
-  #theme_bw()+
+ex3<- ggplot(square_mem, aes(x=x, y=y))+  ##, colour=MaxCls
+  theme_bw()+
   geom_path(data=hull_data,colour="red",size=2)+
   geom_point(aes(color=MaxCls),size=4)+
   scale_colour_brewer(palette="Set1")+
-  geom_point(data=centroids, colour="black", size=4,shape=16)+
+  geom_point(data=centroids, colour="black", size=5.5,shape=16,alpha=.4)+
+  theme(axis.text.x=element_text(size=20))+
+  theme(axis.text.y=element_text(size=20))+
+  theme(axis.title.x = element_text(size=20))+
+  theme(axis.title.y = element_text(size=20))+
   coord_equal()
+
+ggsave("ex3.png",ex3, type="cairo")
 
 # data<-rbind(centroids,data)
 # ggplot(data, aes(x=x, y=y))+
@@ -177,8 +193,8 @@ data3<-cbind(id,data3)
 dataark1<-rbind(data3,data)
 
 ggplot(data, aes(x=x, y=y))+
-  theme_grey()+
-  #theme_bw()+
+  #theme_grey()+
+  theme_bw()+
   geom_path(data=hull_data,colour="red",size=2)+
   geom_text(aes(label=id),size=7)+
   geom_point(data=data3, colour="blue", size=6,alpha=.7)+
