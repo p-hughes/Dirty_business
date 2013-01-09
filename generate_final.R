@@ -192,13 +192,19 @@ data3<-cbind(id,data3)
 
 dataark1<-rbind(data3,data)
 
-ggplot(data, aes(x=x, y=y))+
+ex4 <- ggplot(data, aes(x=x, y=y))+
   #theme_grey()+
   theme_bw()+
   geom_path(data=hull_data,colour="red",size=2)+
   geom_text(aes(label=id),size=7)+
   geom_point(data=data3, colour="blue", size=6,alpha=.7)+
+  theme(axis.text.x=element_text(size=20))+
+  theme(axis.text.y=element_text(size=20))+
+  theme(axis.title.x = element_text(size=20))+
+  theme(axis.title.y = element_text(size=20))+
   coord_equal()
+
+ggsave("ex4.png",ex4, type="cairo")
 
 ggplot(data, aes(x=x, y=y))+
   #theme_grey()+
