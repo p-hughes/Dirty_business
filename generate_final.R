@@ -20,22 +20,22 @@ de<-2
 points<-5
 ends<-1
 
-f<-data.frame(id="EP",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de))
-g<-data.frame(id="EP",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de))
-h<-data.frame(id="EP",x=rnorm(ends, 5,de), y=rnorm(ends, 95,de))
-i<-data.frame(id="EP",x=rnorm(ends, 95,de), y=rnorm(ends, 95,de))
+f<-data.frame(id="End point",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de))
+g<-data.frame(id="End point",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de))
+h<-data.frame(id="End point",x=rnorm(ends, 5,de), y=rnorm(ends, 95,de))
+i<-data.frame(id="End point",x=rnorm(ends, 95,de), y=rnorm(ends, 95,de))
 #i<-data.frame(id="EM4",x=130, y=130)
 
-a<-data.frame(id="a",x=rnorm(points, 50,de), y=rnorm(points, 25,de))
-b<-data.frame(id="b",x=rnorm(points, 25,de), y=rnorm(points, 50,de))
-c<-data.frame(id="c",x=rnorm(points, 50,de), y=rnorm(points, 50,de))
-d<-data.frame(id="d",x=rnorm(points, 75,de), y=rnorm(points, 50,de))
-e<-data.frame(id="e",x=rnorm(points, 50,de), y=rnorm(points, 75,de))
+a<-data.frame(id="Cluster a",x=rnorm(points, 50,de), y=rnorm(points, 25,de))
+b<-data.frame(id="Cluster b",x=rnorm(points, 25,de), y=rnorm(points, 50,de))
+c<-data.frame(id="Cluster c",x=rnorm(points, 50,de), y=rnorm(points, 50,de))
+d<-data.frame(id="Cluster d",x=rnorm(points, 75,de), y=rnorm(points, 50,de))
+e<-data.frame(id="Cluster e",x=rnorm(points, 50,de), y=rnorm(points, 75,de))
 
-w<-data.frame(id="EX",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
-y<-data.frame(id="EX",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
-x<-data.frame(id="EX",x=rnorm(1, 80,de), y=rnorm(1, 80,de))
-z<-data.frame(id="EX",x=rnorm(1, 20,de), y=rnorm(1, 80,de))
+w<-data.frame(id="Extragrade",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
+y<-data.frame(id="Extragrade",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
+x<-data.frame(id="Extragrade",x=rnorm(1, 80,de), y=rnorm(1, 80,de))
+z<-data.frame(id="Extragrade",x=rnorm(1, 20,de), y=rnorm(1, 80,de))
 
 data<-rbind(a,b,c,d,e,f,g,h,i,w,x,y,z)
 
@@ -65,7 +65,7 @@ ex1<- ggplot(data, aes(x=x, y=y))+
   geom_path(data=hull_data, size=2, alpha=.2)+
   #scale_colour_brewer(palette="Set1")+
 #   geom_text(aes(label=id),size=7)+ #include this after "label=id" to set the colours: ,colour=id
-  geom_point(aes(shape=id),size=4)+
+  geom_point(aes(shape=id),size=6)+
   scale_shape_manual('',values=c(1:7))+
   theme(axis.text.x=element_text(size=20))+
   theme(axis.text.y=element_text(size=20))+
@@ -98,7 +98,9 @@ ex2<- ggplot(data, aes(x=x, y=y))+
   geom_path(data=hull_data, size=2, alpha=.2)+
   #geom_point(aes(shape=id),color="blue",size=10)+
   #scale_colour_brewer(palette="Set1")+
-  geom_text(aes(label=id), size=7)+
+  #geom_text(aes(label=id), size=7)+
+  geom_point(aes(shape=id),size=4)+
+  scale_shape_manual('',values=c(1:7))+
   geom_point(data=kNOEXcent, shape=16, size=4)+
   theme(axis.text.x=element_text(size=20))+
   theme(axis.text.y=element_text(size=20))+
@@ -203,7 +205,9 @@ ex4 <- ggplot(data, aes(x=x, y=y))+
   #theme_grey()+
   theme_bw()+
   geom_path(data=hull_data,size=2, alpha=.2)+
-  geom_text(aes(label=id),size=7)+
+  #geom_text(aes(label=id),size=7)+
+  geom_point(aes(shape=id),size=4)+
+  scale_shape_manual('',values=c(1:7))+
   geom_point(data=data3, shape=16, size=4)+
   theme(axis.text.x=element_text(size=20))+
   theme(axis.text.y=element_text(size=20))+
