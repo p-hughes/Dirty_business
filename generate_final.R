@@ -8,6 +8,7 @@
 setwd("C:/Users/phug7649/Desktop/TXTBIN")
 source(file.path(getwd(), "R-scripts", "qhull_algorithm.R"))
 library(ggplot2)
+library(grid)
 
 ##for consistent results, set the seed.
 set.seed(20120927)
@@ -62,22 +63,23 @@ hist (data[,2],main="Histogram of x column",nclass=10,col="steelblue")
 ex1<- ggplot(data, aes(x=x, y=y))+
   #theme_grey()+
   theme_bw()+
-  geom_path(data=hull_data, size=2, alpha=.2)+
+  #geom_path(data=hull_data, size=2, alpha=.2)+
   #scale_colour_brewer(palette="Set1")+
 #   geom_text(aes(label=id),size=7)+ #include this after "label=id" to set the colours: ,colour=id
-  geom_point(aes(shape=id),size=6)+
+   geom_point(aes(shape=id),size=6, lwd=100)+
   scale_shape_manual('',values=c(1:7))+
-  theme(shape=element_line(size=10))
   theme(legend.text=element_text(size=20)) +
   theme(axis.text.x=element_text(size=20))+
   theme(axis.text.y=element_text(size=20))+
   theme(axis.title.x = element_text(size=20))+
   theme(axis.title.y = element_text(size=20))+
   coord_equal()
+
 ex1
+grid.edit("geom_point.points", grep=TRUE, gp=gpar(lwd=2))
 
 
-  ggsave("ex1.png",ex1, type="cairo")
+  ggsave("ex1.png",last_plot(), type="cairo")
 #Input centroid data from fuzzy k without extragrades
 kNOEXcent<-read.table(text="
 
@@ -97,13 +99,14 @@ datak1<-rbind(kNOEXcent,data)
 ex2<- ggplot(data, aes(x=x, y=y))+
   #theme_grey()+
   theme_bw()+
-  geom_path(data=hull_data, size=2, alpha=.2)+
+  #geom_path(data=hull_data, size=2, alpha=.2)+
   #geom_point(aes(shape=id),color="blue",size=10)+
   #scale_colour_brewer(palette="Set1")+
   #geom_text(aes(label=id), size=7)+
-  geom_point(aes(shape=id),size=4)+
+  geom_point(aes(shape=id),size=6)+
   scale_shape_manual('',values=c(1:7))+
   geom_point(data=kNOEXcent, shape=16, size=4)+
+  theme(legend.text=element_text(size=20)) +
   theme(axis.text.x=element_text(size=20))+
   theme(axis.text.y=element_text(size=20))+
   theme(axis.title.x = element_text(size=20))+
@@ -160,11 +163,12 @@ names(centroids)[1] <- "MaxCls"
 
 ex3<- ggplot(square_mem, aes(x=x, y=y))+  ##, colour=MaxCls
   theme_bw()+
-  geom_path(data=hull_data,size=1.5, alpha=.2)+
-  geom_point(aes(shape=MaxCls),size=3.5)+
+#  geom_path(data=hull_data,size=1.5, alpha=.2)+
+  geom_point(aes(shape=MaxCls),size=6)+
   scale_shape_manual('Clusters',values=c(1,2,3,5,6,4))+
 #   scale_colour_brewer(palette="Set1")+
   geom_point(data=centroids, colour="black", size=3,shape=16)+
+  theme(legend.text=element_text(size=20)) +
   theme(axis.text.x=element_text(size=20))+
   theme(axis.text.y=element_text(size=20))+
   theme(axis.title.x = element_text(size=20))+
@@ -208,9 +212,10 @@ ex4 <- ggplot(data, aes(x=x, y=y))+
   theme_bw()+
   geom_path(data=hull_data,size=2, alpha=.2)+
   #geom_text(aes(label=id),size=7)+
-  geom_point(aes(shape=id),size=4)+
+  geom_point(aes(shape=id),size=6)+
   scale_shape_manual('',values=c(1:7))+
   geom_point(data=data3, shape=16, size=4)+
+  theme(legend.text=element_text(size=20)) +
   theme(axis.text.x=element_text(size=20))+
   theme(axis.text.y=element_text(size=20))+
   theme(axis.title.x = element_text(size=20))+
