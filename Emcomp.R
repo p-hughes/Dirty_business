@@ -55,8 +55,8 @@ z<-read.table("matcomp.txt", sep=",", na.strings="", header=TRUE)
   
   ####Apply values to columns####
 
-source(file.path(getwd(), "R-scripts", "point_euclid.R"))
-source(file.path(getwd(), "R-scripts", "qhull_algorithm.R"))
+source("./functions/point_euclid.R")
+source("./functions/qhull_algorithm.R")
 
 
 z<- na.exclude(z)

@@ -11,7 +11,7 @@ z<-read.table("Carbon_comp_6094.txt", sep=",", na.strings="", header=TRUE)
 getwd()
 
 
-source(file.path(getwd(), "R-scripts", "point_euclid.R"))
+source("./functions/point_euclid.R")
 
 z<- na.exclude(z)
 combs <- combn(seq_len(ncol(z)), 2)

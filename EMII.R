@@ -19,8 +19,8 @@ check1<-nrow(z)
 
       ####Apply values to columns####
 
-source(file.path(getwd(), "R-scripts", "point_euclid.R"))
-source(file.path(getwd(), "R-scripts", "qhull_algorithm.R"))
+source("./functions/point_euclid.R")
+source("./functions/qhull_algorithm.R")
 
 ##errors sometimes occur if the rows don't line up. This fixes the problem at a cost of disorganising the data
 z<- na.exclude(z)

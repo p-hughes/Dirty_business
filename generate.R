@@ -1,7 +1,7 @@
 ##for consistent results, set the seed.
-setwd("C:/Users/phug7649/Desktop/TXTBIN")
+#setwd("C:/Users/phug7649/Desktop/TXTBIN")
 
-source(file.path(getwd(), "R-scripts", "qhull_algorithm.R"))
+source("./functions/qhull_algorithm.R")
 library(ggplot2)
 set.seed(20120927)
 

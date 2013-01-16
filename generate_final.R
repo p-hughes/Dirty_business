@@ -5,8 +5,8 @@
 
 ##setting working directory, importing the neccesary scripts.
 
-setwd("C:/Users/phug7649/Desktop/TXTBIN")
-source(file.path(getwd(), "R-scripts", "qhull_algorithm.R"))
+#setwd("C:/Users/phug7649/Desktop/TXTBIN")
+source("./functions/qhull_algorithm.R")
 library(ggplot2)
 
 ##for consistent results, set the seed.
@@ -15,33 +15,32 @@ set.seed(20120927)
 
 ##Alex/budis suggestion- A square data set.
 
-set.seed(20120927)
-de<-2
-points<-5
-ends<-1
+de <- 2
+points <- 5
+ends <- 1
 
-f<-data.frame(id="End point",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de))
-g<-data.frame(id="End point",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de))
-h<-data.frame(id="End point",x=rnorm(ends, 5,de), y=rnorm(ends, 95,de))
-i<-data.frame(id="End point",x=rnorm(ends, 95,de), y=rnorm(ends, 95,de))
-#i<-data.frame(id="EM4",x=130, y=130)
+f <- data.frame(id="End point",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de))
+g <- data.frame(id="End point",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de))
+h <- data.frame(id="End point",x=rnorm(ends, 5,de), y=rnorm(ends, 95,de))
+i <- data.frame(id="End point",x=rnorm(ends, 95,de), y=rnorm(ends, 95,de))
+#i <- data.frame(id="EM4",x=130, y=130)
 
-a<-data.frame(id="Cluster a",x=rnorm(points, 50,de), y=rnorm(points, 25,de))
-b<-data.frame(id="Cluster b",x=rnorm(points, 25,de), y=rnorm(points, 50,de))
-c<-data.frame(id="Cluster c",x=rnorm(points, 50,de), y=rnorm(points, 50,de))
-d<-data.frame(id="Cluster d",x=rnorm(points, 75,de), y=rnorm(points, 50,de))
-e<-data.frame(id="Cluster e",x=rnorm(points, 50,de), y=rnorm(points, 75,de))
+a <- data.frame(id="Cluster a",x=rnorm(points, 50,de), y=rnorm(points, 25,de))
+b <- data.frame(id="Cluster b",x=rnorm(points, 25,de), y=rnorm(points, 50,de))
+c <- data.frame(id="Cluster c",x=rnorm(points, 50,de), y=rnorm(points, 50,de))
+d <- data.frame(id="Cluster d",x=rnorm(points, 75,de), y=rnorm(points, 50,de))
+e <- data.frame(id="Cluster e",x=rnorm(points, 50,de), y=rnorm(points, 75,de))
 
-w<-data.frame(id="Extragrade",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
-y<-data.frame(id="Extragrade",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
-x<-data.frame(id="Extragrade",x=rnorm(1, 80,de), y=rnorm(1, 80,de))
-z<-data.frame(id="Extragrade",x=rnorm(1, 20,de), y=rnorm(1, 80,de))
+w <- data.frame(id="Extragrade",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
+y <- data.frame(id="Extragrade",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
+x <- data.frame(id="Extragrade",x=rnorm(1, 80,de), y=rnorm(1, 80,de))
+z <- data.frame(id="Extragrade",x=rnorm(1, 20,de), y=rnorm(1, 80,de))
 
-data<-rbind(a,b,c,d,e,f,g,h,i,w,x,y,z)
+data <- rbind(a,b,c,d,e,f,g,h,i,w,x,y,z)
 
 ##plotting
 
-hull<-quick_hull(data[,2:3])
+hull <- quick_hull(data[,2:3])
 hull_data <- data[c(hull,hull[1]),]
 
 ggplot(data, aes(x=x, y=y))+
@@ -59,7 +58,7 @@ hist (data[,2],main="Histogram of x column",nclass=10,col="steelblue")
 ####################################output here###############################################
 
 #write.csv(data,file="square.csv")
-ex1<- ggplot(data, aes(x=x, y=y))+
+ex1 <- ggplot(data, aes(x=x, y=y))+
   #theme_grey()+
   theme_bw()+
   geom_path(data=hull_data, size=2, alpha=.2)+
@@ -79,7 +78,7 @@ ex1
 
   ggsave("ex1.png",ex1, type="cairo")
 #Input centroid data from fuzzy k without extragrades
-kNOEXcent<-read.table(text="
+kNOEXcent <- read.table(text="
 
 5a       50.1421         48.8607    
 5b       79.0612         59.1939    
@@ -90,11 +89,11 @@ names(kNOEXcent) <- c('id','x','y')
 
 #merge data with kNOEXcent
 
-datak1<-rbind(kNOEXcent,data)
+datak1 <- rbind(kNOEXcent,data)
 
 #Plot centroids vs data. NOTE: centroid letters randomly assigned and do not match letters assigned in data
 
-ex2<- ggplot(data, aes(x=x, y=y))+
+ex2 <- ggplot(data, aes(x=x, y=y))+
   #theme_grey()+
   theme_bw()+
   geom_path(data=hull_data, size=2, alpha=.2)+
@@ -116,7 +115,7 @@ ggsave("ex2.png",ex2, type="cairo")
 ##Input the text output from fuzzy k means with extragrades.
 ##5_class
 
-data2<-read.table(text="id       MaxCls      CI      5a       5b       5c       5d       5e       5* 
+data2 <- read.table(text="id       MaxCls      CI      5a       5b       5c       5d       5e       5* 
   a          5d     0.19363  0.02631  0.04049  0.04417  0.85053  0.01713  0.02137
                   a          5d     0.08901  0.01215  0.02039  0.02254  0.93353  0.00790  0.00349
                   a          5d     0.04958  0.00716  0.01152  0.01266  0.96308  0.00447  0.00110
@@ -153,12 +152,12 @@ data2<-read.table(text="id       MaxCls      CI      5a       5b       5c       
 ,header=TRUE)
 
 ##Plotting the data 
-data<-rbind(a,b,c,d,e,f,g,h,i,w,x,y,z)
+data <- rbind(a,b,c,d,e,f,g,h,i,w,x,y,z)
 square_mem <- cbind(data2[,1:2],data[c("x","y")])
 centroids <- read.csv("output.csv")
 names(centroids)[1] <- "MaxCls"
 
-ex3<- ggplot(square_mem, aes(x=x, y=y))+  ##, colour=MaxCls
+ex3 <- ggplot(square_mem, aes(x=x, y=y))+  ##, colour=MaxCls
   theme_bw()+
   geom_path(data=hull_data,size=1.5, alpha=.2)+
   geom_point(aes(shape=MaxCls),size=3.5)+
@@ -174,18 +173,18 @@ ex3
 
 ggsave("ex3.png",ex3, type="cairo")
 
-# data<-rbind(centroids,data)
+# data <- rbind(centroids,data)
 # ggplot(data, aes(x=x, y=y))+
 #   #theme_grey()+
 #   theme_bw()+
 #   geom_text(aes(label=id,colour=id))+
 #   geom_path(data=hull_data,colour="red")+
 #   coord_equal()
-# data3<-1:9
+# data3 <- 1:9
 
 ## arcomeson, phi of 1.75
 
-data3<-read.table(text="
+data3 <- read.table(text="
 5.11436026881286  6.17629562291158
 99.5253593351536	1.67680127618063
 7.03427985605290	90.2434560476277
@@ -195,13 +194,13 @@ data3<-read.table(text="
 49.9267185742559	48.9158968876554
 25.4561609649128	48.7931616031220
 50.0885015208430	23.4160900083503")
-names(data3)<-c("x","y")
+names(data3) <- c("x","y")
 plot(data3)
-id<-c("c","c","c","c","c","c","c","c","c")
-data3<-cbind(id,data3)
+id <- c("c","c","c","c","c","c","c","c","c")
+data3 <- cbind(id,data3)
 
 
-dataark1<-rbind(data3,data)
+dataark1 <- rbind(data3,data)
 
 ex4 <- ggplot(data, aes(x=x, y=y))+
   #theme_grey()+
@@ -230,7 +229,7 @@ ggplot(data, aes(x=x, y=y))+
 
 plot(data3)
 
-cent<-read.table(text="
+cent <- read.table(text="
 5.34763718189816  6.30850329247068
 99.2727532058492	1.89753243390930
 7.13103087543316	90.1718221913140
@@ -243,7 +242,7 @@ cent<-read.table(text="
 
 
 ##Alex asked me to plot this...
-r<-read.table(text="
+r <- read.table(text="
   5.04726740724799  6.13860091676842
 99.5765614833474  1.63206937047374
 6.96489098839824	90.2947839467634
@@ -257,7 +256,7 @@ r<-read.table(text="
 plot(r)
 
 ##jose's craziness
-j<-read.table(text="
+j <- read.table(text="
 5.09057342606623  6.17042684481357
 99.5167266821952	1.66289082679495
 6.96085973909758	90.2985533734585
@@ -273,9 +272,9 @@ plot(data[,2:3])
 points(j,pch=4, col='red')
 
 ##a quick demonstration of the convex bicycle
-de<-5
-points<-5000
-c<-data.frame(id="c",x=rnorm(points, 50,de), y=rnorm(points, 50,de))
+de <- 5
+points <- 5000
+c <- data.frame(id="c",x=rnorm(points, 50,de), y=rnorm(points, 50,de))
 plot(c[,2],c[,3],main="Cluster",xlab="x",ylab="y")
 
 ggplot(hull_data, aes(x=x, y=y))+
@@ -284,14 +283,14 @@ ggplot(hull_data, aes(x=x, y=y))+
 
 
 
-c<-data.frame(x=c$x,y=c$y)
+c <- data.frame(x=c$x,y=c$y)
 plot(c)
-cz<-chull(c)
+cz <- chull(c)
 hull_data <- c[c(cz,cz[1]),]
 ggplot(hull_data, aes(x=x, y=y))+
   theme_bw()+
   geom_path(data=hull_data,colour="red")  
-#cz<-quick_hull(c)
+#cz <- quick_hull(c)
 
 hull_data <- c[c(cz,cz[1]),]
 plot(c[cz,2],c[cz,3])
