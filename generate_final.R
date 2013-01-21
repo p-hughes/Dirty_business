@@ -20,10 +20,10 @@ de <- 2
 points <- 5
 ends <- 1
 
-f <- data.frame(id="End point",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de))
-g <- data.frame(id="End point",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de))
-h <- data.frame(id="End point",x=rnorm(ends, 5,de), y=rnorm(ends, 95,de))
-i <- data.frame(id="End point",x=rnorm(ends, 95,de), y=rnorm(ends, 95,de))
+f <- data.frame(id="Extreme point",x=rnorm(ends, 5,de), y=rnorm(ends, 5,de))
+g <- data.frame(id="Extreme point",x=rnorm(ends, 100,de), y=rnorm(ends, 5,de))
+h <- data.frame(id="Extreme point",x=rnorm(ends, 5,de), y=rnorm(ends, 95,de))
+i <- data.frame(id="Extreme point",x=rnorm(ends, 95,de), y=rnorm(ends, 95,de))
 #i <- data.frame(id="EM4",x=130, y=130)
 
 a <- data.frame(id="Cluster a",x=rnorm(points, 50,de), y=rnorm(points, 25,de))
@@ -32,10 +32,10 @@ c <- data.frame(id="Cluster c",x=rnorm(points, 50,de), y=rnorm(points, 50,de))
 d <- data.frame(id="Cluster d",x=rnorm(points, 75,de), y=rnorm(points, 50,de))
 e <- data.frame(id="Cluster e",x=rnorm(points, 50,de), y=rnorm(points, 75,de))
 
-w <- data.frame(id="Extragrade",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
-y <- data.frame(id="Extragrade",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
-x <- data.frame(id="Extragrade",x=rnorm(1, 80,de), y=rnorm(1, 80,de))
-z <- data.frame(id="Extragrade",x=rnorm(1, 20,de), y=rnorm(1, 80,de))
+w <- data.frame(id="Outlying point",x=rnorm(1, 80,de), y=rnorm(1, 15,de))
+y <- data.frame(id="Outlying point",x=rnorm(1, 20,de), y=rnorm(1, 15,de))
+x <- data.frame(id="Outlying point",x=rnorm(1, 80,de), y=rnorm(1, 80,de))
+z <- data.frame(id="Outlying point",x=rnorm(1, 20,de), y=rnorm(1, 80,de))
 
 data <- rbind(a,b,c,d,e,f,g,h,i,w,x,y,z)
 
@@ -76,7 +76,7 @@ ex1 <- ggplot(data, aes(x=x, y=y))+
 
 ex1
 grid.edit("geom_point.points", grep=TRUE, gp=gpar(lwd=2))
-
+write.csv(data, "data.csv")
 
   ggsave("ex1.png",last_plot(), type="cairo")
 #Input centroid data from fuzzy k without extragrades
