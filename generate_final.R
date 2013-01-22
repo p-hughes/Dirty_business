@@ -79,7 +79,9 @@ grid.edit("geom_point.points", grep=TRUE, gp=gpar(lwd=2))
 write.csv(data, "data.csv")
 
   ggsave("ex1.png",last_plot(), type="cairo")
-#Input centroid data from fuzzy k without extragrades
+
+
+#Input centroid data and membership data from FKM without extragrades
 kNOEXcent <- read.table(text="
 
 5a       50.1421         48.8607    
@@ -88,6 +90,72 @@ kNOEXcent <- read.table(text="
 5d       40.1836         78.0915    
 5e       61.1895         19.6632 ") 
 names(kNOEXcent) <- c('id','x','y')
+
+FKMNOEX <- read.table(text="
+id       MaxCls      CI      5a       5b       5c       5d       5e 
+a          5e     0.00547  0.00231  0.00002  0.00081  0.00001  0.99685
+a          5e     0.02298  0.01054  0.00006  0.00182  0.00002  0.98756
+a          5e     0.00875  0.00410  0.00003  0.00052  0.00001  0.99535
+a          5e     0.02058  0.00955  0.00005  0.00141  0.00001  0.98897
+a          5e     0.00006  0.00003  0.00000  0.00000  0.00000  0.99997
+b          5c     0.00189  0.00086  0.00000  0.99897  0.00016  0.00001
+b          5c     0.00652  0.00307  0.00001  0.99655  0.00036  0.00002
+b          5c     0.00317  0.00155  0.00000  0.99838  0.00006  0.00001
+b          5c     0.00029  0.00014  0.00000  0.99985  0.00001  0.00000
+b          5c     0.03747  0.01719  0.00003  0.97972  0.00300  0.00007
+c          5a     0.00000  1.00000  0.00000  0.00000  0.00000  0.00000
+c          5a     0.00000  1.00000  0.00000  0.00000  0.00000  0.00000
+c          5a     0.00000  1.00000  0.00000  0.00000  0.00000  0.00000
+c          5a     0.00000  1.00000  0.00000  0.00000  0.00000  0.00000
+c          5a     0.00000  1.00000  0.00000  0.00000  0.00000  0.00000
+d          5b     0.24204  0.10902  0.86698  0.00015  0.00028  0.02357
+d          5b     0.00164  0.00079  0.99915  0.00000  0.00001  0.00005
+d          5b     0.00102  0.00045  0.99943  0.00000  0.00001  0.00011
+d          5b     0.00003  0.00001  0.99998  0.00000  0.00000  0.00000
+d          5b     0.02278  0.00973  0.98694  0.00003  0.00006  0.00324
+e          5d     0.00416  0.00194  0.00027  0.00002  0.99777  0.00000
+e          5d     0.00035  0.00016  0.00003  0.00000  0.99981  0.00000
+e          5d     0.00337  0.00156  0.00024  0.00001  0.99819  0.00000
+e          5d     0.00146  0.00065  0.00015  0.00001  0.99919  0.00000
+e          5d     0.00348  0.00160  0.00026  0.00001  0.99812  0.00000
+EM1        5c     0.06483  0.01362  0.00064  0.95956  0.00179  0.02439
+EM2        5e     0.12509  0.02038  0.05005  0.00333  0.00126  0.92497
+EM3        5d     0.08153  0.01439  0.00164  0.03245  0.95092  0.00060
+EM4        5b     0.11978  0.01884  0.92886  0.00108  0.04864  0.00258
+EX1        5e     0.01016  0.00229  0.00384  0.00015  0.00004  0.99368
+EX3        5b     0.00782  0.00193  0.99505  0.00004  0.00287  0.00011
+EX2        5c     0.02909  0.00534  0.00010  0.98262  0.00022  0.01171
+EX4        5d     0.01195  0.00296  0.00018  0.00438  0.99242  0.00005", header=T)
+
+
+##putting data together so memberships are in a column with x-y values
+
+dataFKM <- cbind(FKMNOEX,data)
+values<-dataFKM[,4:8]
+dataFKM$maxnumber<-apply(values,1,max)
+
+
+#Plotting data so memberships affect the size of the plot
+
+ex2 <- ggplot(dataFKM, aes(x=x, y=y))+
+  #theme_grey()+
+  theme_bw()+
+  geom_point(data=kNOEXcent, shape=16, size=4)+
+  #geom_path(data=hull_data, size=2, alpha=.2)+
+  #geom_point(aes(shape=id),color="blue",size=10)+
+  #scale_colour_brewer(palette="Set1")+
+  #geom_text(aes(label=id), size=7)+
+  geom_point(aes(shape=MaxCls,size=maxnumber))+
+  scale_shape_manual('',values=c(1:7))+
+  theme(legend.text=element_text(size=20)) +
+  theme(axis.text.x=element_text(size=20))+
+  theme(axis.text.y=element_text(size=20))+
+  theme(axis.title.x = element_text(size=20))+
+  theme(axis.title.y = element_text(size=20))+
+ 
+  coord_equal()
+ex2
+
 
 #merge data with kNOEXcent
 
@@ -102,9 +170,9 @@ ex2 <- ggplot(data, aes(x=x, y=y))+
   #geom_point(aes(shape=id),color="blue",size=10)+
   #scale_colour_brewer(palette="Set1")+
   #geom_text(aes(label=id), size=7)+
-  geom_point(aes(shape=id),size=6)+
-  scale_shape_manual('',values=c(1:7))+
   geom_point(data=kNOEXcent, shape=16, size=4)+
+  geom_point(aes(shape=id),size=maxnumber)+
+  scale_shape_manual('',values=c(1:7))+
   theme(legend.text=element_text(size=20)) +
   theme(axis.text.x=element_text(size=20))+
   theme(axis.text.y=element_text(size=20))+
