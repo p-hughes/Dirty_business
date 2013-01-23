@@ -58,14 +58,14 @@ hist (data[,2],main="Histogram of x column",nclass=10,col="steelblue")
 
 ####################################output here###############################################
 
+#If you need the CSV of this data, unhash below!
 #write.csv(data,file="square.csv")
+
+# Plotting the data
 ex1 <- ggplot(data, aes(x=x, y=y))+
-  #theme_grey()+
+
   theme_bw()+
-  #geom_path(data=hull_data, size=2, alpha=.2)+
-  #scale_colour_brewer(palette="Set1")+
-#   geom_text(aes(label=id),size=7)+ #include this after "label=id" to set the colours: ,colour=id
-   geom_point(aes(shape=id),size=6, lwd=100)+
+  geom_point(aes(shape=id),size=6, lwd=100)+
   scale_shape_manual('',values=c(1:7))+
   theme(legend.text=element_text(size=20)) +
   theme(axis.text.x=element_text(size=20))+
@@ -75,6 +75,7 @@ ex1 <- ggplot(data, aes(x=x, y=y))+
   coord_equal()
 
 ex1
+
 grid.edit("geom_point.points", grep=TRUE, gp=gpar(lwd=2))
 write.csv(data, "data.csv")
 
@@ -133,55 +134,35 @@ EX4        5d     0.01195  0.00296  0.00018  0.00438  0.99242  0.00005", header=
 dataFKM <- cbind(FKMNOEX,data)
 values<-dataFKM[,4:8]
 dataFKM$maxnumber<-apply(values,1,max)
-
+str(dataFKM)
 
 #Plotting data so memberships affect the size of the plot
 
 ex2 <- ggplot(dataFKM, aes(x=x, y=y))+
-  #theme_grey()+
+ 
   theme_bw()+
-  geom_point(data=kNOEXcent, shape=16, size=4)+
-  #geom_path(data=hull_data, size=2, alpha=.2)+
-  #geom_point(aes(shape=id),color="blue",size=10)+
-  #scale_colour_brewer(palette="Set1")+
-  #geom_text(aes(label=id), size=7)+
-  geom_point(aes(shape=MaxCls,size=maxnumber))+
-  scale_shape_manual('',values=c(1:7))+
+  geom_point(data=kNOEXcent, aes(size="Centroid"), shape=16)+ 
+  geom_point(aes(shape=MaxCls),size=6)+
+  scale_size_discrete("", range=c(4, 4)) +
+  scale_shape_manual('Clusters',values=c(1:7))+
   theme(legend.text=element_text(size=20)) +
+  theme(legend.title=element_text(size=19)) +
   theme(axis.text.x=element_text(size=20))+
   theme(axis.text.y=element_text(size=20))+
   theme(axis.title.x = element_text(size=20))+
   theme(axis.title.y = element_text(size=20))+
- 
   coord_equal()
+
 ex2
 
+#Saving
+ggsave("ex2.png",ex2, type="cairo")
 
-#merge data with kNOEXcent
-
+#merge data with kNOEXcent **possibly redundant**
 datak1 <- rbind(kNOEXcent,data)
 
-#Plot centroids vs data. NOTE: centroid letters randomly assigned and do not match letters assigned in data
 
-ex2 <- ggplot(data, aes(x=x, y=y))+
-  #theme_grey()+
-  theme_bw()+
-  #geom_path(data=hull_data, size=2, alpha=.2)+
-  #geom_point(aes(shape=id),color="blue",size=10)+
-  #scale_colour_brewer(palette="Set1")+
-  #geom_text(aes(label=id), size=7)+
-  geom_point(data=kNOEXcent, shape=16, size=4)+
-  geom_point(aes(shape=id),size=maxnumber)+
-  scale_shape_manual('',values=c(1:7))+
-  theme(legend.text=element_text(size=20)) +
-  theme(axis.text.x=element_text(size=20))+
-  theme(axis.text.y=element_text(size=20))+
-  theme(axis.title.x = element_text(size=20))+
-  theme(axis.title.y = element_text(size=20))+
-  coord_equal()
-ex2
 
-ggsave("ex2.png",ex2, type="cairo")
 
 ##Input the text output from fuzzy k means with extragrades.
 ##5_class
@@ -234,8 +215,9 @@ ex3 <- ggplot(square_mem, aes(x=x, y=y))+  ##, colour=MaxCls
   geom_point(aes(shape=MaxCls),size=6)+
   scale_shape_manual('Clusters',values=c(1,2,3,5,6,4))+
 #   scale_colour_brewer(palette="Set1")+
-  geom_point(data=centroids, colour="black", size=3,shape=16)+
+  geom_point(data=centroids, colour="black", size=4,shape=16)+
   theme(legend.text=element_text(size=20)) +
+  theme(legend.title=element_text(size=19)) +
   theme(axis.text.x=element_text(size=20))+
   theme(axis.text.y=element_text(size=20))+
   theme(axis.title.x = element_text(size=20))+
