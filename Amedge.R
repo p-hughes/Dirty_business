@@ -8,15 +8,16 @@ library(ggplot2)
 library(grid)
 
 edata<-read.table("AMed2084pc.txt",sep=",", header=T)
+ecent<-read.table("AMecent.txt",sep=",", header=T)
+ccentdata<-read.table("AMccent.txt",sep=",", header=T)
 edata$max<-as.factor(edata$max)
 
 
-AM1 <- ggplot(edata, aes(x=Prin1, y=Prin2))+
-  
+ECENT <- ggplot(edata, aes(x=Prin1, y=Prin2))+
   theme_bw()+
-  scale_color_grey()+
-  geom_point(aes(colour=max),size=3)+
-  scale_shape_manual('',values=c(1:11))+
+  geom_point(color='grey')+
+  geom_point(aes(x=Prin1, y=Prin2,shape=Soil.ID), data=ecent,size=6)+
+  scale_size_discrete("", range=c(4, 4)) +
   theme(legend.text=element_text(size=20)) +
   theme(axis.text.x=element_text(size=20))+
   theme(axis.text.y=element_text(size=20))+
@@ -24,11 +25,28 @@ AM1 <- ggplot(edata, aes(x=Prin1, y=Prin2))+
   theme(axis.title.y = element_text(size=20))+
   coord_equal()
 
-AM1
+ECENT
+ggsave("ECENT.png",ECENT, type="cairo")
 
-###Grey plots
-#library(hexbin)
-ggplot(edata, aes(x=Prin1, y=Prin2))+
+CCENT <- ggplot(edata, aes(x=Prin1, y=Prin2))+
+  theme_bw()+
+  geom_point(color='grey')+
+  geom_point(aes(x=Prin1, y=Prin2,shape=Soil.ID), data=ccentdata,size=6)+
+  scale_size_discrete("", range=c(4, 4)) +
+  theme(legend.text=element_text(size=20)) +
+  theme(axis.text.x=element_text(size=20))+
+  theme(axis.text.y=element_text(size=20))+
+  theme(axis.title.x = element_text(size=20))+
+  theme(axis.title.y = element_text(size=20))+
+  coord_equal()
+
+CCENT
+ggsave("CCENT.png",CCENT, type="cairo")
+
+
+
+###SEB GOING NUTS
+NUTS<-ggplot(edata, aes(x=Prin1, y=Prin2))+
   theme_bw() +
   geom_point(data=edata[,-3], aes(x=Prin1, y=Prin2), inherit.aes=FALSE, colour="grey")+
   #geom_density2d()+
@@ -39,5 +57,7 @@ ggplot(edata, aes(x=Prin1, y=Prin2))+
   geom_point(alpha=0.4)+
   facet_wrap(~ max, nrow=3)+
   coord_equal()
+NUTS
+ggsave("NUTS.png",NUTS, type="cairo")
 
 ###
