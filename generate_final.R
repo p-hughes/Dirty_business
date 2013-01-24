@@ -5,7 +5,7 @@
 
 ##setting working directory, importing the neccesary scripts.
 
-#setwd("C:/Users/phug7649/Desktop/TXTBIN")
+setwd("C:/Users/phug7649/Desktop/TXTBIN")
 source("./functions/qhull_algorithm.R")
 library(ggplot2)
 library(grid)
@@ -209,16 +209,16 @@ square_mem <- cbind(data2[,1:2],data[c("x","y")])
 centroids <- read.csv("output.csv")
 names(centroids)[1] <- "MaxCls"
 
-geom_point(data=kNOEXcent, aes(size="Centroid"), shape=16)+
+#geom_point(data=kNOEXcent, aes(size="Centroid"), shape=16)+
 
 ex3 <- ggplot(square_mem, aes(x=x, y=y))+  ##, colour=MaxCls
   theme_bw()+
-#  geom_path(data=hull_data,size=1.5, alpha=.2)+
+  geom_point(data=centroids, aes(size="Centroid"), shape=16)+
   geom_point(aes(shape=MaxCls),size=6)+
   scale_shape_manual('Clusters',values=c(1,2,3,5,6,4))+
-#   scale_colour_brewer(palette="Set1")+
+  
   scale_size_discrete("", range=c(4, 4)) +
-  geom_point(data=centroids, aes(size="Centroid"), shape=16)+
+  
   theme(legend.text=element_text(size=20)) +
   theme(legend.title=element_text(size=19)) +
   theme(axis.text.x=element_text(size=20))+
@@ -253,7 +253,7 @@ data3 <- read.table(text="
 50.0885015208430	23.4160900083503")
 names(data3) <- c("x","y")
 plot(data3)
-id <- c("c","c","c","c","c","c","c","c","c")
+id <- c("c1","c2","c3","c4","c5","c6","c7","c8","c9")
 data3 <- cbind(id,data3)
 
 
@@ -294,9 +294,36 @@ AM<- read.table(text="
 2.05557761981857e-06	2.33409314035940e-05	3.11118329569456e-05	0.930035214549317	0.00227147011508621	0.000115659682743157	0.000111914685233214	0.0347776729553721	0.0326315596702683
 0.961303742243768	1.08578525863864e-05	1.54576104342350e-05	8.21508683255300e-07	0.00117641914217531	0.0269213668618850	0.0104637992597190	6.35890337814067e-05	4.39464869675821e-05
 1.19741813309994e-06	5.30814154416264e-08	0.998018722282669	1.00661029064479e-06	8.07806263316094e-05	3.95609612354813e-06	0.000895002740605654	3.98691517011212e-06	0.000995294229260647
-")
+",col.names=c("a","b","c","d","e","f","g","h","i"))
 
+#names(AM) <- letters[1:9]
+
+
+aa<-as.matrix(AM)
+library(plyr)
+AM$max<-apply(aa,1,which.max)
+AM$max<-as.factor(paste0(letters[AM$max]))
 ex4data<-cbind(data,AM)
+
+##
+
+ex4 <- ggplot(ex4data, aes(x=x, y=y))+
+  theme_bw()+
+  geom_point(data=data3, size=4,shape=16)+
+  geom_point(aes(shape=max),size=6)+
+  scale_shape_manual('',values=c(1:9))+
+ # scale_size_discrete("", range=c(4, 4)) +
+  geom_path(data=hull_data,size=2, alpha=.2)+
+  
+  
+  theme(legend.text=element_text(size=20)) +
+  theme(axis.text.x=element_text(size=20))+
+  theme(axis.text.y=element_text(size=20))+
+  theme(axis.title.x = element_text(size=20))+
+  theme(axis.title.y = element_text(size=20))+
+  coord_equal()
+
+ex4
 
 ex4 <- ggplot(data, aes(x=x, y=y))+
   #theme_grey()+
