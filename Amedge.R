@@ -2,7 +2,7 @@
 
 ## Setting working directory, putting in data
 
-setwd("C:/Users/phug7649/Desktop/TXTBIN")
+#setwd("C:/Users/phug7649/Desktop/TXTBIN")
 source("./functions/qhull_algorithm.R")
 library(ggplot2)
 library(grid)
@@ -26,11 +26,17 @@ AM1 <- ggplot(edata, aes(x=Prin1, y=Prin2))+
 
 AM1
 
-###SEB GOING NUTS
+###Grey plots
+#library(hexbin)
 ggplot(edata, aes(x=Prin1, y=Prin2))+
   theme_bw() +
-  geom_point(size=3)+
-  geom_point(data=edata[,-3], aes(x=Prin1, y=Prin2), inherit.aes=FALSE, alpha=0.1, colour="grey")+
+  geom_point(data=edata[,-3], aes(x=Prin1, y=Prin2), inherit.aes=FALSE, colour="grey")+
+  #geom_density2d()+
+  #geom_hex()+
+  #stat_binhex()+
+  #geom_point(colour=..count..)+
+  #stat_density2d(geom="tile", aes(fill = ..density..), contour = FALSE)+
+  geom_point(alpha=0.4)+
   facet_wrap(~ max, nrow=3)+
   coord_equal()
 
