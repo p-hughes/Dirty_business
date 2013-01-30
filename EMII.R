@@ -15,12 +15,14 @@ setwd("C:/Users/phug7649/Desktop/TXTBIN")
 #za<-read.table("extraprin.txt", sep=",", na.strings="", header=TRUE)
 #z<-read.table("ed_sur_pc_319_197del.txt",sep=",", na.strings="",header=TRUE) ##row 197 is dodgy. I need to delete, then reorder rows.
 z<-read.table("Edgeroi_Fit_cut_PC_2073.txt",sep=",", na.strings="",header=TRUE)
+z<-z[-1902,]
+
 check1<-nrow(z)
 
       ####Apply values to columns####
 
-source("./functions/point_euclid.R")
-source("./functions/qhull_algorithm.R")
+source("C:/Users/phug7649/Desktop/TXTBIN/R-scripts/functions/point_euclid.R")
+source("C:/Users/phug7649/Desktop/TXTBIN/R-scripts/functions/qhull_algorithm.R")
 
 ##errors sometimes occur if the rows don't line up. This fixes the problem at a cost of disorganising the data
 z<- na.exclude(z)
@@ -41,7 +43,8 @@ b<-components+1
 z<-z[,2:b]
 ##creating a file to dump values
 file.create("bin.csv")
-bin<-matrix(NA, 1,1) 
+#bin<-matrix(NA, 1,1)
+bin<-c()
 
 ##Using sebs script to create hulls
 cz<-quick_hull(z)                               ############
@@ -56,8 +59,8 @@ cz<-quick_hull(z)                               ############
 # factor<-eq1(35)
 
 ys<-10      ##starting parameter for yardstick
-factor<-.8  ##creating the factor by which the yardstick length is modified
-YScrit<-8   ##Creating stopping parameter  
+factor<-.75  ##creating the factor by which the yardstick length is modified (previous run was0.8)
+YScrit<-8   ##Creating stopping parameter  (previous run was 8)
 
 
 ##I want the loop to start here
@@ -104,6 +107,8 @@ while (ys>YScrit)
    origin <- as.matrix(pcdist == 0)
    or <- as.matrix(pcdist[origin,])
    bin <- rbind(or,bin)
+#  bin <- c(or,bin)
+  
   
 #    max <- as.matrix(pcdist==b)
 #    maxi <- as.matrix(pcdist[max,])
@@ -120,13 +125,15 @@ while (ys>YScrit)
   
   
 }
+paste0("your algorithm has returned ",nrow(bin), " end points")
+
 
 # removing duplicates
 a<-rownames(bin)
 s<-as.matrix(unique(a))
 
 ##Output- row numbers only:
-write.csv(s, file="ed_ep.csv")
+write.csv(s, file="ed_ep_II.csv")
 
 ##output row numbers and principle components:
 sz<-z[s,]
