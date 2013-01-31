@@ -14,8 +14,9 @@ setwd("C:/Users/phug7649/Desktop/TXTBIN")
 #z<-read.table("matcomp.txt", sep=",", na.strings="", header=TRUE)
 #za<-read.table("extraprin.txt", sep=",", na.strings="", header=TRUE)
 #z<-read.table("ed_sur_pc_319_197del.txt",sep=",", na.strings="",header=TRUE) ##row 197 is dodgy. I need to delete, then reorder rows.
-z<-read.table("Edgeroi_Fit_cut_PC_2073.txt",sep=",", na.strings="",header=TRUE)
-z<-z[-1902,]
+#z<-read.table("Edgeroi_Fit_cut_PC_2073.txt",sep=",", na.strings="",header=TRUE)## removed row 1902- dodgy
+z<-read.table("Edgeroi_Fit_cut_PC_2072.csv",sep=",", na.strings="",header=TRUE)
+#z<-z[-1902,]
 
 check1<-nrow(z)
 
