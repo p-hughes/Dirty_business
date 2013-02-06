@@ -10,6 +10,7 @@ library(grid)
 edata<-read.table("../AMed2084pc.txt",sep=",", header=T)
 ecent<-read.table("../AMecent.txt",sep=",", header=T)
 ccentdata<-read.table("../AMccent.txt",sep=",", header=T)
+extra<-read.table("10_class.txt",sep="", header=T)
 edata$max<-as.factor(edata$max)
 ecent$Centroid_type<-c("E","E","E","E","E")
 ccentdata$Centroid_type<-c("C","C","C","C","C","C")
@@ -114,4 +115,5 @@ stuff<-as.matrix(stuf)
 str(stuf)
 sum(stuf)
 table(eememb$ex)
+
 

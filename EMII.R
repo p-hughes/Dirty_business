@@ -60,7 +60,7 @@ cz<-quick_hull(z)                               ############
 # factor<-eq1(35)
 
 ys<-10      ##starting parameter for yardstick
-factor<-.75  ##creating the factor by which the yardstick length is modified (previous run was0.8)
+factor<-.65  ##creating the factor by which the yardstick length is modified (previous run was0.8)
 YScrit<-8   ##Creating stopping parameter  (previous run was 8)
 
 
@@ -135,6 +135,7 @@ s<-as.matrix(unique(a))
 
 ##Output- row numbers only:
 write.csv(s, file="ed_ep_II.csv")
+write.csv(s, paste0('ep_',factor,'_',YScrit,'.csv'))
 
 ##output row numbers and principle components:
 sz<-z[s,]
