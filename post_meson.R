@@ -6,6 +6,11 @@
 
 setwd("C:/Users/phug7649/Desktop/TXTBIN")
 z<-read.table("Edgeroi_Fit_cut_PC_2072.csv",sep=",", na.strings="",header=TRUE)
+#importing output from fuzzy k means with extragrades
+extra<-read.table("10_class.txt",sep="", header=T)
+excent<-read.csv("excent.csv")
+extra<-extra[1:2072,]
+
 
 #setting working directory (in this case the edgeroi folders), reading in the data.
 
@@ -158,5 +163,48 @@ ggsave("NUTS2.png",NUTS2, type="cairo")
 ## it looks as though clusters of about 1% total row length capture end point clusters. increasing w 
 ## tidies up the data, but may miss extragrade clusters or worse, give data extreme weight.
 
- 
+##extragrade data for comparison
+
+setwd("C:/Users/phug7649/Desktop/TXTBIN")
+extra<-read.table("10_class.txt",sep="", header=T)
+excent<-read.csv("excent.csv")
+extra<-extra[1:2072,]
+setwd("C:/Users/phug7649/Desktop/edgeroi/New/W_200")
+#Soil attributes should go here
+attrib<-read.table("b.csv",header=TRUE, sep=",")
+Soil_ID<-letters[1:10]
+CI<-1:10
+MaxCls<-letters[1:10]
+mat<-diag(10)
+matrix<-cbind(Soil_ID,MaxCls,CI,mat)
+att_ex<-cbind(attrib,extra)
+cent_mat<-cbind(excent,matrix,MaxCls)
+names(cent_mat)<-names(att_ex)
+explot<-rbind(att_ex,cent_mat)
+##pc's needed.
+write.csv(explot,"explot.csv")
+##input pc's
+pc<-read.csv("Ex_pc.txt",header=TRUE)
+pccent<-pc[2073:2082,]
+
+NUTS3<-ggplot(pc, aes(x=Prin1, y=Prin2), group=max)+
+  theme_bw() +
+  geom_point(data=pc[,c("Prin1", "Prin2")], aes(x=Prin1, y=Prin2), inherit.aes=FALSE, colour="grey40")+
+  #geom_density2d()+
+  #geom_hex()+
+  #stat_binhex()+
+  #geom_point(colour=..count..)+
+  #stat_density2d(geom="tile", aes(fill = ..density..), contour = FALSE)+
+  stat_bin2d(binwidth=c(0.5, 0.5)) +
+  #geom_point(alpha=0.5)+
+  facet_wrap(~ MaxCls, nrow=3,)#+
+#   geom_point(data=pccent, aes( shape=Soil.ID), size=4, colour="black")+  
+#   scale_fill_gradient(low="grey90", high="grey10")+
+#   scale_shape_manual(values=c(1, 2))+
+#   coord_equal()
+NUTS3
+
+table(pc$MaxCls)
+
+  
 
