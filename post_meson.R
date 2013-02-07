@@ -197,13 +197,13 @@ NUTS3<-ggplot(pc, aes(x=Prin1, y=Prin2), group=max)+
   #stat_density2d(geom="tile", aes(fill = ..density..), contour = FALSE)+
   stat_bin2d(binwidth=c(0.5, 0.5)) +
   #geom_point(alpha=0.5)+
-  facet_wrap(~ MaxCls, nrow=3,)#+
-#   geom_point(data=pccent, aes( shape=Soil.ID), size=4, colour="black")+  
-#   scale_fill_gradient(low="grey90", high="grey10")+
-#   scale_shape_manual(values=c(1, 2))+
-#   coord_equal()
+  facet_wrap(~ MaxCls, nrow=3,)+
+   geom_point(data=pccent, shape=1, size=4, colour="black")+  
+   scale_fill_gradient(low="grey90", high="grey10")+
+#   scale_shape_manual(values=c(1:10))+
+   coord_equal()
 NUTS3
-
+ggsave("NUTS3.png",NUTS3, type="cairo")
 table(pc$MaxCls)
 
   
