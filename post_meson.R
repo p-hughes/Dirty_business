@@ -206,5 +206,15 @@ NUTS3
 ggsave("NUTS3.png",NUTS3, type="cairo")
 table(pc$MaxCls)
 
+write.csv(excent, "excent.csv", row.names=FALSE)
+
+##messing with R's principal components
+
+c<-princomp(attrib[,2:ncol(attrib)],scale=TRUE)
+ d<-c$scores
+ head(d)
+ plot(d[,1],d[,2])
+
+#yep, the principal component analysis is officially fucked.
   
 
