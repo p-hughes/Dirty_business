@@ -74,9 +74,15 @@ c_out<-cbind(m1,m2[,3],m3[,3],m4[,3],m5[,3])
 cout<-c_out[,3:7]
 tcout<-t(cout)
 plot(tcout[,1])
-for (i in 1:5){
-  plot(tcout[,i],ylim=c(1,200),type="l", main=i)
+for (i in 1:11){
+  plot(tcout[,i],ylim=c(1,500),type="l", main=i)
 }
+
+weights<-plot(tcout[,1],type='l',ylim=c(1,500), main="Changes to weighting factor", xaxt="n",ylab="Number of data in cluster",xlab="weighting applied")
+axis(1,at=1:5,labels=c("w=30", "w=60", "w=100", "w=200","w=400")) 
+apply(tcout[,-1], 2, lines)
+weights
+ggsave("weights.png",weights, type="cairo")
 
 
  #may as well add principal components, reading in the data and getting rid of that annoying 
