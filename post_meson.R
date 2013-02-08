@@ -78,7 +78,7 @@ for (i in 1:11){
   plot(tcout[,i],ylim=c(1,500),type="l", main=i)
 }
 
-weights<-plot(tcout[,1],type='l',ylim=c(1,500), main="Changes to weighting factor", xaxt="n",ylab="Number of data in cluster",xlab="weighting applied")
+weights<-plot(tcout[,1],type='l',ylim=c(1,500), main="Comparison of weighting factor to data distribution within clusters", xaxt="n",ylab="Number of data in cluster",xlab="weighting applied")
 axis(1,at=1:5,labels=c("w=30", "w=60", "w=100", "w=200","w=400")) 
 apply(tcout[,-1], 2, lines)
 weights
