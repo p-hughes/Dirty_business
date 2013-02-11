@@ -64,25 +64,28 @@ write.csv(ATTRIB_DIST_cent, paste0('output_',w[1,1],'.csv'))
 write.csv(summary,paste0('summary_',w[1,1],'.csv'))
 
 ##further analysis--DATA SPECIFIC!
+##maybe this neeeds to be cut down to w=30 again. Too confusing.
+my<-read.csv("summary_1.csv")
+mx<-read.csv("summary_5.csv")
+ma<-read.csv("summary_15.csv")
 m1<-read.csv("summary_30.csv")
 m2<-read.csv("summary_60.csv")
 m3<-read.csv("summary_100.csv")
 m4<-read.csv("summary_200.csv")
 m5<-read.csv("summary_400.csv")
 
-c_out<-cbind(m1,m2[,3],m3[,3],m4[,3],m5[,3])
-cout<-c_out[,3:7]
+c_out<-cbind(my,mx[,3],ma[,3],m1[,3],m2[,3],m3[,3],m4[,3],m5[,3])
+cout<-c_out[,3:10]
 tcout<-t(cout)
 plot(tcout[,1])
 for (i in 1:11){
   plot(tcout[,i],ylim=c(1,500),type="l", main=i)
 }
 
-weights<-plot(tcout[,1],type='l',ylim=c(1,500), main="Comparison of weighting factor to data distribution within clusters", xaxt="n",ylab="Number of data in cluster",xlab="weighting applied")
-axis(1,at=1:5,labels=c("w=30", "w=60", "w=100", "w=200","w=400")) 
+plot(tcout[,1],type='l',ylim=c(1,500), main="Comparison of weighting factor to data distribution within clusters", xaxt="n",ylab="Number of data in cluster",xlab="weighting applied")
+axis(1,at=1:8,labels=c("w=1","w=5","w=15","w=30", "w=60", "w=100", "w=200","w=400")) 
 apply(tcout[,-1], 2, lines)
-weights
-ggsave("weights.png",weights, type="cairo")
+
 
 
  #may as well add principal components, reading in the data and getting rid of that annoying 
