@@ -33,7 +33,8 @@ check<-na.exclude(data)
 
 ##have a look at the CN ratio. May be able to pick up missing C or N values.
 
-
+head(data)
+plot(data[,4],data[,6])
 
 
 
