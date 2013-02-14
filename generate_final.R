@@ -6,7 +6,7 @@
 ##setting working directory, importing the neccesary scripts.
 
 setwd("C:/Users/phug7649/Desktop/TXTBIN")
-source("./functions/qhull_algorithm.R")
+source("./R-scripts/functions/qhull_algorithm.R")
 library(ggplot2)
 library(grid)
 
