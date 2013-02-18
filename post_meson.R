@@ -74,6 +74,8 @@ m3<-read.csv("summary_100.csv")
 m4<-read.csv("summary_200.csv")
 m5<-read.csv("summary_400.csv")
 
+##Plot 1
+
 c_out<-cbind(my,mx[,3],ma[,3],m1[,3],m2[,3],m3[,3],m4[,3],m5[,3])
 cout<-c_out[,3:10]
 tcout<-t(cout)
@@ -82,11 +84,55 @@ for (i in 1:11){
   plot(tcout[,i],ylim=c(1,500),type="l", main=i)
 }
 
-plot(tcout[,1],type='l',ylim=c(1,500), main="Comparison of weighting factor to data distribution within clusters", xaxt="n",ylab="Number of data in cluster",xlab="weighting applied")
-axis(1,at=1:8,labels=c("w=1","w=5","w=15","w=30", "w=60", "w=100", "w=200","w=400")) 
+plot(tcout[,1],type='l',ylim=c(1,500), main="Comparison of weighting factor to data distribution within clusters", 
+     xaxt="n",ylab="Number of data in cluster",xlab="weighting applied",cex.lab=1.55,cex.axis=1.5)
+axis(1,at=1:8,labels=c("w=1","w=5","w=15","w=30", "w=60", "w=100", "w=200","w=400"),cex.axis=1.5) 
 apply(tcout[,-1], 2, lines)
 
+c_out<-cbind(m1[,3],m2[,3],m3[,3],m4[,3],m5[,3])
+cout<-c_out[,1:5]
+tcout<-t(cout)
 
+##version 2
+
+##installing cairo
+
+install.packages(c("Cairo"), repos="http://cran.r-project.org" )
+library(Cairo)
+
+opar<-par()
+
+colnames(tcout)<-c("E","E","E","E","E","I","I","I","I","I","I")
+
+#CairoPNG('new-style.png')
+par(mar = c(5,5,4,2) +0.1)
+plot(tcout[,1],type='n',ylim=c(1,500), main="Comparison of weight factor to data distribution within clusters",
+    cex.main=1.65,
+     xaxt="n",ylab="Number of data in each cluster",xlab="weighting applied",cex.lab=1.6,cex.axis=1.5)
+axis(1,at=1:5,labels=c("w=30", "w=60", "w=100", "w=200","w=400"),cex.axis=1.5) 
+
+apply(tcout[,colnames(tcout)=="E"], 2, lines, lty=1)
+apply(tcout[,colnames(tcout)=="I"], 2, lines, lty=2)
+legend(1000,4.5, c(colnames(tcout=="E"),colnames(tcout=="I")))
+
+#dev.off()
+
+
+#plot(x, y, main='Test plot', pch=21, col='blue', bg='lightblue')
+#abline(lm(y ~ x), col='red', lwd=2)
+
+       
+# for (i in 1:5) {
+# lines(tcout[,-i],lty=2)
+# }
+# for i in 6:ll
+# lines(tcout[,-i],lty=1)
+
+head(tcout)
+
+
+barplot(tN, col=rainbow(5),cex.axis=0.5) # for the Y-axis
+barplot(tN, col=rainbow(5),cex.names=0.5) # for the X-axis
 
  #may as well add principal components, reading in the data and getting rid of that annoying 
  #"X" column R sometimes makes
