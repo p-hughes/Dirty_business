@@ -27,14 +27,24 @@ data[,4]<-y
 y=ifelse(is.na(data[,6]),ifelse(data[,4]<7.5,0,NA),data[,6])
 data[,6]<-y
 
-data<-cbind(data[,2],data[,4],data[,6:8],data[,11:13],data[,26:31])
+##Using composition to ensure the sand/silt clay fraction is as complete as possible
+y=ifelse(is.na(data[,11]),100-data[,12]+data[,13],data[,11])
+data[,11]<-y
 
+y=ifelse(is.na(data[,12]),100-data[,11]+data[,13],data[,12])
+data[,12]<-y
+
+y=ifelse(is.na(data[,13]),100-data[,12]+data[,11],data[,13])
+data[,13]<-y
+
+#check step
+data <- data[,c(1,4,6:8,11:13,26:31)]
 check<-na.exclude(data)
 
 ##have a look at the CN ratio. May be able to pick up missing C or N values.
 
 head(data)
-plot(data[,4],data[,6])
+plot(data[,6],data[,4])
 
 
 
