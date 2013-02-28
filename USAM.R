@@ -6,6 +6,21 @@ ec<-read.csv("ec.txt")
 data<-merge(data,ec, by="natural_key", all=TRUE )
 data<-(unique(data))
 
+##some research on the nasis pH data
+ph<-read.csv("phinfo.txt")
+lmph<-lm(ph[,4]~ph[,2])
+summary(lmph)
+plot(ph[,2],ph[,4],xlim=c(0,15),ylim=c(0,15))
+abline(lmph, col="red")
+a<-ph[,1:2]
+b<-ph[,4]
+c<-cbind(a,b)
+d<-na.exclude(c)
+##adding each data column together to see how much extra data a linear model would produce
+y=ifelse(is.na(c[,2]),c[,3],c[,2])
+e<-na.exclude(y)
+##will work on this tomorrow, I need to apply the lm to the data, but it changes 40,000 rows to 200,000!!!
+
 ##y is a temporary column
 
 
