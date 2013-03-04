@@ -4,10 +4,16 @@ setwd("C:/Users/phug7649/Desktop/txtbin")
 library(ggplot2)
 
 
+
 ph<-read.csv("phinfo.txt")
 ec<-read.csv("ec.txt")
+cec<- read.csv("CEC.txt")
 
-##this data may be obsolete. I will add each column manually. 
+
+##I may need to import the carbonates as a seperate column, then do a funky heat map like in the pH, then perform a regression.
+
+
+## v This data may be obsolete. I will add each column manually. 
 #data<-read.csv("phil1.txt")
 #data<-merge(data,ec, by="natural_key", all=TRUE )
 #data<-(unique(data))
@@ -28,7 +34,7 @@ ilmph
 plot(ph[,2],ph[,4],xlim=c(0,15),ylim=c(0,15),xlab="CaCl2", ylab="KCl", main="pH measurement in different media")
 abline(lmph, col="red")
 
-##Awesome plot
+##Awesome plot of pH
 png("hextbin.png", type="cairo", width=4196*2, height=2048*2)
 d <- ggplot(ph, aes(x = ph_cacl2, y = ph_kcl))
 d + geom_hex(binwidth = c(0.25, 0.25)) +
@@ -42,6 +48,16 @@ d + geom_hex(binwidth = c(0.25, 0.25)) +
         legend.title=element_text(size=80),
         axis.text=element_text(size=50))
 dev.off()
+
+
+##awesome plot of carbonates
+pdf("carbhex.pdf")
+d <- ggplot(ph, aes(y = caco3, x = ph_h2o))
+d + geom_hex(binwidth = c(.4, 4)) +
+  coord_cartesian(ylim = c(-0, 100))+ 
+  theme_bw()
+ dev.off()
+
 
 ##Applying regression to data to estimate pH
 y=ifelse(is.na(ph[,2]),0.5995 + 0.9735*ph[,4],ph[,2])
@@ -65,8 +81,6 @@ ph_ec[,3]<-y
 head(ph_ec)
 sp_ph<-na.exclude(y)
 
-##plot carbonates before you fuck with the data!
-
 ##estimating pH from Caco3 and ec
 #first, NA needs to be converted to 1 so absence of carbonates will be ignored, rather than returning NA
 
@@ -84,6 +98,18 @@ ph_ec[,3]<-y
 y=ifelse(is.na(ph_ec[,7]),ifelse(ph_ec[,3]<7.5,0,NA),ph_ec[,7])
 caco3<-na.exclude(y)
 ph_ec[,7]<-y
+
+##Merging CEC data with the rest of it..
+CEC<-na.exclude(cec)
+ph_ec_cec<-merge(ph_ec,CEC, by="natural_key", all=TRUE )
+
+##checking to see how much usable data is available
+cec_check<-ph_ec_cec[,c(3,7,10)]
+c_check<-na.exclude(cec_check)
+rowloss<-nrow(cec_check)-nrow(c_check)
+
+
+
 
 
 
