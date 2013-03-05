@@ -8,10 +8,9 @@ library(ggplot2)
 ph<-read.csv("phinfo.txt")
 ec<-read.csv("ec.txt")
 cec<- read.csv("CEC.txt")
-
-
-##I may need to import the carbonates as a seperate column, then do a funky heat map like in the pH, then perform a regression.
-
+horizon<-read.csv("DEPTH.txt")
+LNkey<-read.csv("LNkey.txt")##this guy may be the rosetta stone of the data
+colour<-read.csv("colour.txt")
 
 ## v This data may be obsolete. I will add each column manually. 
 #data<-read.csv("phil1.txt")
@@ -21,6 +20,7 @@ cec<- read.csv("CEC.txt")
 ##some research on the nasis pH data
 
 ##there is a ph value of 35 in here. I need to remove this at some stage
+##I suggest its a missing full stop. 3.5 makes way more sense than 35.
 #regression for Cacl2~KCl 
 
 lmph<-lm(ph[,4]~ph[,2])
@@ -34,7 +34,7 @@ ilmph
 plot(ph[,2],ph[,4],xlim=c(0,15),ylim=c(0,15),xlab="CaCl2", ylab="KCl", main="pH measurement in different media")
 abline(lmph, col="red")
 
-##Awesome plot of pH
+##Hex plot of pH
 png("hextbin.png", type="cairo", width=4196*2, height=2048*2)
 d <- ggplot(ph, aes(x = ph_cacl2, y = ph_kcl))
 d + geom_hex(binwidth = c(0.25, 0.25)) +
@@ -49,8 +49,8 @@ d + geom_hex(binwidth = c(0.25, 0.25)) +
         axis.text=element_text(size=50))
 dev.off()
 
-
-##awesome plot of carbonates
+##I may need to import the carbonates as a seperate column, then do a funky heat map like in the pH, then perform a regression.
+##Hex plot of carbonates
 pdf("carbhex.pdf")
 d <- ggplot(ph, aes(y = caco3, x = ph_h2o))
 d + geom_hex(binwidth = c(.4, 4)) +
@@ -83,7 +83,6 @@ sp_ph<-na.exclude(y)
 
 ##estimating pH from Caco3 and ec
 #first, NA needs to be converted to 1 so absence of carbonates will be ignored, rather than returning NA
-
 y=ifelse(is.na(ph_ec[,9]),1,ph_ec[,9])
 check<-na.exclude(y)##check step. "check" should be the identical to y.
 identical(check,y)
@@ -108,6 +107,11 @@ cec_check<-ph_ec_cec[,c(3,7,10)]
 c_check<-na.exclude(cec_check)
 rowloss<-nrow(cec_check)-nrow(c_check)
 
+ph_ec_cec<-as.data.frame(ph_ec_cec)
+horizon<-as.data.frame(horizon)
+
+ph_ec_cec_horizon<-merge(ph_ec_cec,horizon, by= "natural_key", all= TRUE)
+
 
 
 
@@ -117,11 +121,10 @@ rowloss<-nrow(cec_check)-nrow(c_check)
 
 ###########################################################################################################################
 
-##fixing up pH data
 
-#y is a bin column which will contain the results of this action.
 
-##replacing NA with 1 so that the regression will include na values for ec
+
+
 #y is a bin column which will contain the results of this action.
 
 
