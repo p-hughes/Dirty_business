@@ -11,6 +11,7 @@ cec<- read.csv("CEC.txt")
 horizon<-read.csv("DEPTH.txt")
 LNkey<-read.csv("LNkey.txt")##this guy may be the rosetta stone of the data
 colour<-read.csv("colour.txt")
+psa<-read.csv("PSA.txt")
 
 ## v This data may be obsolete. I will add each column manually. 
 #data<-read.csv("phil1.txt")
@@ -89,7 +90,7 @@ identical(check,y)
 ph_ec[,9]<-y
 
 ##Next: convert CaCl2 pH to water pH via budi's equation.
-y=ifelse(is.na(ph_ec[,3]),(ph_ec[,2]-0.14*log(ph_ec[,9]))/9,ph_ec[,3])
+y=ifelse(is.na(ph_ec[,3]),(ph_ec[,2]+0.5-0.14*log(ph_ec[,9]))/.9,ph_ec[,3])
 ec_ph<-na.exclude(y)
 ph_ec[,3]<-y
 
@@ -112,7 +113,35 @@ horizon<-as.data.frame(horizon)
 
 ph_ec_cec_horizon<-merge(ph_ec_cec,horizon, by= "natural_key", all= TRUE)
 
+## merging colour data to see what we have left. The nasis database has proved itself to be particularly unhelpful.
+## ID columns can be merged to create a common row id, but not knowing if a designation is common, dupicated or missing 
+## creates real hassles when trying to create massive data sets from different areas. 
 
+col_pech<-merge(ph_ec_cec_horizon,colour, by="natural_key", all=TRUE)
+##check step
+head(col_pech)
+combined<-col_pech[,c(1,3,7,10,11,15:17)]
+comcheck<-na.exclude(combined)
+tex_pechc<-merge(col_pech,psa, by="natural_key", all=TRUE)
+
+##fixing texture data by composition
+head(tex_pechc)
+
+y=ifelse(is.na(tex_pechc[,18]),100-tex_pechc[,19]+tex_pechc[,20],tex_pechc[,18])
+tex_pechc[,18]<-y
+
+y=ifelse(is.na(tex_pechc[,19]),100-tex_pechc[,18]+tex_pechc[,20],tex_pechc[,18])
+tex_pechc[,19]<-y
+
+y=ifelse(is.na(tex_pechc[,20]),100-tex_pechc[,19]+tex_pechc[,18],tex_pechc[,20])
+tex_pechc[,20]<-y
+##check step
+head(tex_pechc)
+combined<-tex_pechc[,c(1,3,7,10,11,15:20)]
+comcheckII<-na.exclude(combined)
+
+## check for duplicates please
+## add carbon data please
 
 
 
