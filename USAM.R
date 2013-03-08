@@ -12,6 +12,7 @@ horizon<-read.csv("DEPTH.txt")
 LNkey<-read.csv("LNkey.txt")##this guy may be the rosetta stone of the data
 colour<-read.csv("colour.txt")
 psa<-read.csv("PSA.txt")
+carbon<-read.csv("carbon.txt")
 
 ## v This data may be obsolete. I will add each column manually. 
 #data<-read.csv("phil1.txt")
@@ -143,8 +144,35 @@ comcheckII<-na.exclude(combined)
 ## check for duplicates please
 ## add carbon data please
 
+##consultation with experts indicates that if the pH is below 7.5 then all of the carbon in the profile should be organic.
 
+##creating a c-oc ratio to plot against pH
+head(carbon)
+carbon$c_ratio<-carbon[,2]/(carbon[,2]+carbon[,3])
+cph<-merge(carbon,ph_ec, by= "natural_key", all= TRUE)
+head(cph)
+  
+plot(cph$ratio,cph$ph_h2o)
 
+lmcph<-lm(cph[,3]~cph[,2])
+lmcphi<-lm(cph[,2]~cph[,3])
+plot(cph[,2],cph[,3])
+abline(lmcph,col="red")
+abline(lmcphi,col="blue")
+
+pdf("chex.pdf")
+d <- ggplot(cph, aes(y = ph_h2o, x = c_ratio))
+d + geom_hex(binwidth = c(.06, .6)) +
+  coord_cartesian(ylim = c(-0, 14))+ 
+  theme_bw()
+dev.off()
+
+pdf("cchex.pdf")
+d <- ggplot(cph, aes(y = c_tot, x = oc))
+d + geom_hex(binwidth = c(7,7)) +
+  coord_cartesian(ylim = c(-0, 90))+ 
+  theme_bw()
+dev.off()
 
 
 
