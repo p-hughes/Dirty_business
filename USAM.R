@@ -173,9 +173,36 @@ d + geom_hex(binwidth = c(7,7)) +
   coord_cartesian(ylim = c(-0, 90))+ 
   theme_bw()
 dev.off()
+head(cph)
+
+# Multiple linear regression prediction (oc ~ carbon and pH)
+# > stackloss.lm = lm(stack.loss ~ 
+#                       +     Air.Flow + Water.Temp + Acid.Conc., 
+#                     +     data=stackloss)
+oc.pred<-lm(cph$oc~
+              +cph$c_tot
+            +cph$ph_h2o)
+summary(oc.pred)
+oc.pred
+y<-0.04936+(1.08923*cph$c_tot)+ (-0.09031*cph$ph_h2o)  
 
 
+#This produces results that sometimes dive below zero and climb above the maximum total carbon values
+#Make negative values zero and values above the maximum equal to the maximum.
 
+z=ifelse(y>cph$c_tot,cph$c_tot,y)
+y=ifelse(z<0,0,z)
+z=ifelse(is.na(cph$oc),y,cph$oc)
+zna<-na.exclude(z)
+cph$oc<-z
+head(cph)
+
+
+# plot(oc~y,data=cphy)
+# a<-cbind(cphy$oc,cphy$y)
+# a<-na.exclude(a)
+# plot(a)
+# plot(caco3~oc,data=cphy)
 ###########################################################################################################################
 
 
