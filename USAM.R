@@ -13,6 +13,7 @@ LNkey<-read.csv("LNkey.txt")##this guy may be the rosetta stone of the data
 colour<-read.csv("colour.txt")
 psa<-read.csv("PSA.txt")
 carbon<-read.csv("carbon.txt")
+Nitrogen<-read.csv("nitrogen.txt")
 
 ## v This data may be obsolete. I will add each column manually. 
 #data<-read.csv("phil1.txt")
@@ -197,6 +198,9 @@ zna<-na.exclude(z)
 cph$oc<-z
 head(cph)
 
+## Consider using the nitrogen data as a guide to fill out the carbon column. It seems as though the CN ratio only applies
+## to the OC column. 
+
 
 # plot(oc~y,data=cphy)
 # a<-cbind(cphy$oc,cphy$y)
@@ -218,44 +222,44 @@ head(cph)
 
 
 ##Using composition to ensure the sand/silt clay fraction is as complete as possible
-y=ifelse(is.na(data[,11]),100-data[,12]+data[,13],data[,11])
-data[,11]<-y
-
-y=ifelse(is.na(data[,12]),100-data[,11]+data[,13],data[,12])
-data[,12]<-y
-
-y=ifelse(is.na(data[,13]),100-data[,12]+data[,11],data[,13])
-data[,13]<-y
-
-#check step
-data <- data[,c(1,4,6:8,11:13,26:31)]
-check<-na.exclude(data)
-
-##have a look at the CN ratio. May be able to pick up missing C or N values.
-
-head(data)
-plot(data[,6],data[,4])
-
-
-
-
-
-
-# a<-ph[,1:2]
-# b<-ph[,4]
-# c<-cbind(a,b)
-# d<-na.exclude(c)
-# ##adding each data column together to see how much extra data a linear model would produce
-# y=ifelse(is.na(c[,2]),c[,3],c[,2])
-# e<-na.exclude(y)
-
-
-# ##Estimating 
-# plot(ph[,4],ph[,2],xlim=c(0.5995,15),ylim=c(0,15),ylab="CaCl2", xlab="KCl", main="pH measurement in different media")
-# abline(ilmph, col="red")
-
-
-
+# y=ifelse(is.na(data[,11]),100-data[,12]+data[,13],data[,11])
+# data[,11]<-y
+# 
+# y=ifelse(is.na(data[,12]),100-data[,11]+data[,13],data[,12])
+# data[,12]<-y
+# 
+# y=ifelse(is.na(data[,13]),100-data[,12]+data[,11],data[,13])
+# data[,13]<-y
+# 
+# #check step
+# data <- data[,c(1,4,6:8,11:13,26:31)]
+# check<-na.exclude(data)
+# 
+# ##have a look at the CN ratio. May be able to pick up missing C or N values.
+# 
+# head(data)
+# plot(data[,6],data[,4])
+# 
+# 
+# 
+# 
+# 
+# 
+# # a<-ph[,1:2]
+# # b<-ph[,4]
+# # c<-cbind(a,b)
+# # d<-na.exclude(c)
+# # ##adding each data column together to see how much extra data a linear model would produce
+# # y=ifelse(is.na(c[,2]),c[,3],c[,2])
+# # e<-na.exclude(y)
+# 
+# 
+# # ##Estimating 
+# # plot(ph[,4],ph[,2],xlim=c(0.5995,15),ylim=c(0,15),ylab="CaCl2", xlab="KCl", main="pH measurement in different media")
+# # abline(ilmph, col="red")
+# 
+# 
+# 
 
 
 
