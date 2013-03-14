@@ -6,15 +6,23 @@ library(ggplot2)
 
 
 ph<-read.csv("phinfo.txt")
+anyDuplicated(as.character(ph$natural_key))
 ec<-read.csv("ec.txt")
+anyDuplicated(as.character(ec$natural_key))
 cec<- read.csv("CEC.txt")
+anyDuplicated(as.character(cec$natural_key))
 horizon<-read.csv("DEPTH.txt")
+anyDuplicated(as.character(horizon$natural_key))
 LNkey<-read.csv("LNkey.txt")##this guy may be the rosetta stone of the data
+anyDuplicated(as.character(LNkey$natural_key))
 colour<-read.csv("colour.txt")
+anyDuplicated(as.character(colour$natural_key))
 psa<-read.csv("PSA.txt")
+anyDuplicated(as.character(psa$natural_key))
 carbon<-read.csv("carbon.txt")
+anyDuplicated(as.character(carbon$natural_key))
 Nitrogen<-read.csv("nitrogen.txt")
-
+anyDuplicated(as.character(Nitrogen$natural_key))##I may not need nitrogen, so leave well alone!!!
 ## v This data may be obsolete. I will add each column manually. 
 #data<-read.csv("phil1.txt")
 #data<-merge(data,ec, by="natural_key", all=TRUE )
@@ -148,8 +156,19 @@ comcheckII<-na.exclude(combined)
 ##consultation with experts indicates that if the pH is below 7.5 then all of the carbon in the profile should be organic.
 
 ##creating a c-oc ratio to plot against pH
+
+##estimating carbon using nitrogen and c_n ratio
+#cn<-merge(carbon,Nitrogen, by="natural_key")
+
+#head(cn)
+y=ifelse(is.na(carbon[,"oc"]),carbon[,"c_n_ra"]*carbon[,"n_tot"],carbon[,"oc"])
+a<-carbon[,"oc"]
+sum(is.na(a))
+sum(is.na(y))
+carbon$oc<-y
+
 head(carbon)
-carbon$c_ratio<-carbon[,2]/(carbon[,2]+carbon[,3])
+carbon$c_ratio<-carbon[,"c_tot"]/(carbon[,"c_tot"]+carbon[,"oc"])
 cph<-merge(carbon,ph_ec, by= "natural_key", all= TRUE)
 head(cph)
   
@@ -197,6 +216,8 @@ z=ifelse(is.na(cph$oc),y,cph$oc)
 zna<-na.exclude(z)
 cph$oc<-z
 head(cph)
+
+
 
 ## Consider using the nitrogen data as a guide to fill out the carbon column. It seems as though the CN ratio only applies
 ## to the OC column. 
