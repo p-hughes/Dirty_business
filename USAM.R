@@ -80,9 +80,9 @@ kcl_reg<-na.exclude(y)
 ph_ec<-merge(ph,ec, by="natural_key", all=TRUE )
 
 ##removing duplicates
-sub_ph_ec<-with(ph_ec, data.frame(natural_key))
-nodup_ph_ec <- which(!duplicated(sub_ph_ec))
-ph_ec <- ph_ec[nodup_ph_ec,]
+# sub_ph_ec<-with(ph_ec, data.frame(natural_key))
+# nodup_ph_ec <- which(!duplicated(sub_ph_ec))
+# ph_ec <- ph_ec[nodup_ph_ec,]
 
 ##Adding sp data
 #replace missing pH values (1:5 in water) with paste pH values (which are roughly equivalent). 
@@ -216,6 +216,17 @@ z=ifelse(is.na(cph$oc),y,cph$oc)
 zna<-na.exclude(z)
 cph$oc<-z
 head(cph)
+
+
+carb<-carbon[,c("natural_key","oc")]
+
+carb_tpechc<-merge(tex_pechc,carb, by="natural_key", all= TRUE)
+head(carb_tpechc)
+
+check<-carb_tpechc[,c(1,3,7,10,11,15:21)]
+checkII<-na.exclude(check)
+anyDuplicated(as.character(checkII$natural_key))
+
 
 
 
