@@ -1,4 +1,10 @@
-##this script is to 
+##this script is to create a complete set of records for the US data. 
+
+
+##################################################################################################
+###  IT IS VITALLY important that I name each column, rather than using the column number!!!!  ###
+##################################################################################################
+
 
 setwd("C:/Users/phug7649/Desktop/txtbin")
 library(ggplot2)
@@ -6,7 +12,7 @@ library(ggplot2)
 
 
 ph<-read.csv("phinfo.txt")
-anyDuplicated(as.character(ph$natural_key))
+sum(duplicated(ph$natural_key))
 ec<-read.csv("ec.txt")
 anyDuplicated(as.character(ec$natural_key))
 cec<- read.csv("CEC.txt")
@@ -16,7 +22,23 @@ anyDuplicated(as.character(horizon$natural_key))
 LNkey<-read.csv("LNkey.txt")##this guy may be the rosetta stone of the data
 anyDuplicated(as.character(LNkey$natural_key))
 colour<-read.csv("colour.txt")
-anyDuplicated(as.character(colour$natural_key))
+sum(duplicated(colour$natural_key))
+
+## Duplicates found, I should go to the source and correct that but I am taking the cowards way out...
+
+head(colour)
+sub_colour<-colour$natural_key
+nodup_colour <- which(!duplicated(sub_colour))
+colour_no_dup <- colour[nodup_colour,]
+sum(duplicated(colour_no_dup))
+colour<-colour_no_dup
+rm(colour_no_dup)
+##pulling the cieLAB data out of the munsell information 
+colour<-colour[,c(1,2,3,10,11,12)]
+
+
+
+
 psa<-read.csv("PSA.txt")
 anyDuplicated(as.character(psa$natural_key))
 carbon<-read.csv("carbon.txt")
@@ -78,11 +100,6 @@ kcl_reg<-na.exclude(y)
 
 ##Merging ec data so pH can be accurately estimated from CaCl2
 ph_ec<-merge(ph,ec, by="natural_key", all=TRUE )
-
-##removing duplicates
-# sub_ph_ec<-with(ph_ec, data.frame(natural_key))
-# nodup_ph_ec <- which(!duplicated(sub_ph_ec))
-# ph_ec <- ph_ec[nodup_ph_ec,]
 
 ##Adding sp data
 #replace missing pH values (1:5 in water) with paste pH values (which are roughly equivalent). 
@@ -226,12 +243,52 @@ head(carb_tpechc)
 check<-carb_tpechc[,c(1,3,7,10,11,15:21)]
 checkII<-na.exclude(check)
 anyDuplicated(as.character(checkII$natural_key))
+sum(duplicated(checkII$natural_key))
+
+##a small number of duplicates found. Taking the cowards way out again.
+
+sub_checkII<-checkII$natural_key
+nodup_checkII <- which(!duplicated(sub_checkII))
+checkII_no_dup <- checkII[nodup_checkII,]
+sum(duplicated(checkII_no_dup))
+checkII<-checkII_no_dup
+rm(checkII_no_dup)
+
+##subsetting
+head(checkII)
+
+# Just 0
+subset0 <- subset(checkII, hzn_top.x==0)
+# Between 0 and 5 
+subset0_5 <- subset(checkII, hzn_top.x >= 0 & hzn_top.x < 5) 
+
+##preparing for fuzzy k algorithm. No extraneous columns, keep an id column.
+subset0_5<-subset0_5[,-5]
+
+##outputting data into a csv
+write.csv(subset0_5, "USII_0_5.csv")
+               
+
+
 
 
 
 
 ## Consider using the nitrogen data as a guide to fill out the carbon column. It seems as though the CN ratio only applies
 ## to the OC column. 
+
+##today:
+##Use regression to turn munsell into cie lab.
+
+
+
+
+##select out top horizons
+##use fuzzy k to estimate number of clusters:
+#Cluster estimation can go either by nested clusters or total clusters.
+
+##subsetting for regression in jmp
+
 
 
 # plot(oc~y,data=cphy)
