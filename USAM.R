@@ -283,10 +283,22 @@ scatterplot3d(Phi,Class,FPI, main="3D Scatterplot")
 # Spinning 3d Scatterplot
 library(rgl)
 attach(clusfind)
-plot3d(Class,FPI,Phi, main="FKM~phi,FPI and class", col="red", size=3)
-
+redblue.colors <- colorRampPalette(c("red", "blue"))
+contrast<-colorRampPalette(c("red","blue","green","red","blue","green"))
+plot3d(Class,FPI,Phi, main="FKM~phi,FPI and class",col=rep(contrast(6), each=34) , size=3)
+plot3d(Class,FPI,Phi, main="FKM~phi,FPI and class",col=rep(redblue.colors(6), each=34) , size=3)
+#col=rainbow(500)
 #from this plot, phi of 1.25, with 4 major classes may be the best. This means that we will move on to AM, but first 
 #the principal component issue needs to be resolved.
+
+##a correlation matrix needs to be used, not a covariance matrix.
+##Code is:
+##result<-princomp(x,cor=TRUE)
+##comps<-result$scores
+
+classes<-read.csv("f1.25  4_class.txt",sep="")
+
+
                
 
 
