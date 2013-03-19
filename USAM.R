@@ -267,6 +267,26 @@ subset0_5<-subset0_5[,-5]
 
 ##outputting data into a csv
 write.csv(subset0_5, "USII_0_5.csv")
+
+##reading in the results from FKM in its appropriate directory
+
+setwd("C:/Users/phug7649/Desktop/kmeans/Paper_2/0-5")
+
+clusfind<-read.csv("summary.txt",sep="", header=TRUE)
+head(clusfind)
+# 3D Scatterplot
+install.packages("scatterplot3d")
+library(scatterplot3d)
+attach(clusfind)
+scatterplot3d(Phi,Class,FPI, main="3D Scatterplot")
+
+# Spinning 3d Scatterplot
+library(rgl)
+attach(clusfind)
+plot3d(Class,FPI,Phi, main="FKM~phi,FPI and class", col="red", size=3)
+
+#from this plot, phi of 1.25, with 4 major classes may be the best. This means that we will move on to AM, but first 
+#the principal component issue needs to be resolved.
                
 
 
