@@ -299,100 +299,166 @@ plot3d(Class,FPI,Phi, main="FKM~phi,FPI and class",col=rep(redblue.colors(6), ea
 classes<-read.csv("f1.25  4_class.txt",sep="")
 
 
-               
+##how do you rename a header? heres how!
+names(classes)[1]<-"natural_key"
+
+class_subset0_5<-merge(subset0_5,classes, by= "natural_key",all=TRUE)
+##you must be vewwy vewwy qwiet, im hunting outliers!
+a<-which.max(class_subset0_5[,"ph_h2o"])
+class_subset0_5[a,"ph_h2o"]
+hist(class_subset0_5[,"ph_h2o"])
+##outliers must have been culled earlier... checked the data is complete. On with your scheduled number crunching..
+##making principal components from the data...
+head(subset0_5)
+ncol(subset0_5)
+a<-princomp(subset0_5[,2:11], cor=TRUE)
+prin0_5<-a$scores
+csprin0_5<-cbind(class_subset0_5,prin0_5)
+
+
+####################################################################################################################
+################################ Time to use the script found in EMII.r ############################################
+####################################################################################################################
+
+
+
+############################################# THE CONVEX BICYCLE ###################################################
+
+##A script made to identify a small number of points around the periphery of a data cloud. This should coincide with
+##the location of end members. It works by creating an n-dimensional convex hull (thanks seb),finding a point with a 
+##maximum distance from zero then finding the maximum distance of this point from all other points in the hull.
+
+
+##control panel
+ys<-10      ##starting parameter for yardstick
+factor<-.6  ##creating the factor by which the yardstick length is modified (previous run was0.8)
+YScrit<-5   ##Creating stopping parameter  (previous run was 8)
+
+
+##constructing the dataset. Required: 1 column (column.30 with the components arranged after that.)
+
+Column.30<-1:nrow(prin0_5)
+z<-cbind(Column.30,prin0_5)
+
+####Apply values to columns####
+
+source("C:/Users/phug7649/Desktop/TXTBIN/R-scripts/functions/point_euclid.R")
+source("C:/Users/phug7649/Desktop/TXTBIN/R-scripts/functions/qhull_algorithm.R")
+
+##errors sometimes occur if the rows don't line up. This fixes the problem at a cost of disorganising the data
+check1<-nrow(z)
+z<- na.exclude(z)
+row.names(z)<-NULL
+check2<-nrow(z)
+
+if(check1==check2) print("Rows are in order") else stop("rows are now disorganised. Do you wish to proceed?")
+
+
+z<-z[,2:ncol(z)]
+##creating a file to dump values
+file.create("bin.csv")
+#bin<-matrix(NA, 1,1)
+bin<-c()
+
+##Using sebs script to create hulls
+cz<-quick_hull(z)                               ############
+##CONTROLS##
+############
+## there are two control methods atm; the first is to define the length of the yardstick. Provides an undefined number
+## of end-members. the second is to use an equation which most likely is data specific.
+
+##While the script below runs, the number in "eq1" is the number of end members the algorythm gets (approximately)
 
 
 
 
+##I want the loop to start here
+
+while (ys>YScrit)
+  
+{
+  ##sum of rows
+  czr<-z[cz,]
+  czr<-czr^2
+  czrsum<-rowSums(czr)
+  fin<-sqrt(czrsum)
+  finm<-as.matrix(fin)  
+  
+  ##rows with max and min euclidean distance from zero
+  refmax<-which.max(finm)
+  
+  ##getting maximum value and anchoring it to the row number in the master data set (z)
+#   BLARG<-as.matrix(refmax)
+#    BLARG<-rownames(z[cz,])==cz[refmax]
+  ###(I hope this works)
+   BLARG<-as.data.frame(z)[cz[refmax],]
+#   BLARG<-as.matrix(cz[BLARG])
+  
+  ##retrieving all the principal component data from rows that contain maximum and minimum euclidean distances
+  rowx<-BLARG
+  
+  
+  ## retrieving all pc data from cz 
+  object<-z[cz,]
+  #object<-z[finm,]
+  
+  ##getting distances
+  pcdist<-as.matrix(point_euclid(object,rowx))
+  #pcdisty<-as.matrix(point_euclid(object,rowy))
+  
+  ##yardstick
+  b<-as.numeric(pcdist[which.max(pcdist),])
+  ys<-b*factor
+  
+  ##compare yardstick to the convex hull
+  new <- ys < as.vector(pcdist)
+#   new <- as.matrix(new)
+  
+  ##Placing maximum (maxi) and minimum (origin) points in the final file
+  
+#   origin <- as.matrix(pcdist == 0)
+#   or <- as.matrix(pcdist[origin,])
+#  or <- cz[which(pcdist == 0)]
+  or <- cz[which.min(abs(pcdist))]
+  bin <- rbind(or,bin)
+  #  bin <- c(or,bin)
+  
+  
+  #    max <- as.matrix(pcdist==b)
+  #    maxi <- as.matrix(pcdist[max,])
+  #    bin <-rbind(maxi,bin)
+  
+  
+  ##Exclude any values inferior to yardstick (this file should be renamed cz when its time to reiterate)
+#   finm <- as.matrix(pcdist[new,])
+  
+  ##Create a new object to replace the previous convex hull list
+#   cz<-as.numeric(rownames(finm))
+  cz <- cz[which(new)]
+  
+  print(ys)
+  
+  
+}
+paste0("your algorithm has returned ",nrow(bin), " end points")
+
+####################################################################################################################
 
 
-## Consider using the nitrogen data as a guide to fill out the carbon column. It seems as though the CN ratio only applies
-## to the OC column. 
+# removing duplicates
+a<-rownames(bin)
+s<-as.matrix(unique(a))
 
-##today:
-##Use regression to turn munsell into cie lab.
+##Output- row numbers only:
+write.csv(s, file="USII_ep_II.csv")
+write.csv(s, paste0('ep_',factor,'_',YScrit,'.csv'))
 
+# ##output row numbers and principle components:
+# sz<-z[s,]
+# write.csv(sz,file="USII_ep.csv")
 
-
-
-##select out top horizons
-##use fuzzy k to estimate number of clusters:
-#Cluster estimation can go either by nested clusters or total clusters.
-
-##subsetting for regression in jmp
-
-
-
-# plot(oc~y,data=cphy)
-# a<-cbind(cphy$oc,cphy$y)
-# a<-na.exclude(a)
-# plot(a)
-# plot(caco3~oc,data=cphy)
-###########################################################################################################################
-
-
-
-
-
-#y is a bin column which will contain the results of this action.
-
-
-#y is a bin column which will contain the results of this action.
-
-
-
-
-##Using composition to ensure the sand/silt clay fraction is as complete as possible
-# y=ifelse(is.na(data[,11]),100-data[,12]+data[,13],data[,11])
-# data[,11]<-y
-# 
-# y=ifelse(is.na(data[,12]),100-data[,11]+data[,13],data[,12])
-# data[,12]<-y
-# 
-# y=ifelse(is.na(data[,13]),100-data[,12]+data[,11],data[,13])
-# data[,13]<-y
-# 
-# #check step
-# data <- data[,c(1,4,6:8,11:13,26:31)]
-# check<-na.exclude(data)
-# 
-# ##have a look at the CN ratio. May be able to pick up missing C or N values.
-# 
-# head(data)
-# plot(data[,6],data[,4])
-# 
-# 
-# 
-# 
-# 
-# 
-# # a<-ph[,1:2]
-# # b<-ph[,4]
-# # c<-cbind(a,b)
-# # d<-na.exclude(c)
-# # ##adding each data column together to see how much extra data a linear model would produce
-# # y=ifelse(is.na(c[,2]),c[,3],c[,2])
-# # e<-na.exclude(y)
-# 
-# 
-# # ##Estimating 
-# # plot(ph[,4],ph[,2],xlim=c(0.5995,15),ylim=c(0,15),ylab="CaCl2", xlab="KCl", main="pH measurement in different media")
-# # abline(ilmph, col="red")
-# 
-# 
-# 
-
-
-
-
-
-
-
-
-
-
-
-
-
+#making a set number of points based on a specific yardstick.
+y<-sz[1:20,]
+write.csv(y,file="bend.csv")
 
 
