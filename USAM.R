@@ -267,6 +267,10 @@ subset0_5<-subset0_5[,-5]
 
 ##outputting data into a csv
 write.csv(subset0_5, "USII_0_5.csv")
+##Checkpoint
+setwd("C:/Users/phug7649/Desktop/txtbin")
+subset0_5<-read.csv("USII_0_5.csv")
+
 
 ##reading in the results from FKM in its appropriate directory
 
@@ -296,7 +300,7 @@ plot3d(Class,FPI,Phi, main="FKM~phi,FPI and class",col=rep(redblue.colors(6), ea
 ##result<-princomp(x,cor=TRUE)
 ##comps<-result$scores
 
-classes<-read.csv("f1.25  4_class.txt",sep="")
+classes<-read.csv("f1.25 11_class.txt",sep="")
 
 
 ##how do you rename a header? heres how!
@@ -311,16 +315,19 @@ hist(class_subset0_5[,"ph_h2o"])
 ##making principal components from the data...
 head(subset0_5)
 ncol(subset0_5)
+
+##should have used "row.names=FALSE when making this csv. I will fix the problem later.
+subset0_5<-subset0_5[,2:12]# remove this when the issue is fixed.
 a<-princomp(subset0_5[,2:11], cor=TRUE)
 prin0_5<-a$scores
 csprin0_5<-cbind(class_subset0_5,prin0_5)
 
 
 ####################################################################################################################
-################################ Time to use the script found in EMII.r ############################################
+#################################### Time to use the script found in EMII.r ########################################
 ####################################################################################################################
 
-
+#I need to make a function out of this...
 
 ############################################# THE CONVEX BICYCLE ###################################################
 
@@ -328,121 +335,85 @@ csprin0_5<-cbind(class_subset0_5,prin0_5)
 ##the location of end members. It works by creating an n-dimensional convex hull (thanks seb),finding a point with a 
 ##maximum distance from zero then finding the maximum distance of this point from all other points in the hull.
 
+####################################################################################################################
 
-##control panel
-ys<-10      ##starting parameter for yardstick
-factor<-.6  ##creating the factor by which the yardstick length is modified (previous run was0.8)
-YScrit<-5   ##Creating stopping parameter  (previous run was 8)
+
+
 
 
 ##constructing the dataset. Required: 1 column (column.30 with the components arranged after that.)
-
 Column.30<-1:nrow(prin0_5)
 z<-cbind(Column.30,prin0_5)
+z<-z[,2:ncol(z)]
 
-####Apply values to columns####
-
+##scripts required for this algorithm to work...
 source("C:/Users/phug7649/Desktop/TXTBIN/R-scripts/functions/point_euclid.R")
 source("C:/Users/phug7649/Desktop/TXTBIN/R-scripts/functions/qhull_algorithm.R")
 
-##errors sometimes occur if the rows don't line up. This fixes the problem at a cost of disorganising the data
-check1<-nrow(z)
-z<- na.exclude(z)
-row.names(z)<-NULL
-check2<-nrow(z)
-
-if(check1==check2) print("Rows are in order") else stop("rows are now disorganised. Do you wish to proceed?")
-
-
-z<-z[,2:ncol(z)]
-##creating a file to dump values
-file.create("bin.csv")
-#bin<-matrix(NA, 1,1)
-bin<-c()
-
-##Using sebs script to create hulls
-cz<-quick_hull(z)                               ############
-##CONTROLS##
-############
+################################################# control panel ####################################################
 ## there are two control methods atm; the first is to define the length of the yardstick. Provides an undefined number
 ## of end-members. the second is to use an equation which most likely is data specific.
+ys<-10      ##starting parameter for yardstick
+factor<-.52  ##creating the factor by which the yardstick length is modified (previous run was0.8)
+YScrit<-2   ##Creating stopping parameter  (previous run was 8)
+####################################################################################################################
+rm(bin)
+file.create("bin.csv")##creating a file to dump values
+bin<-c()
+cz<-quick_hull(z)##Using sebs script to create hulls 
 
-##While the script below runs, the number in "eq1" is the number of end members the algorythm gets (approximately)
 
-
-
-
-##I want the loop to start here
-
-while (ys>YScrit)
+while (ys>YScrit)##I want the loop to start here
   
 {
-  ##sum of rows
-  czr<-z[cz,]
+  
+  czr<-z[cz,]##sum of rows
   czr<-czr^2
   czrsum<-rowSums(czr)
   fin<-sqrt(czrsum)
-  finm<-as.matrix(fin)  
-  
-  ##rows with max and min euclidean distance from zero
-  refmax<-which.max(finm)
-  
-  ##getting maximum value and anchoring it to the row number in the master data set (z)
-#   BLARG<-as.matrix(refmax)
-#    BLARG<-rownames(z[cz,])==cz[refmax]
-  ###(I hope this works)
-   BLARG<-as.data.frame(z)[cz[refmax],]
-#   BLARG<-as.matrix(cz[BLARG])
-  
-  ##retrieving all the principal component data from rows that contain maximum and minimum euclidean distances
-  rowx<-BLARG
-  
-  
-  ## retrieving all pc data from cz 
-  object<-z[cz,]
-  #object<-z[finm,]
-  
-  ##getting distances
-  pcdist<-as.matrix(point_euclid(object,rowx))
-  #pcdisty<-as.matrix(point_euclid(object,rowy))
-  
-  ##yardstick
-  b<-as.numeric(pcdist[which.max(pcdist),])
-  ys<-b*factor
-  
-  ##compare yardstick to the convex hull
-  new <- ys < as.vector(pcdist)
-#   new <- as.matrix(new)
-  
-  ##Placing maximum (maxi) and minimum (origin) points in the final file
-  
-#   origin <- as.matrix(pcdist == 0)
-#   or <- as.matrix(pcdist[origin,])
-#  or <- cz[which(pcdist == 0)]
-  or <- cz[which.min(abs(pcdist))]
-  bin <- rbind(or,bin)
-  #  bin <- c(or,bin)
-  
-  
-  #    max <- as.matrix(pcdist==b)
-  #    maxi <- as.matrix(pcdist[max,])
-  #    bin <-rbind(maxi,bin)
-  
-  
-  ##Exclude any values inferior to yardstick (this file should be renamed cz when its time to reiterate)
-#   finm <- as.matrix(pcdist[new,])
-  
-  ##Create a new object to replace the previous convex hull list
-#   cz<-as.numeric(rownames(finm))
-  cz <- cz[which(new)]
-  
-  print(ys)
-  
+  finm<-as.matrix(fin)      
+  refmax<-which.max(finm)##rows with max and min euclidean distance from zero 
+  BLARG<-as.data.frame(z)[cz[refmax],]##getting maximum value and anchoring it to the row number in the master data set (z)    
+  rowx<-BLARG##retrieving all the principal component data from rows that contain maximum and minimum euclidean distances  
+  object<-z[cz,] ## retrieving all pc data from cz    
+  pcdist<-as.matrix(point_euclid(object,rowx))##getting distances 
+  b<-as.numeric(pcdist[which.max(pcdist),])##max distance
+  ys<-b*factor##yardstick
+  new <- ys < as.vector(pcdist)##compare yardstick to the convex hull  
+  or <- cz[which(pcdist == 0)]##Placing maximum (maxi) and minimum (origin) points in the final file
+  bin <- rbind(or,bin)    
+  cz <- cz[which(new)]##Exclude any values inferior to yardstick (this file should be renamed cz when its time to reiterate)  
+  print(ys) #print the yardstick value to see if the script is running  
   
 }
 paste0("your algorithm has returned ",nrow(bin), " end points")
-
+ys<-10
 ####################################################################################################################
+
+
+##plotting components
+
+bincomp<-z[bin,]
+plot(bincomp[,1],bincomp[,2])
+
+##plotting hull
+
+cz<-quick_hull(z)
+head(cz)
+test<-z[cz,]
+head(test)
+plot(test[,1],test[,2])
+plot3d(test[,1],test[,2],test[,3])
+
+z3<-z[,1:3]
+cz<-quick_hull(z3)
+test<-z[cz,]
+plot3d(test[,1],test[,2],test[,3])
+
+z4_6<-z[,4:6]
+cz<-quick_hull(z4_6)
+test<-z[cz,]
+plot3d(test[,1],test[,2],test[,3])
 
 
 # removing duplicates
