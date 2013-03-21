@@ -355,7 +355,7 @@ source("C:/Users/phug7649/Desktop/TXTBIN/R-scripts/functions/qhull_algorithm.R")
 ## of end-members. the second is to use an equation which most likely is data specific.
 ys<-10      ##starting parameter for yardstick
 factor<-.52  ##creating the factor by which the yardstick length is modified (previous run was0.8)
-YScrit<-2   ##Creating stopping parameter  (previous run was 8)
+YScrit<-2   ##Stopping criteria; when the overall size of the hull is less than this, the algorithm stops.
 ####################################################################################################################
 rm(bin)
 file.create("bin.csv")##creating a file to dump values
@@ -387,6 +387,7 @@ while (ys>YScrit)##I want the loop to start here
   
 }
 paste0("your algorithm has returned ",nrow(bin), " end points")
+paste0("Yardstick factor is ",factor,","," stopping criterion is ",YScrit)
 ys<-10
 ####################################################################################################################
 
@@ -395,6 +396,10 @@ ys<-10
 
 bincomp<-z[bin,]
 plot(bincomp[,1],bincomp[,2])
+plot3d(bincomp[,1],bincomp[,2],bincomp[,3])
+plot3d(bincomp[,4],bincomp[,5],bincomp[,6])
+plot3d(bincomp[,7],bincomp[,8],bincomp[,9])
+plot3d(bincomp[,10],bincomp[,2],bincomp[,1])
 
 ##plotting hull
 
@@ -415,21 +420,48 @@ cz<-quick_hull(z4_6)
 test<-z[cz,]
 plot3d(test[,1],test[,2],test[,3])
 
+##creating an identity matrix
+matrix<-diag(nrow(bin))
+##creating end point matrices
+points<-subset0_5[bin,]
+verify<-cbind(bin,points)
 
-# removing duplicates
-a<-rownames(bin)
-s<-as.matrix(unique(a))
+#creating control file
+crow1<-c("weights","phi","nend","nclass")
+crow2<-c(w,p,ncol(bin),total)
+#writing files
 
-##Output- row numbers only:
-write.csv(s, file="USII_ep_II.csv")
-write.csv(s, paste0('ep_',factor,'_',YScrit,'.csv'))
+setwd("C:\\Users\\phug7649\\Documents\\MATLAB")
 
-# ##output row numbers and principle components:
-# sz<-z[s,]
-# write.csv(sz,file="USII_ep.csv")
 
-#making a set number of points based on a specific yardstick.
-y<-sz[1:20,]
-write.csv(y,file="bend.csv")
+write.table(matrix,"matrix.csv",row.names=FALSE,col.names=FALSE,sep=",")
+write.csv(points,"EP.csv",row.names=FALSE)
+write.csv(subset0_5,"DATA.csv",row.names=FALSE)
+
+ checkdata<-read.csv("edg_2072_ep_k_2072_II.csv")
+ head(checkdata)
+ data<-read.csv("DATA.csv")
+ head(data)
+ checkep<-read.csv("edg_2072_ep_k_5_II.csv")
+ head(checkep)
+ ep<-read.csv("EP.csv")
+ head(ep)
+ checkmatrix<-read.csv("edg_2073_ep_k_id.csv")
+ head(checkmatrix)
+ matII<-read.csv("matrix.csv")
+ head(matII)
+shell("matlab -nodesktop -nosplash -wait -r rep")
+
+
+
+
+
+
+
+
+
+
+
+
 
 
