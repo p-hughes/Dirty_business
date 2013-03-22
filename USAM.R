@@ -267,7 +267,11 @@ subset0_5<-subset0_5[,-5]
 
 ##outputting data into a csv
 write.csv(subset0_5, "USII_0_5.csv")
-##Checkpoint
+
+###################################################################################################################
+##                                       ## Checkpoint -- 11 gold get ##                                         ##
+###################################################################################################################
+
 setwd("C:/Users/phug7649/Desktop/txtbin")
 subset0_5<-read.csv("USII_0_5.csv")
 ##this data needs the silt fraction removed. This may cause problems down the line
