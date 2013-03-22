@@ -270,6 +270,10 @@ write.csv(subset0_5, "USII_0_5.csv")
 ##Checkpoint
 setwd("C:/Users/phug7649/Desktop/txtbin")
 subset0_5<-read.csv("USII_0_5.csv")
+##this data needs the silt fraction removed. This may cause problems down the line
+one<-subset0_5[,1:9]
+two<-subset0_5[,11:12]
+subset0_5<-cbind(one,two)
 
 
 ##reading in the results from FKM in its appropriate directory
@@ -278,11 +282,6 @@ setwd("C:/Users/phug7649/Desktop/kmeans/Paper_2/0-5")
 
 clusfind<-read.csv("summary.txt",sep="", header=TRUE)
 head(clusfind)
-# 3D Scatterplot
-install.packages("scatterplot3d")
-library(scatterplot3d)
-attach(clusfind)
-scatterplot3d(Phi,Class,FPI, main="3D Scatterplot")
 
 # Spinning 3d Scatterplot
 library(rgl)
@@ -314,11 +313,12 @@ hist(class_subset0_5[,"ph_h2o"])
 ##outliers must have been culled earlier... checked the data is complete. On with your scheduled number crunching..
 ##making principal components from the data...
 head(subset0_5)
-ncol(subset0_5)
+y<-ncol(subset0_5)
 
 ##should have used "row.names=FALSE when making this csv. I will fix the problem later.
-subset0_5<-subset0_5[,2:12]# remove this when the issue is fixed.
-a<-princomp(subset0_5[,2:11], cor=TRUE)
+subset0_5<-subset0_5[,2:y]# remove this when the issue is fixed.
+y<-ncol(subset0_5)
+a<-princomp(subset0_5[,2:y], cor=TRUE)
 prin0_5<-a$scores
 csprin0_5<-cbind(class_subset0_5,prin0_5)
 
@@ -354,8 +354,8 @@ source("C:/Users/phug7649/Desktop/TXTBIN/R-scripts/functions/qhull_algorithm.R")
 ## there are two control methods atm; the first is to define the length of the yardstick. Provides an undefined number
 ## of end-members. the second is to use an equation which most likely is data specific.
 ys<-10      ##starting parameter for yardstick
-factor<-.52  ##creating the factor by which the yardstick length is modified (previous run was0.8)
-YScrit<-2   ##Stopping criteria; when the overall size of the hull is less than this, the algorithm stops.
+factor<-.52  ##creating the factor by which the yardstick length is modified (previous run was 0.8)
+YScrit<-3.1   ##Stopping criteria; when the overall size of the hull is less than this, the algorithm stops.
 ####################################################################################################################
 rm(bin)
 file.create("bin.csv")##creating a file to dump values
@@ -396,7 +396,7 @@ ys<-10
 
 bincomp<-z[bin,]
 plot(bincomp[,1],bincomp[,2])
-plot3d(bincomp[,1],bincomp[,2],bincomp[,3])
+plot3d(bincomp[,1],bincomp[,2],bincomp[,3],size=10)
 plot3d(bincomp[,4],bincomp[,5],bincomp[,6])
 plot3d(bincomp[,7],bincomp[,8],bincomp[,9])
 plot3d(bincomp[,10],bincomp[,2],bincomp[,1])
@@ -450,6 +450,11 @@ write.csv(subset0_5,"DATA.csv",row.names=FALSE)
  head(checkmatrix)
  matII<-read.csv("matrix.csv")
  head(matII)
+
+Clusters<-11
+
+message(paste0("nclass needs to be ", Clusters+nrow(bin)))
+
 shell("matlab -nodesktop -nosplash -wait -r rep")
 
 
