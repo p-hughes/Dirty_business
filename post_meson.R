@@ -2,26 +2,45 @@
 ##can be analysed.This assumes the output from matlab is based on an id matrix of the same size 
 ##as the centroid table.
 
-#Importing original principal components
+#Importing original principal components Not neccesary as we have the internal mechanism working now.
 
 setwd("C:/Users/phug7649/Desktop/TXTBIN")
-z<-read.table("Edgeroi_Fit_cut_PC_2072.csv",sep=",", na.strings="",header=TRUE)
+Original_data<-read.table("USII_0_5.csv",header=TRUE, sep=",")
+comps<-princomp(Original_data[,3:ncol(Original_data)],cor=TRUE)
+scores<-comps$scores
+
+z<-cbind(Original_data[,2],scores)
 #importing output from fuzzy k means with extragrades
-extra<-read.table("10_class.txt",sep="", header=T)
+
+setwd("C:/Users/phug7649/Desktop/kmeans/Paper_2/0-5")
+
+clusfind<-
+head(clusfind)
+
+extra<-read.csv("f1.25 11_class.txt",sep="", header=TRUE)##importing classes, ID, maxcls, n data columns
+
+############################################ Im up to here...########################################################
+
+##WTF?????
+
 excent<-read.csv("excent.csv")
 extra<-extra[1:2072,]
+
+
 
 
 #setting working directory (in this case the edgeroi folders), reading in the data.
 
 setwd("C:/Users/phug7649/Desktop/edgeroi/New/W_200")
 #Soil attributes should go here
-attrib<-read.table("b.csv",header=TRUE, sep=",")
+attrib<-read.table("C:/Users/phug7649/Documents/MATLAB/mdist.csv",header=TRUE, sep=",")
 dist<-read.csv("C:/Users/phug7649/Documents/MATLAB/mdist.csv",header=FALSE)
 c<-read.csv("C:/Users/phug7649/Documents/MATLAB/mcent.csv",header=FALSE)
 w<-read.csv("C:/Users/phug7649/Documents/MATLAB/weighting.csv",header=FALSE)
 #dist<- read.table("membership table_30.csv",header=TRUE,sep=",",check.names=FALSE)
 names(dist)<-c('11a','11b','11c','11d','11e','11f','11g','11h','11i','11j','11k')
+
+
 
 
 ##number of rows in the data set
