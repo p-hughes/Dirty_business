@@ -57,7 +57,11 @@ max<-t(max)
 
 
 data.complete<-cbind(data_cent.prin,max)
-centroids.complete<-data.complete[11752:11780,]
+datarows<-nrow(data)
+position1<-datarows+1
+cdatarows<-nrow(data.complete)
+#centroids.complete<-data.complete[11752:11780,]
+centroids.complete<-data.complete[position1:cdatarows,]
 emno<-number_of_end_members[1,1]
 ceno<-nrow(centroid_table)-emno
 soil.id<-rep(c("E", "C"), c(emno, ceno))
@@ -67,7 +71,7 @@ centroids.complete<-cbind(centroids.complete,soil.id)
 
 
 ###SEB GOING NUTS (more often referred to as a panel plot)
-ggplot(data.complete, aes(x=Comp.1, y=Comp.2), group=max)+
+NUTS<-ggplot(data.complete, aes(x=Comp.1, y=Comp.2), group=max)+
   theme_bw() +
   geom_point(colour="grey40")+
   
@@ -75,13 +79,17 @@ ggplot(data.complete, aes(x=Comp.1, y=Comp.2), group=max)+
   #stat_bin2d(binwidth=c(1, 1),colour=gray) +
 
   facet_wrap(~ max, nrow=5)+
-  geom_point(data=centroids.complete, aes(shape=soil.id),size=2.5, colour="black")+  
+  geom_point(data=centroids.complete, aes(shape=soil.id),size=4, colour="black")+  
   scale_shape_manual(values=c(16, 17))+
-  theme(plot.background = element_rect(fill = "green"))+
+  theme(plot.background = element_rect(fill = 101))+
  # theme(panel.margin = unit(5, "lines"))+
   coord_equal()
+w<-weighting_factor[1,1]
+NUTS
 
 ggsave("NUTS.png", type="cairo")
+ggsave(paste(w),"NUTS.png",NUTS, type="cairo")
+
 
 
 
