@@ -25,7 +25,7 @@ data_cent<-rbind(data,centroid_table)
 princomp_main<-princomp(data_cent[,2:ncol(data)],cor=TRUE)
 princomp_comp<-princomp_main$scores
 ##attaching principal components to main data, plotting to ensure we know what it looks like.
-plot(princomp_comp[,1],princomp_comp[,2])
+#plot(princomp_comp[,1],princomp_comp[,2])
 ##creating max distance column
 data_distances<-read.csv("mdist.csv",sep=",",header=F)  
 id.matrix<-diag(nrow(centroid_table))
@@ -48,6 +48,8 @@ number_of_centroids<-read.csv("cent.csv",header=FALSE,sep=",")
 ##creating max column for data distances
 aa<-as.matrix(data_distances)
 data_distances$max<-apply(aa,1,which.max)
+data_ratio<-data_distances
+data_ratio$max<-apply(aa,1,which.max)
 max<-make_letter_ids(nrow(centroid_table))
 data_distances$max<-max[data_distances$max]
 max<-data_distances$max
@@ -68,7 +70,14 @@ soil.id<-rep(c("E", "C"), c(emno, ceno))
 centroids.complete<-cbind(centroids.complete,soil.id)
 
 
-
+totals<-as.data.frame(table(data_ratio$max))
+end.tot<-totals[1:nrow(matrix),]
+cent.tot<-totals[nrow(matrix):nrow(totals),]
+sum.end<-sum(end.tot[,2])
+sum.cent<-sum(cent.tot[,2])  
+ratio<-(sum.end/sum.cent)*100
+ratio<-round(ratio,digits=2)
+message(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, "% end point memberships"))
 
 ###SEB GOING NUTS (more often referred to as a panel plot)
 NUTS<-ggplot(data.complete, aes(x=Comp.1, y=Comp.2), group=max)+
@@ -81,14 +90,23 @@ NUTS<-ggplot(data.complete, aes(x=Comp.1, y=Comp.2), group=max)+
   facet_wrap(~ max, nrow=5)+
   geom_point(data=centroids.complete, aes(shape=soil.id),size=4, colour="black")+  
   scale_shape_manual(values=c(16, 17))+
-  theme(plot.background = element_rect(fill = 101))+
+  theme(plot.background = element_rect(fill = 103))+
+  ggtitle(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, " percent end point memberships"))
  # theme(panel.margin = unit(5, "lines"))+
   coord_equal()
 w<-weighting_factor[1,1]
 NUTS
 
-ggsave("NUTS.png", type="cairo")
-ggsave(paste(w),"NUTS.png",NUTS, type="cairo")
+#ggsave option + paste0= less work for lazy programmers
+#ggsave("NUTS.png", type="cairo")
+#ggsave(paste(w),"NUTS.png",NUTS, type="cairo")
+
+#Assign colours in one giant plot for Alex. 
+
+
+#hclust(centroids.complete[,2:19])
+
+
 
 
 
