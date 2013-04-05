@@ -41,6 +41,7 @@ weighting_factor<-read.csv("weighting.csv",sep=",")
 number_of_rows<-read.csv("rows.csv",header=FALSE,sep=",")
 number_of_end_members<-read.csv("end.csv",header=FALSE,sep=",")
 number_of_centroids<-read.csv("cent.csv",header=FALSE,sep=",")
+w<-weighting_factor[1,1]
 
 ##create the id matrix from the matlab data
 
@@ -62,7 +63,6 @@ data.complete<-cbind(data_cent.prin,max)
 datarows<-nrow(data)
 position1<-datarows+1
 cdatarows<-nrow(data.complete)
-#centroids.complete<-data.complete[11752:11780,]
 centroids.complete<-data.complete[position1:cdatarows,]
 emno<-number_of_end_members[1,1]
 ceno<-nrow(centroid_table)-emno
@@ -90,11 +90,14 @@ NUTS<-ggplot(data.complete, aes(x=Comp.1, y=Comp.2), group=max)+
   facet_wrap(~ max, nrow=5)+
   geom_point(data=centroids.complete, aes(shape=soil.id),size=4, colour="black")+  
   scale_shape_manual(values=c(16, 17))+
-  theme(plot.background = element_rect(fill = 103))+
-  ggtitle(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, " percent end point memberships"))
+  theme(plot.background = element_rect(fill = w))+
+  xlim(-12,8)+
+  ylim(-7.5,5)+
+  
+  ggtitle(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, " percent end point memberships"))+
  # theme(panel.margin = unit(5, "lines"))+
   coord_equal()
-w<-weighting_factor[1,1]
+
 NUTS
 
 #ggsave option + paste0= less work for lazy programmers
@@ -105,9 +108,24 @@ NUTS
 
 
 #hclust(centroids.complete[,2:19])
+#qplot(Comp.1,Comp.2,data=data.complete,colour=centroids.complete$soil.id)
+ggplot(data.complete,aes(x=Comp.1,y=Comp.2))+
+        geom_point(aes(colour=max))+
+        geom_point(data=centroids.complete,aes(shape=soil.id),size=4)+
+        scale_shape_manual(values=c(16,17))+
+        xlim(-12,8)+
+        ylim(-7.5,5)+
+        ggtitle(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, " percent end point memberships"))+
+        coord_equal()
 
 
-
+# ggplot(data.complete, aes(x=Comp.1, y=Comp.2)) +
+#   geom_point(centroids.complete,aes(x=Comp.1,y=Comp.2))  
+#   coord_equal()
+  
+  
+ 
+  
 
 
 
