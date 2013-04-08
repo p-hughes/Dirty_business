@@ -75,24 +75,23 @@ end.tot<-totals[1:nrow(matrix),]
 cent.tot<-totals[nrow(matrix):nrow(totals),]
 sum.end<-sum(end.tot[,2])
 sum.cent<-sum(cent.tot[,2])  
-ratio<-(sum.end/sum.cent)*100
+ratio<-(sum.end/(sum.end+sum.cent))*100
 ratio<-round(ratio,digits=2)
 message(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, "% end point memberships"))
+
+setwd("C:/Users/phug7649/Desktop/txtbin")
 
 ###SEB GOING NUTS (more often referred to as a panel plot)
 NUTS<-ggplot(data.complete, aes(x=Comp.1, y=Comp.2), group=max)+
   theme_bw() +
   geom_point(colour="grey40")+
-  
-
   #stat_bin2d(binwidth=c(1, 1),colour=gray) +
-
   facet_wrap(~ max, nrow=5)+
   geom_point(data=centroids.complete, aes(shape=soil.id),size=4, colour="black")+  
   scale_shape_manual(values=c(16, 17))+
   theme(plot.background = element_rect(fill = w))+
-  xlim(-12,8)+
-  ylim(-7.5,5)+
+#    xlim(-12,8)+
+#    ylim(-7.5,5)+
   
   ggtitle(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, " percent end point memberships"))+
  # theme(panel.margin = unit(5, "lines"))+
@@ -100,23 +99,26 @@ NUTS<-ggplot(data.complete, aes(x=Comp.1, y=Comp.2), group=max)+
 
 NUTS
 
-#ggsave option + paste0= less work for lazy programmers
-#ggsave("NUTS.png", type="cairo")
-#ggsave(paste(w),"NUTS.png",NUTS, type="cairo")
+ggsave(paste0("nuts", w, number_of_end_members[1,1],".png"),type="cairo")
+
+
 
 #Assign colours in one giant plot for Alex. 
 
 
 #hclust(centroids.complete[,2:19])
 #qplot(Comp.1,Comp.2,data=data.complete,colour=centroids.complete$soil.id)
-ggplot(data.complete,aes(x=Comp.1,y=Comp.2))+
+
+combined<-ggplot(data.complete,aes(x=Comp.1,y=Comp.2))+
         geom_point(aes(colour=max))+
         geom_point(data=centroids.complete,aes(shape=soil.id),size=4)+
         scale_shape_manual(values=c(16,17))+
-        xlim(-12,8)+
-        ylim(-7.5,5)+
+#         xlim(-12,8)+
+#         ylim(-7.5,5)+
         ggtitle(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, " percent end point memberships"))+
         coord_equal()
+combined
+ggsave(paste0("combined", w, number_of_end_members[1,1],".png"),type="cairo")
 
 
 # ggplot(data.complete, aes(x=Comp.1, y=Comp.2)) +
