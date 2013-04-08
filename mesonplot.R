@@ -121,10 +121,7 @@ combined
 ggsave(paste0("combined", w, number_of_end_members[1,1],".png"),type="cairo")
 
 
-# ggplot(data.complete, aes(x=Comp.1, y=Comp.2)) +
-#   geom_point(centroids.complete,aes(x=Comp.1,y=Comp.2))  
-#   coord_equal()
-  
+
   
  
   
