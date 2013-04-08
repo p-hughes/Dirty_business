@@ -303,12 +303,12 @@ setwd("C:/Users/phug7649/Desktop/txtbin")
 ##I have created several input files based on the same data set.
 #subset0_5<-read.csv("USII_0_5.csv")
 input<-read.csv("USII_0_5.csv")
-input<-read.csv("USII_5_10.csv")
-input<-read.csv("USII_10_20.csv")
-input<-read.csv("USII_20_40.csv")
-input<-read.csv("USII_40_60.csv")
-input<-read.csv("USII_60_100.csv")
-input<-read.csv("USII_100plus.csv")
+# input<-read.csv("USII_5_10.csv")
+# input<-read.csv("USII_10_20.csv")
+# input<-read.csv("USII_20_40.csv")
+# input<-read.csv("USII_40_60.csv")
+# input<-read.csv("USII_60_100.csv")
+# input<-read.csv("USII_100plus.csv")
 
 ##this data needs the silt fraction removed. This may cause problems down the line
 one<-input[,1:9]
@@ -398,8 +398,8 @@ source("C:/Users/phug7649/Desktop/TXTBIN/R-scripts/functions/qhull_algorithm.R")
 ## there are two control methods atm; the first is to define the length of the yardstick. Provides an undefined number
 ## of end-members. the second is to use an equation which most likely is data specific.
 ys<-10      ##starting parameter for yardstick
-factor<-.52  ##creating the factor by which the yardstick length is modified (previous run was 0.8)
-YScrit<-3.1   ##Stopping criteria; when the overall size of the hull is less than this, the algorithm stops.
+factor<-.55  ##creating the factor by which the yardstick length is modified (previous run was 0.8)
+YScrit<-3.2   ##Stopping criteria; when the overall size of the hull is less than this, the algorithm stops.
 ####################################################################################################################
 rm(bin)
 file.create("bin.csv")##creating a file to dump values
