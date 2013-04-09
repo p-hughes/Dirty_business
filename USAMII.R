@@ -8,7 +8,7 @@
 
 setwd("C:/Users/phug7649/Desktop/txtbin")
 library(ggplot2)
-
+library(rgl)
 
 
 ph<-read.csv("phinfo.txt")
@@ -315,10 +315,6 @@ one<-input[,1:9]
 two<-input[,11:12]
 input<-cbind(one,two)
 
-# one<-subset0_5[,1:9]
-# two<-subset0_5[,11:12]
-# subset0_5<-cbind(one,two)
-
 
 ##reading in the results from FKM in its appropriate directory
 
@@ -328,35 +324,11 @@ clusfind<-read.csv("summary.txt",sep="", header=TRUE)
 head(clusfind)
 
 # Spinning 3d Scatterplot
-library(rgl)
-attach(clusfind)
-redblue.colors <- colorRampPalette(c("red", "blue"))
-contrast<-colorRampPalette(c("red","blue","green","red","blue","green"))
-plot3d(Class,FPI,Phi, main="FKM~phi,FPI and class",col=rep(contrast(6), each=34) , size=3)
-plot3d(Class,FPI,Phi, main="FKM~phi,FPI and class",col=rep(redblue.colors(6), each=34) , size=3)
-#col=rainbow(500)
-#from this plot, phi of 1.25, with 4 major classes may be the best. This means that we will move on to AM, but first 
-#the principal component issue needs to be resolved.
-
-##a correlation matrix needs to be used, not a covariance matrix.
-##Code is:
-##result<-princomp(x,cor=TRUE)
-##comps<-result$scores
-
-
-
 
 ##how do you rename a header? heres how!
 names(classes)[1]<-"natural_key"
 
 class_input<-merge(input,classes, by= "natural_key",all=TRUE)
-##you must be vewwy vewwy qwiet, im hunting outliers!
-a<-which.max(class_input[,"ph_h2o"])
-class_input[a,"ph_h2o"]
-hist(class_input[,"ph_h2o"])
-##outliers must have been culled earlier... checked the data is complete. On with your scheduled number crunching..
-##making principal components from the data...
-head(input)
 y<-ncol(input)
 
 ##should have used "row.names=FALSE" when making this csv. I will fix the problem later.
@@ -434,35 +406,6 @@ paste0("your algorithm has returned ",nrow(bin), " end points")
 paste0("Yardstick factor is ",factor,","," stopping criterion is ",YScrit)
 ys<-10
 ####################################################################################################################
-
-
-##plotting components
-
-bincomp<-z[bin,]
-plot(bincomp[,1],bincomp[,2])
-plot3d(bincomp[,1],bincomp[,2],bincomp[,3],size=10)
-plot3d(bincomp[,4],bincomp[,5],bincomp[,6])
-plot3d(bincomp[,7],bincomp[,8],bincomp[,9])
-plot3d(bincomp[,10],bincomp[,2],bincomp[,1])
-
-##plotting hull
-
-cz<-quick_hull(z)
-head(cz)
-test<-z[cz,]
-head(test)
-plot(test[,1],test[,2])
-plot3d(test[,1],test[,2],test[,3])
-
-z3<-z[,1:3]
-cz<-quick_hull(z3)
-test<-z[cz,]
-plot3d(test[,1],test[,2],test[,3])
-
-z4_6<-z[,4:6]
-cz<-quick_hull(z4_6)
-test<-z[cz,]
-plot3d(test[,1],test[,2],test[,3])
 
 ##creating an identity matrix
 matrix<-diag(nrow(bin))
