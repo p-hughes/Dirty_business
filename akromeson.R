@@ -8,8 +8,8 @@ setwd("C:/Users/phug7649/Desktop/txtbin")
 ##for the function to work optimally, the specific "subset" file needs to be changed to a generic "input" file. 
 ##I have created several input files based on the same data set.
 #subset0_5<-read.csv("USII_0_5.csv")
-#input<-read.csv("USII_0_5.csv")
- input<-read.csv("USII_5_10.csv")
+input<-read.csv("USII_0_5.csv")
+# input<-read.csv("USII_5_10.csv")
 # input<-read.csv("USII_10_20.csv")
 # input<-read.csv("USII_20_40.csv")
 # input<-read.csv("USII_40_60.csv")
