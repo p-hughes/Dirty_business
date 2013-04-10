@@ -1,8 +1,8 @@
-setwd("C:/Users/phug7649/Desktop/kmeans/Paper_2/0-5")
+#setwd("C:/Users/phug7649/Desktop/kmeans/Paper_2/0-5")
 
-classes<-read.csv("f1.25 11_class.txt",sep="") ##this is the output from the fuzzy k analysis. Using 0-5 currently 
+#classes<-read.csv("f1.25 11_class.txt",sep="") ##this is the output from the fuzzy k analysis. Using 0-5 currently 
 ##as a testbed
-
+Clusters<-11
 setwd("C:/Users/phug7649/Desktop/txtbin")
 
 ##for the function to work optimally, the specific "subset" file needs to be changed to a generic "input" file. 
@@ -32,9 +32,9 @@ head(clusfind)
 # Spinning 3d Scatterplot
 
 ##how do you rename a header? heres how!
-names(classes)[1]<-"natural_key"
+#names(classes)[1]<-"natural_key"
 
-class_input<-merge(input,classes, by= "natural_key",all=TRUE)
+#class_input<-merge(input,classes, by= "natural_key",all=TRUE)
 y<-ncol(input)
 
 ##should have used "row.names=FALSE" when making this csv. I will fix the problem later.
@@ -42,7 +42,7 @@ input<-input[,2:y]# remove this when the issue is fixed.
 y<-ncol(input)
 a<-princomp(input[,2:y], cor=TRUE)
 prin<-a$scores
-csprin<-cbind(class_input,prin)
+#csprin<-cbind(class_input,prin)
 
 
 ####################################################################################################################
@@ -144,7 +144,7 @@ head(checkmatrix)
 matII<-read.csv("matrix.csv")
 head(matII)
 
-Clusters<-11
+
 
 message(paste0("nclass needs to be ", Clusters+nrow(bin)))
 
@@ -230,7 +230,7 @@ sum.end<-sum(end.tot[,2])
 sum.cent<-sum(cent.tot[,2])  
 ratio<-(sum.end/(sum.end+sum.cent))*100
 ratio<-round(ratio,digits=2)
-message(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, "% end point memberships"))
+(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, "% end point memberships"))
 
 setwd("C:/Users/phug7649/Desktop/txtbin")
 
@@ -289,3 +289,41 @@ ggsave(paste0("combined", w, number_of_end_members[1,1],".png"),type="cairo")
 #   coord_equal()
 # E.C
 # ggsave(paste0("combined", w, number_of_end_members[1,1],".png"),type="cairo")
+
+
+##################################################################################################################
+############################################### THE ALEX BIT #####################################################
+##################################################################################################################
+
+# attach(centroids.muns)
+# newdata <- centroids.muns[order(caco3),]
+# newdata <- centroids.muns[order(cec_nh4),]
+# newdata <- centroids.muns[order(clay_tot_psa),]
+# newdata <- centroids.muns[order(oc),]
+# newdata <- centroids.muns[order(ph_h2o),]
+# newdata <- centroids.muns[order(soil.id),]
+# detach(centroids.muns)
+# EP<-newdata[1:11,]
+# C<-newdata[12:nrow(newdata),]
+# 
+# EP<-EP[order(EP$ph_h2o),]
+# EP<-EP[order(EP$sand_tot_psa),]
+# EP<-EP[order(EP$clay_tot_psa),]
+# 
+# C<-C[order(C$ph_h2o),]
+# C<-C[order(C$sand_tot_psa),]
+# C<-C[order(C$clay_tot_psa),]
+# 
+# # prepare hierarchical cluster
+# hc = hclust(dist(EP[,2:10]))
+# # very simple dendrogram
+# plot(hc)
+# # labels at the same level
+# plot(hc,hang=-1)
+# hc <- hclust(dist(EP[,c("ph_h2o","caco3","cec_nh4","L","A","B","clay_tot_psa","sand_tot_psa","oc")]), "ward")
+# plot(hc, hang=-1,labels=EP$natural_key)
+# 
+# HCE = hclust(dist(C[,2:10]))
+# plot(HCE, hang=-1,labels=C$natural_key)
+
+

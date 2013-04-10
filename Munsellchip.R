@@ -4,7 +4,8 @@ setwd("C:/Users/phug7649/Desktop/TXTBIN")
 ## This is where the munsell colours are.
 ##install.packages("munsell")
 ctrial <- read.table("LAB_Carbon32.txt", header=TRUE, sep=",")
-ctrial<-na.exclude(ctrial)
+ctrial<-colours
+#ctrial<-na.exclude(ctrial)
 Reference <- read.csv("reference.csv", header=TRUE, sep=",")
 #ctrial <- read.table("Ctrial.txt", header=TRUE, sep=",")
 library(munsell)
