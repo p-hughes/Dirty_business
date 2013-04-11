@@ -295,35 +295,106 @@ ggsave(paste0("combined", w, number_of_end_members[1,1],".png"),type="cairo")
 ############################################### THE ALEX BIT #####################################################
 ##################################################################################################################
 
-# attach(centroids.muns)
-# newdata <- centroids.muns[order(caco3),]
-# newdata <- centroids.muns[order(cec_nh4),]
-# newdata <- centroids.muns[order(clay_tot_psa),]
-# newdata <- centroids.muns[order(oc),]
-# newdata <- centroids.muns[order(ph_h2o),]
-# newdata <- centroids.muns[order(soil.id),]
-# detach(centroids.muns)
-# EP<-newdata[1:11,]
-# C<-newdata[12:nrow(newdata),]
-# 
-# EP<-EP[order(EP$ph_h2o),]
-# EP<-EP[order(EP$sand_tot_psa),]
-# EP<-EP[order(EP$clay_tot_psa),]
-# 
-# C<-C[order(C$ph_h2o),]
-# C<-C[order(C$sand_tot_psa),]
-# C<-C[order(C$clay_tot_psa),]
-# 
-# # prepare hierarchical cluster
-# hc = hclust(dist(EP[,2:10]))
-# # very simple dendrogram
-# plot(hc)
-# # labels at the same level
-# plot(hc,hang=-1)
-# hc <- hclust(dist(EP[,c("ph_h2o","caco3","cec_nh4","L","A","B","clay_tot_psa","sand_tot_psa","oc")]), "ward")
-# plot(hc, hang=-1,labels=EP$natural_key)
-# 
-# HCE = hclust(dist(C[,2:10]))
-# plot(HCE, hang=-1,labels=C$natural_key)
+colours<-centroid_table[,5:7]
+head(colours)
+ctrial<-colours
+Reference <- read.csv("reference.csv", header=TRUE, sep=",")
+
+library(munsell)
+LAB<-read.table("LAB_Carbon32.txt", sep=",", header=T)
+
+euc <- function(dat, x1, y1, z1){
+  
+  if(any(length(x1)!=1,length(y1)!=1,length(z1)!=1)) stop("x1, y1, or z1 should be length 1")
+  
+  x<-dat$L.
+  y<-dat$a.
+  z<-dat$b.
+  
+  answer <- sqrt((x-x1)^2+(y-y1)^2+(z-z1)^2)
+  
+  return(answer)
+  
+}
+
+Munsell <- rep(NA,nrow(ctrial))
+
+for(i in 1:nrow(ctrial)){
+  L <- ctrial$L[i]
+  A <- ctrial$A[i]
+  B <- ctrial$B[i]
+  y <-euc(Reference,L,A,B) 
+  
+  Munsell[i]<- which.min(y)
+    
+}
+
+out<-Reference[Munsell,]
+
+munsell<-out[,2:4]
+centroid.muns<-cbind(centroid_table,munsell)
+the.number.i.need.to.use.to.create.the.below.file<-ncol(centroids.complete)-2
+the.other.number.i.need<-ncol(centroids.complete)
+the.bit.i.want.to.put.on.the.end.of.centroids.muns<-centroids.complete[,the.number.i.need.to.use.to.create.the.below.file:the.other.number.i.need]
+
+
+centroid.muns<-cbind(centroid.muns,the.bit.i.want.to.put.on.the.end.of.centroids.muns)
+
+attach(centroid.muns)
+newdata <- centroid.muns[order(caco3),]
+newdata <- centroid.muns[order(cec_nh4),]
+newdata <- centroid.muns[order(clay_tot_psa),]
+newdata <- centroid.muns[order(oc),]
+newdata <- centroid.muns[order(ph_h2o),]
+newdata <- centroid.muns[order(soil.id),]
+detach(centroid.muns)
+C<-newdata[1:11,]
+EP<-newdata[12:nrow(newdata),]
+
+EP<-EP[order(EP$ph_h2o),]
+EP<-EP[order(EP$sand_tot_psa),]
+EP<-EP[order(EP$clay_tot_psa),]
+
+C<-C[order(C$ph_h2o),]
+C<-C[order(C$sand_tot_psa),]
+C<-C[order(C$clay_tot_psa),]
+
+newdata<-newdata[order(newdata$ph_h2o),]
+newdata<-newdata[order(newdata$sand_tot_psa),]
+newdata<-newdata[order(newdata$clay_tot_psa),]
+
+hc.all<-hclust(dist(newdata[c(2:10)]), "ward")
+plot(hc.all, hang=-1,labels=newdata$natural_key,main="Dendrogram of all the clusters")
+
+
+hc <- hclust(dist(EP[,c(2:10)]), "ward")
+plot(hc, hang=-1,labels=EP$natural_key,main="Dendrogram of the fixed clusters")
+
+HCE = hclust(dist(C[,2:10]))
+plot(HCE, hang=-1,labels=C$natural_key,main="Dendrogram of the non-fixed clusters")
+message("Oh Noes!")
+
+install.packages( pkgs = "soiltexture" )
+library(soiltexture)
+require(soiltexture)
+TT.plot( class.sys = "USDA.TT" )
+
+EPtex<-EP[,c("clay_tot_psa","sand_tot_psa","oc")]
+names(EPtex)<-c("CLAY","SAND","OC")
+head(EPtex)
+EPtex$SILT<-100-(EPtex$CLAY+EPtex$SAND)
+CLAY<-EPtex$CLAY
+SILT<-EPtex$SILT
+SAND<-EPtex$SAND
+OC<-EPtex$OC
+EPtex<-cbind(CLAY,SILT,SAND,OC)
+  
+#TT.plot(EPtex)
+TT.plot(
+  class.sys = "USDA.TT",
+  tri.data = EPtex,
+  main = "Soil texture data-end points"
+) #
+
 
 
