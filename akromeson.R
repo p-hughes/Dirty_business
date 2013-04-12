@@ -388,13 +388,57 @@ SILT<-EPtex$SILT
 SAND<-EPtex$SAND
 OC<-EPtex$OC
 EPtex<-cbind(CLAY,SILT,SAND,OC)
+
+Ctex<-C[,c("clay_tot_psa","sand_tot_psa","oc")]
+names(Ctex)<-c("CLAY","SAND","OC")
+head(Ctex)
+Ctex$SILT<-100-(Ctex$CLAY+Ctex$SAND)
+CLAY<-Ctex$CLAY
+SILT<-Ctex$SILT
+SAND<-Ctex$SAND
+OC<-Ctex$OC
+Ctex<-cbind(CLAY,SILT,SAND,OC)
+
+ALLtex<-newdata[,c("clay_tot_psa","sand_tot_psa","oc")]
+names(ALLtex)<-c("CLAY","SAND","OC")
+head(ALLtex)
+ALLtex$SILT<-100-(ALLtex$CLAY+ALLtex$SAND)
+CLAY<-ALLtex$CLAY
+SILT<-ALLtex$SILT
+SAND<-ALLtex$SAND
+OC<-ALLtex$OC
+ALLtex<-cbind(CLAY,SILT,SAND,OC)
+ALLtex<-cbind(ALLtex,newdata$soil.id)
+ALLtex<-cbind(ALLtex,newdata$natural_key)
+
   
 #TT.plot(EPtex)
 TT.plot(
-  class.sys = "USDA.TT",
-  tri.data = EPtex,
-  main = "Soil texture data-end points"
-) #
 
+  class.sys = "USDA.TT",
+  tri.data = ALLtex,
+  main = "Soil texture data-end points(red), centroids(black)",
+  labels=newdata$natural_key,
+  font = 2, 
+  col = ALLtex[,5]
+  
+) #
+geo <- TT.plot(class.sys="USDA.TT",main="Soil texture data-end points(red), centroids(black)")
+
+TT.text(
+  
+  tri.data = ALLtex,
+  geo = geo,
+  labels = newdata$natural_key,
+  font = 6,
+  col = ALLtex[,5]
+) #
+# dev.off()
+
+pHmean<-mean(centroid.muns$ph_h2o)
+Camean<-mean(centroid.muns$caco3)
+cecmean<-mean(centroid.muns$cec_nh4)
+ocmean<-mean(centroid.muns$oc)
+c(pHmean,Camean,cecmean,ocmean)
 
 
