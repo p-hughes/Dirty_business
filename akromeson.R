@@ -413,16 +413,16 @@ ALLtex<-cbind(ALLtex,newdata$natural_key)
 
   
 #TT.plot(EPtex)
-TT.plot(
-
-  class.sys = "USDA.TT",
-  tri.data = ALLtex,
-  main = "Soil texture data-end points(red), centroids(black)",
-  labels=newdata$natural_key,
-  font = 2, 
-  col = ALLtex[,5]
-  
-) #
+# TT.plot(
+# 
+#   class.sys = "USDA.TT",
+#   tri.data = ALLtex,
+#   main = "Soil texture data-end points(red), centroids(black)",
+#   labels=newdata$natural_key,
+#   font = 2, 
+#   col = ALLtex[,5]
+#   
+# ) #
 geo <- TT.plot(class.sys="USDA.TT",main="Soil texture data-end points(red), centroids(black)")
 
 TT.text(
@@ -439,6 +439,22 @@ pHmean<-mean(centroid.muns$ph_h2o)
 Camean<-mean(centroid.muns$caco3)
 cecmean<-mean(centroid.muns$cec_nh4)
 ocmean<-mean(centroid.muns$oc)
-c(pHmean,Camean,cecmean,ocmean)
+logoc<-log(centroid.muns$oc)
+mloc<-mean(logoc)
+centroid.muns<-cbind(centroid.muns,logoc)
+logoc
+c(pHmean,Camean,cecmean,ocmean,mloc)
+pHmedian<-median(centroid.muns$ph_h2o)
+Camedian<-median(centroid.muns$caco3)
+cecmedian<-median(centroid.muns$cec_nh4)
+ocmedian<-median(centroid.muns$oc)
+c(pHmedian,Camedian,cecmedian,ocmedian)
+
+#install.packages("ape")
+# library("ape")
+# test1<-centroid.muns[,2:10]
+# test2<-dist(test1)
+# test3<-pcoa(test2)
+# test3$vectors
 
 
