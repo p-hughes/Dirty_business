@@ -53,9 +53,9 @@ prin<-a$scores
 
 ############################################# THE CONVEX BICYCLE ###################################################
 
-##A script made to identify a small number of points around the periphery of a data cloud. This should coincide with
-##the location of end members. It works by creating an n-dimensional convex hull (thanks seb),finding a point with a 
-##maximum distance from zero then finding the maximum distance of this point from all other points in the hull.
+##A script made to identify a small number of points around the periphery of a data cloud. It works by creating an 
+##n-dimensional convex hull (thanks seb),finding a point with a maximum distance from zero then finding the maximum 
+##distance of this point from all other points in the hull.
 
 ####################################################################################################################
 
@@ -435,20 +435,22 @@ TT.text(
 ) #
 # dev.off()
 
-pHmean<-mean(centroid.muns$ph_h2o)
-Camean<-mean(centroid.muns$caco3)
-cecmean<-mean(centroid.muns$cec_nh4)
-ocmean<-mean(centroid.muns$oc)
-logoc<-log(centroid.muns$oc)
+pHmean<-mean(data.complete$ph_h2o)
+Camean<-mean(data.complete$caco3)
+cecmean<-mean(data.complete$cec_nh4)
+ocmean<-mean(data.complete$oc)
+logoc<-log(data.complete$oc)
 mloc<-mean(logoc)
-centroid.muns<-cbind(centroid.muns,logoc)
-logoc
-c(pHmean,Camean,cecmean,ocmean,mloc)
-pHmedian<-median(centroid.muns$ph_h2o)
-Camedian<-median(centroid.muns$caco3)
-cecmedian<-median(centroid.muns$cec_nh4)
-ocmedian<-median(centroid.muns$oc)
-c(pHmedian,Camedian,cecmedian,ocmedian)
+# centroid.muns<-cbind(centroid.muns,logoc)
+# logoc
+Mean<-c(pHmean,Camean,cecmean,ocmean)
+pHmedian<-median(data.complete$ph_h2o)
+Camedian<-median(data.complete$caco3)
+cecmedian<-median(data.complete$cec_nh4)
+ocmedian<-median(data.complete$oc)
+Median<-c(pHmedian,Camedian,cecmedian,ocmedian)
+Labels<-c("pH","CaCO3","CEC","oc")
+cent.analysis<-cbind(Labels,Mean,Median)
 
 #install.packages("ape")
 # library("ape")
@@ -457,4 +459,22 @@ c(pHmedian,Camedian,cecmedian,ocmedian)
 # test3<-pcoa(test2)
 # test3$vectors
 
+tex<-TT.points.in.classes(
+  tri.data = ALLtex,
+  class.sys = "USDA.TT"
+) #
+##creating a file with locations added
+locations<-read.csv("C:/Users/phug7649/Desktop/TXTBIN/locations.txt")
+head(locations)
+latitude_std_decimal_degrees<-locations$latitude_std_decimal_degrees
+longitude_std_decimal_degrees<-locations$longitude_std_decimal_degrees
+natural_key<-locations$natural_key
+Locations<-cbind(natural_key,latitude_std_decimal_degrees,longitude_std_decimal_degrees)
+geo.cent<-merge(data.complete,Locations, by= "natural_key",all=TRUE)
+# geo.cent<-na.exclude(geo.cent)
 
+greek <- c("\U03B1", "\U03B2", "\U03B3", "\U03B4", "\U03B5", "\U03B6", "\U03B7", "\U03B8", "\U03B9", "\U03BA", "\U03BB")
+
+#, "\U03BC", "\U03BD", "\U03BE", "\U03BF", "\U03C1", "\U03C2", "\U03C3", "\U03C4", "\U03C5", "\U03C6", "\U03C7", "\U03C8", "\U03C9")
+greek
+greek.cent<-cbind(centroid.muns[19:nrow(centroid.muns),],greek)
