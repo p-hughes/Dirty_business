@@ -374,10 +374,10 @@ HCE = hclust(dist(C[,2:10]))
 plot(HCE, hang=-1,labels=C$natural_key,main="Dendrogram of the non-fixed clusters")
 message("Oh Noes!")
 
-install.packages( pkgs = "soiltexture" )
+#install.packages( pkgs = "soiltexture" )
 library(soiltexture)
-require(soiltexture)
-TT.plot( class.sys = "USDA.TT" )
+#require(soiltexture)
+#TT.plot( class.sys = "USDA.TT" )
 
 EPtex<-EP[,c("clay_tot_psa","sand_tot_psa","oc")]
 names(EPtex)<-c("CLAY","SAND","OC")
@@ -430,6 +430,7 @@ TT.text(
   tri.data = ALLtex,
   geo = geo,
   labels = newdata$natural_key,
+#  labels=greek.cent$greek
   font = 6,
   col = ALLtex[,5]
 ) #
@@ -470,11 +471,51 @@ latitude_std_decimal_degrees<-locations$latitude_std_decimal_degrees
 longitude_std_decimal_degrees<-locations$longitude_std_decimal_degrees
 natural_key<-locations$natural_key
 Locations<-cbind(natural_key,latitude_std_decimal_degrees,longitude_std_decimal_degrees)
-geo.cent<-merge(data.complete,Locations, by= "natural_key",all=TRUE)
+geo.cent<-merge(data.complete,Locations, by= "natural_key",all.x=TRUE)
 # geo.cent<-na.exclude(geo.cent)
 
 greek <- c("\U03B1", "\U03B2", "\U03B3", "\U03B4", "\U03B5", "\U03B6", "\U03B7", "\U03B8", "\U03B9", "\U03BA", "\U03BB")
 
 #, "\U03BC", "\U03BD", "\U03BE", "\U03BF", "\U03C1", "\U03C2", "\U03C3", "\U03C4", "\U03C5", "\U03C6", "\U03C7", "\U03C8", "\U03C9")
-greek
-greek.cent<-cbind(centroid.muns[19:nrow(centroid.muns),],greek)
+
+
+#greek.cent<-cbind(centroid.muns[19:nrow(centroid.muns),],greek)
+
+centroid.muns<-cbind(centroid.muns,totals)
+sum.tot<-sum.cent+sum.end
+Ratio<-(centroid.muns$Freq/sum.tot)*100
+centroid.muns<-cbind(centroid.muns,Ratio)
+y<-as.character(centroid.muns$max)
+y<-y[1:nrow(matrix)]
+#y<-as.matrix(y)
+#greek<-as.matrix(greek)
+centroid.type<-c(y,greek)
+centroid.muns<-cbind(centroid.muns,centroid.type)
+
+ALLtex<-centroid.muns[,c("clay_tot_psa","sand_tot_psa","oc")]
+names(ALLtex)<-c("CLAY","SAND","OC")
+#head(ALLtex)
+ALLtex$SILT<-100-(ALLtex$CLAY+ALLtex$SAND)
+CLAY<-ALLtex$CLAY
+SILT<-ALLtex$SILT
+SAND<-ALLtex$SAND
+OC<-ALLtex$OC
+ALLtex<-data.frame(CLAY,SILT,SAND,OC)
+ALLtex<-cbind(ALLtex, soil.id=centroid.muns$soil.id)
+ALLtex<-cbind(ALLtex, natural_key=centroid.muns$natural_key)
+
+geo <- TT.plot(class.sys="USDA.TT",main="Soil texture data-end points(red), centroids(blue)")
+
+TT.text(
+  
+  tri.data = ALLtex,
+  geo = geo,
+  labels = centroid.muns$centroid.type,
+#    labels=greek.cent$greek
+  font = 6,
+  cex=1,
+  col = c("blue", "red")[as.numeric(ALLtex$soil.id)]
+) #
+greek.alpha<-c("alpha","beta","gamma","delta","epsilon","zeta","eta","theta","iota","kappa","lambda","mu","nu","xi",
+               "omricon","pi","rho","sigma","tau","upsilon","phi","chi","psi","omega")
+make_letter_ids(1:as.numeric(number_of_end_members[1:1]))
