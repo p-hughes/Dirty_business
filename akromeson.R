@@ -205,8 +205,10 @@ data_distances$max<-apply(aa,1,which.max)
 data_ratio<-data_distances
 data_ratio$max<-apply(aa,1,which.max)
 mat.max<-make_letter_ids(nrow(matrix), letters[6:26])
-## under construction: cent.max<-
-max<-make_letter_ids(nrow(centroid_table))
+
+cent.max<-make_letter_ids(unlist(number_of_centroids)-nrow(matrix),greek.alpha)
+max<-c(mat.max,cent.max)
+#max<-make_letter_ids(nrow(centroid_table))
 data_distances$max<-max[data_distances$max]
 max<-data_distances$max
 
@@ -565,7 +567,7 @@ NUTS<-ggplot(geo.cent, aes(x=longitude_std_decimal_degrees, y=latitude_std_decim
 
 world_map <- as.data.frame(map("world",  plot = FALSE)[c("x", "y")])  
 pdf("worldplots.pdf", height=5, width=10)
-for(i in levels(geo.cent$max)){  
+for(i in c(mat.max,cent.max)){  
 pl<-ggplot(world_map, aes(x=x, y=y))+
   theme_bw() +
   geom_path(size=.01)+
