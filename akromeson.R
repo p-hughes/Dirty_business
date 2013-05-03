@@ -204,6 +204,8 @@ aa<-as.matrix(data_distances)
 data_distances$max<-apply(aa,1,which.max)
 data_ratio<-data_distances
 data_ratio$max<-apply(aa,1,which.max)
+mat.max<-make_letter_ids(nrow(matrix), letters[6:26])
+## under construction: cent.max<-
 max<-make_letter_ids(nrow(centroid_table))
 data_distances$max<-max[data_distances$max]
 max<-data_distances$max
@@ -517,5 +519,64 @@ TT.text(
   col = c("blue", "red")[as.numeric(ALLtex$soil.id)]
 ) #
 greek.alpha<-c("alpha","beta","gamma","delta","epsilon","zeta","eta","theta","iota","kappa","lambda","mu","nu","xi",
-               "omricon","pi","rho","sigma","tau","upsilon","phi","chi","psi","omega")
-make_letter_ids(1:as.numeric(number_of_end_members[1:1]))
+               "omicron","pi","rho","sigma","tau","upsilon","phi","chi","psi","omega")
+make_letter_ids(as.integer(number_of_end_members[1,1]))
+
+###########################################################################################################################################
+
+install.packages("maps")
+library(maps)
+map('usa')
+
+##getting location data
+#locations<-read.csv("ids_locations.txt",header=T)
+locations<-read.csv("testIII.txt",header=T)
+locations<-subset(locations, country_code == "US")
+latitude_std_decimal_degrees<-locations$latitude_std_decimal_degrees
+longitude_std_decimal_degrees<-locations$longitude_std_decimal_degrees
+Locations<-locations[,c(2,22,23)]
+head(Locations)
+plot(Locations$longitude_std_decimal_degrees,Locations$latitude_std_decimal_degrees)
+map('usa',add=T)
+geo.cent<-merge(data.complete,Locations, by= "natural_key",all.x=TRUE)
+plot(Locations$longitude_std_decimal_degrees,Locations$latitude_std_decimal_degrees,col=data.complete$max,pch=20,cex=.5)
+#map('usa',add=T)
+map('world',add=T)
+#table(geo.cent$max)
+
+###SEB GOING NUTS (more often referred to as a panel plot)
+NUTS<-ggplot(geo.cent, aes(x=longitude_std_decimal_degrees, y=latitude_std_decimal_degrees), group=max)+
+  theme_bw() +
+  geom_point(colour="grey40")+
+  #stat_bin2d(binwidth=c(1, 1),colour=gray) +
+  facet_wrap(~ max, nrow=5)+
+  #geom_point(data=centroids.complete, aes(shape=soil.id),size=4, colour="black")+  
+  scale_shape_manual(values=c(16, 17))+
+  theme(plot.background = element_rect(fill = w))+
+  coord_equal()
+  #map('world',add=T)
+  #    xlim(-12,8)+
+  #    ylim(-7.5,5)+
+  
+  #ggtitle(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, " percent end point memberships"))+
+  # theme(panel.margin = unit(5, "lines"))+
+
+
+
+world_map <- as.data.frame(map("world",  plot = FALSE)[c("x", "y")])  
+pdf("worldplots.pdf", height=5, width=10)
+for(i in levels(geo.cent$max)){  
+pl<-ggplot(world_map, aes(x=x, y=y))+
+  theme_bw() +
+  geom_path(size=.01)+
+  geom_point(data=geo.cent, aes(x=longitude_std_decimal_degrees, y=latitude_std_decimal_degrees), colour="grey", alpha=0.1)+
+  geom_point(data=geo.cent[geo.cent$max==i,], aes(x=longitude_std_decimal_degrees, y=latitude_std_decimal_degrees), colour="steelblue")+
+  geom_point(data=geo.cent[geo.cent$max==i,], aes(x=longitude_std_decimal_degrees, y=latitude_std_decimal_degrees), size=.1, colour="indianred")+
+  coord_equal()+
+  labs(title=i)
+print(pl)
+}
+dev.off()
+file.show("worldplots.pdf")
+
+  
