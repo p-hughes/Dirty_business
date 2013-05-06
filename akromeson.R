@@ -206,6 +206,10 @@ data_ratio<-data_distances
 data_ratio$max<-apply(aa,1,which.max)
 mat.max<-make_letter_ids(nrow(matrix), letters[6:26])
 
+
+greek.alpha<-c("alpha","beta","gamma","delta","epsilon","zeta","eta","theta","iota","kappa","lambda","mu","nu","xi",
+               "omicron","pi","rho","sigma","tau","upsilon","phi","chi","psi","omega")
+
 cent.max<-make_letter_ids(unlist(number_of_centroids)-nrow(matrix),greek.alpha)
 max<-c(mat.max,cent.max)
 #max<-make_letter_ids(nrow(centroid_table))
