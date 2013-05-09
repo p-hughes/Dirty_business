@@ -197,12 +197,23 @@ number_of_centroids<-read.csv("cent.csv",header=FALSE,sep=",")
 w<-weighting_factor[1,1]
 
 ##create the id matrix from the matlab data
-
-
+which.greater<-function(x,n=0.5){
+  gnum <- which(x>n)
+  if(length(gnum) == 0) gnum <- NA
+  
+  gnum
+}
+# which.greater(data_distances[1,1:29], 0.1)
+# which(data_distances[1,-ncol(data_distances)]>.5)
 ##creating max column for data distances
+
+##replacing "which.max" with "which.greater"
+
 aa<-as.matrix(data_distances)
+#data_distances$max<-apply(aa,1,which.greater, n=0.5)
 data_distances$max<-apply(aa,1,which.max)
 data_ratio<-data_distances
+#data_ratio$max<-apply(aa,1,which.greater, n=0.5)
 data_ratio$max<-apply(aa,1,which.max)
 mat.max<-make_letter_ids(nrow(matrix), letters[6:26])
 
@@ -380,7 +391,7 @@ plot(hc, hang=-1,labels=EP$natural_key,main="Dendrogram of the fixed clusters")
 
 HCE = hclust(dist(C[,2:10]))
 plot(HCE, hang=-1,labels=C$natural_key,main="Dendrogram of the non-fixed clusters")
-message("Oh Noes!")
+
 
 #install.packages( pkgs = "soiltexture" )
 library(soiltexture)
@@ -530,7 +541,7 @@ make_letter_ids(as.integer(number_of_end_members[1,1]))
 
 ###########################################################################################################################################
 
-install.packages("maps")
+# install.packages("maps")
 library(maps)
 map('usa')
 
@@ -573,6 +584,8 @@ world_map <- as.data.frame(map("world",  plot = FALSE)[c("x", "y")])
 pdf("worldplots.pdf", height=5, width=10)
 for(i in c(mat.max,cent.max)){  
 pl<-ggplot(world_map, aes(x=x, y=y))+
+  scale_x_continuous(limits=c(-200, 0))+
+  scale_y_continuous(limits=c(0, 100))+
   theme_bw() +
   geom_path(size=.01)+
   geom_point(data=geo.cent, aes(x=longitude_std_decimal_degrees, y=latitude_std_decimal_degrees), colour="grey", alpha=0.1)+
