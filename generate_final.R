@@ -303,7 +303,7 @@ aa<-as.matrix(AM)
 library(plyr)
 AM$max<-apply(aa,1,which.max)
 AM$max<-as.factor(paste0(letters[AM$max]))
-AM$designation<-ifelse(AM$max%in%letters[1:4],"End member cluster", "Intragrade cluster")
+AM$designation<-ifelse(AM$max%in%letters[1:4],"End point cluster", "Intragrade cluster")
 ex4data<-cbind(data,AM)
 
 

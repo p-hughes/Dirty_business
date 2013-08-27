@@ -1,0 +1,22 @@
+time<-c(1,1.25,1.45,1.75,2.25,3,4,5,6)-1
+Conductivity<-c(22.5,35,44,53,65,75,84,92,103)
+data<-data.frame(time,Conductivity)
+plot(data,ylab="Cumulative water infiltration (mm)",xlab="Time (hours)",type='n')#, main= "Zone A                                                                 Zone B")
+#abline(v=2.5)
+rect(-1, -1, 1.5, 1000, col="#AAAAAAAA")
+points(data,pch=16,cex=2)
+par(xpd=NA)
+text(0.5,110,"Zone A")
+text(3,110,"Zone B")
+par(xpd=F)
+Depth<-c(0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5)
+CO2.Conc<-c(0.04,2.2,3.8,4.7,5.5,6.2,6.7,7.1,7.45,7.75,8)
+O2.Conc<-21-CO2.Conc
+# O2.Conc<-c(19,17.5,16.2,15.4,14.7,14.2,13.8,13.5,13.2,13)
+  gasplot<-cbind(Depth,CO2.Conc,O2.Conc)
+plot(y=Depth,x=CO2.Conc,ylim = c(0.5,0),xlab="Gas concentration (%)",ylab="Depth (m)",col="red",xlim=c(0,25))
+lines(y=Depth,x=CO2.Conc, col="red")
+points(y=Depth,x=O2.Conc,col="blue")
+lines(y=Depth,x=O2.Conc,col="blue")
+legend("topright",legend=c(expression(CO[2]),expression(O[2])), pch=1, col=c("red","blue"))
+
