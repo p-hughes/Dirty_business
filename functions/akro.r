@@ -8,28 +8,14 @@ akro <- function (input,Clusters,phi,distype,weight,ys=10,factor=.35,YScrit=6) {
   if (missing(distype)) stop('You need Clusters, phi, distype and weight. Define distype. 1=euclidean, 2=diagonal, 3=mahalonobis')
   if (missing(weight)) stop('You need Clusters, phi, distype and weight. Define weight')
   message(paste0("ys=", ys, ", factor=", factor, ", YScrit=", YScrit))
-  y<-ncol(input)
-  
-  ##should have used "row.names=FALSE" when making this csv. I will fix the problem later.
-  #input<-input[,2:y]# remove this when the issue is fixed.
-  #any(sapply(input, is.infinite))
+  y<-ncol(input)  
   if(sum(is.na(input)) > 0) warning(paste0("There exist(s) ", sum(is.na(input)), " NA(s) in your data."))
   input<-na.exclude(input)
-  #str(input)
   y<-ncol(input)
   a<-princomp(input[,2:y], cor=TRUE)
   prin<-a$scores
   loadings<-a$loadings
-  scale<-a$scale
-  #csprin<-cbind(class_input,prin)
-  
-  
-  ####################################################################################################################
-  #################################### Time to use the script found in EMII.r ########################################
-  ####################################################################################################################
-  
-  #I need to make a function out of this...
-  
+  scale<-a$scale  
   ############################################# THE CONVEX BICYCLE ###################################################
   
   ##A script made to identify a small number of points around the periphery of a data cloud. It works by creating an 
@@ -37,15 +23,7 @@ akro <- function (input,Clusters,phi,distype,weight,ys=10,factor=.35,YScrit=6) {
   ##distance of this point from all other points in the hull.
   
   ####################################################################################################################
-  
-  
-  
-  
-  
-  ##constructing the dataset. Required: 1 column (column.30 with the components arranged after that.) These make no sense!
-  # Column.30<-1:nrow(prin)
-  # z<-cbind(Column.30,prin)
-  # z<-z[,2:ncol(z)]
+
   z<-prin
   
   ##scripts required for this algorithm to work...
@@ -60,11 +38,9 @@ akro <- function (input,Clusters,phi,distype,weight,ys=10,factor=.35,YScrit=6) {
   #     factor<-.35  ##creating the factor by which the yardstick length is modified (previous run was 0.8)
   #     YScrit<-6   ##Stopping criteria; when the overall size of the hull is less than this, the algorithm stops.
   ####################################################################################################################
-  #   rm(bin)
   file.create("bin.csv")##creating a file to dump values
   bin<-c()
   cz<-quick_hull(z)##Using sebs script to create hulls 
-  
   
   while (ys>YScrit)##I want the loop to start here
     
@@ -91,29 +67,16 @@ akro <- function (input,Clusters,phi,distype,weight,ys=10,factor=.35,YScrit=6) {
   }
   paste0("your algorithm has returned ",nrow(bin), " end points")
   paste0("Yardstick factor is ",factor,","," stopping criterion is ",YScrit)
-  #     ys<-10
-  # c(bin)
-  
-  
+    
   ###################################### Putting the matlab stuff together####################################################
   
   matrix<-diag(nrow(bin))
   ##creating end point matrices
   points<-input[bin,]
-  
-  ################################How many clusters have you decided on?######################################################
-  
-  #Clusters<-48
-  ##writing files
-  setwd("C:\\Users\\phug7649\\Documents\\MATLAB")
-  write.table(matrix,"matrix.csv",row.names=FALSE,col.names=FALSE,sep=",")
-  write.csv(points,"EP.csv",row.names=FALSE)
-  write.csv(input,"DATA.csv",row.names=FALSE)
-  
+   
   nclass<-Clusters+nrow(bin)
   ep<-nrow(bin)
-  
-  # control<-c(ep,nclass,phi,weight,distype)
+    
   akro.parameters<-c(ep,nclass,phi,weight,distype)
   akro.data<-list(matrix=matrix,points=points,input=input, parameters=akro.parameters)  
   ##put the output into akro.write
