@@ -71,7 +71,11 @@ meson<-function(matlab="C:\\Users\\phug7649\\Documents\\MATLAB",
   
   max<-t(max)
   max<-c(max,mat.max,cent.max) ##cent.max is the problem. Line 95-> matrix. Line 44
+  #browser()----data.complete should have a fifty column now...
   data.complete<-cbind(data_cent.prin,max)
+  fifty<-data_distances$fifty
+  maxend<-data.complete$max[(nrow(data_distances)+1):nrow(data.complete)]
+  data.complete$fifty<-c(fifty,maxend)
   datarows<-nrow(data) ##rows of data
   position1<-datarows+1  ##+1
   cdatarows<-nrow(data.complete) ##rows plus centroids
