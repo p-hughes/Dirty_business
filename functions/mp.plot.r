@@ -1,9 +1,9 @@
-mp.plot<-function(data,ratio,
+mp.plot<-function(data,weight,
                   matlab="C:\\Users\\phug7649\\Documents\\MATLAB",
                   weighting_factor=read.csv(paste(matlab, "weighting.csv", sep="\\"),sep=","))
   {
   if (missing(data)) stop('You need the data from meson and a ratio from weighting. Data missing')
-  if (missing(ratio)) stop('You need the data from meson and a ratio from weighting. Ratio missing.')
+  if (missing(weight)) stop('You need the data from meson and a ratio from weighting. weight missing.')
   data.complete<-data[['data.complete']]
   centroids.complete<-data[['centroids.complete']]
   
@@ -24,7 +24,7 @@ mp.plot<-function(data,ratio,
     #    xlim(-12,8)+
     #    ylim(-7.5,5)+
     
-    ggtitle(paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, " percent end point memberships"))+
+    ggtitle(paste0("Weighting ", weighting_factor[1,1],", creating ",weight$ratio, " percent end point memberships"))+
     # theme(panel.margin = unit(5, "lines"))+
     coord_equal()
   

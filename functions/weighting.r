@@ -1,6 +1,6 @@
 weighting<-function(data,
-                    matlab="C:\\Users\\phug7649\\Documents\\MATLAB",
-                    matrix=read.table("matrix.csv",sep=",",header=TRUE),
+                    matlab="C:/Users/phug7649/Documents/MATLAB",
+                    matrix=read.table(file.path(matlab,"matrix.csv"),sep=",",header=TRUE),
                     weighting_factor=read.csv(paste(matlab, "weighting.csv", sep="\\"),sep=",")){
   
   
@@ -13,5 +13,5 @@ weighting<-function(data,
   ratio<-(sum.end/(sum.end+sum.cent))*100
   ratio<-round(ratio,digits=2)
   message((paste0("Weighting ", weighting_factor[1,1],", creating ",ratio, "% end point memberships")))
-  ratio<-ratio
+  weighting<-list(ratio=ratio,totals=totals)
 }

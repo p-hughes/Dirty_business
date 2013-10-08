@@ -3,7 +3,7 @@
 meson<-function(matlab="C:\\Users\\phug7649\\Documents\\MATLAB",
                 matrix= read.table(paste(matlab, "matrix.csv", sep="\\"),sep=","),
                 end_points=read.csv(paste(matlab, "EP.csv", sep="\\"),sep=","),
-                data=read.table(paste(matlab, "DATA.csv", sep="\\"),sep=",",header=TRUE),
+                data=read.table(paste(matlab, "newdata.csv", sep="\\"),sep=",",header=FALSE),
                 weighting_factor=read.csv(paste(matlab, "weighting.csv", sep="\\"),sep=","),
                 number_of_rows=read.csv(paste(matlab, "rows.csv", sep="\\"),header=FALSE,sep=","),
                 number_of_end_members=read.csv(paste(matlab, "end.csv", sep="\\"),header=FALSE,sep=","),
@@ -27,14 +27,19 @@ meson<-function(matlab="C:\\Users\\phug7649\\Documents\\MATLAB",
   greek.alpha<-c("alpha","beta","gamma","delta","epsilon","zeta","eta","theta","iota","kappa","lambda","mu","nu","xi",
                  "omicron","pi","rho","sigma","tau","upsilon","phi","chi","psi","omega")
   cent.max<-make_letter_ids(unlist(number_of_centroids)-nrow(matrix),greek.alpha)
-  max<-c(mat.max,cent.max)
+  
+  
+  max<-c(mat.max,cent.max)## is this the problem?
+ # max<-c(cent.max,mat.max)
+  
   names(data_distances)<-max
   
-  centroid_table<-cbind(max,centroid_table)
+  #centroid_table<-cbind(max,centroid_table) ##changed on 25.09.13@12.35pm
+  centroid_table[,1]<-max
   
   
   ##joining original data to the centroid table, to be used later.
-  names(centroid_table) <- names(data)
+  names(centroid_table) <- names(data) #####broken here
   data_cent<-rbind(data,centroid_table)
   ##creating principal components from the original data.
   princomp_main<-princomp(data_cent[,2:ncol(data)],cor=TRUE)
@@ -59,9 +64,9 @@ meson<-function(matlab="C:\\Users\\phug7649\\Documents\\MATLAB",
   
   
   
-  mat.max<-make_letter_ids(nrow(matrix)-1, letters[6:26])
+  mat.max<-make_letter_ids(nrow(matrix), letters[6:26])
   c.max<-make_letter_ids(nrow(matrix)-1, letters[6:26])
-  cent.max<-make_letter_ids(unlist(number_of_centroids)-(nrow(matrix)-1),greek.alpha)####here!!
+  cent.max<-make_letter_ids(unlist(number_of_centroids)-(nrow(matrix)),greek.alpha)####here!!
   max<-c(mat.max,cent.max)
   data_distances$max<-max[data_distances$max]
   max<-data_distances$max
@@ -79,7 +84,12 @@ meson<-function(matlab="C:\\Users\\phug7649\\Documents\\MATLAB",
   datarows<-nrow(data) ##rows of data
   position1<-datarows+1  ##+1
   cdatarows<-nrow(data.complete) ##rows plus centroids
+  
+  
   centroids.complete<-data.complete[position1:cdatarows,]
+
+  
+
   emno<-number_of_end_members[1,1]
   ceno<-nrow(centroid_table)-emno
   soil.id<-rep(c("E", "C"), c(emno, ceno))

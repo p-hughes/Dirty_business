@@ -866,7 +866,7 @@ source("C:/Users/phug7649/Desktop/TXTBIN/R-scripts/functions/point_euclid.r")
 # aaaa<-am(file)
 
 #write.table(akro.parameters,"control.txt",row.names=F,col.names=F)  
-k.out<-read.csv("C:/Users/phug7649/Desktop/kmeans/Vince_centroids/5_50/f1.07 18_class.txt",header=T,sep="")
+k.out<-read.csv("C:/Users/phug7649/Desktop/kmeans/Vince_centroids/5_50/f1.05 17_class.txt",header=T,sep="")
 k.out<-read.csv("C:/Users/phug7649/Desktop/kmeans/Vince_centroids/5_50/cent1_05_17.csv",header=T,sep="")
 cent1_05_17
 file<-read.csv("C:\\Users\\phug7649\\Desktop\\kmeans\\Vince_centroids\\5_50\\vince_m3_am.csv",header=T,sep="")
@@ -980,6 +980,8 @@ value<-as.numeric(for.image[,2]+for.image[,3]+for.image[,4]+for.image[,5]+for.im
 ordersum<-as.numeric(for.image[,2])+as.numeric(for.image[,3])+as.numeric(for.image[,4])+as.numeric(for.image[,5])+as.numeric(for.image[,6])+as.numeric(for.image[,7])+as.numeric(for.image[,8])+as.numeric(for.image[,9])+as.numeric(for.image[,10])+as.numeric(for.image[,11])+as.numeric(for.image[,12])
 for.image$ordersum<-ordersum
 
+##alex requested a simplified centroid table. Here is the code.
+
 cent.105.17<-read.csv("C:/Users/phug7649/Desktop/kmeans/Vince_centroids/5_50/cent1_05_17.csv", header=T,sep=",")
 mean<-colMeans(cent.105.17[2:ncol(cent.105.17)])
 sx<-cov(cent.105.17[2:ncol(cent.105.17)])
@@ -1000,3 +1002,55 @@ hc.all<-hclust(dist(vince[c(2:ncol(vince))]), "ward")
 pdf("C:\\Users\\phug7649\\Desktop\\TXTBIN\\vdendraw.pdf", width=40, height=15)
 plot(hc.all, hang=-1,labels=vince[,1],main="Dendrogram of all the clusters using raw data")
 dev.off()
+
+k.out.double=rbind(k.out,k.out)
+plotting<-cbind(plotting,k.out.double$MaxCls)
+colnames(plotting)[4]<-"clusters"
+head(plotting)
+
+##the reset button
+plotting<-plotting[,1:3]
+
+pdf("C:\\Users\\phug7649\\Desktop\\TXTBIN\\17xplot.pdf", width=40, height=15)
+ggplot(plotting, aes(x=prin1, y=prin2,colour=clusters)) +
+  geom_point(shape = 20,size=10,alpha=.5)
+
+dev.off()
+
+##Adding centroid data to the overall dataset.
+colnames(vince.merge3)<-colnames(cent.105.17)
+vince.merge3$class<-k.out$MaxCls
+
+
+pc.reduced<-rbind(cent.105.17,vince.merge3)
+
+##making principal components
+
+comps<-princomp(pc.reduced[,2:ncol(pc.reduced)],cor=TRUE)
+p.red.scores<-comps$scores
+pc.reduced<-cbind(pc.reduced,p.red.scores)
+
+##covariance matrix
+
+covar.pc<-cov(p.red.scores[,2:4])
+
+##plotting data with centroids
+
+pdf("C:\\Users\\phug7649\\Desktop\\TXTBIN\\17xfancyplot.pdf", width=40, height=15)
+ggplot(pc.reduced, aes(x=Comp.1, y=Comp.2,colour=class)) +
+  theme_bw()+
+  geom_point(shape = 20,size=10,alpha=.5)+
+  #geom_point(data=pc.reduced[1:17,],aes(x=Comp.1,y=Comp.2),colour="black",size=100,alpha=.05,inherit.aes=FALSE)+
+  geom_point(data=pc.reduced[1:17,],aes(x=Comp.1,y=Comp.2,colour=class),size=10,shape=2,inherit.aes=FALSE)
+dev.off()
+
+pdf("C:\\Users\\phug7649\\Desktop\\TXTBIN\\17xfancyplotII.pdf", width=40, height=15)
+ggplot(pc.reduced, aes(x=Comp.1, y=Comp.2,colour=class)) +
+  theme_bw()+
+  geom_point(shape = 20,size=10,alpha=.5)+
+  #geom_point(data=pc.reduced[1:17,],aes(x=Comp.1,y=Comp.2),colour="black",size=100,alpha=.05,inherit.aes=FALSE)+
+  geom_text(data=pc.reduced[1:17,],aes(x=Comp.1,y=Comp.2,label=class),size=10,inherit.aes=FALSE)
+dev.off()
+vince.ct<-vince[,2:ncol(vince)]
+cent.thin(rbind(vince.ct,vince.ct))
+#czrsum<-rowSums(vince)
