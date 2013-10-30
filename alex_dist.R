@@ -12,7 +12,7 @@ vince.comp.scores<-vince.comp$x
 #check<-vince.doub[1:nrow(vince),]
 #identical(check,vince)##checking to see if the doubling step had worked.
 #spare<-as.data.frame(cbind(vince[,1],vince.final))
-spare<-as.data.frame(cbind(vince[,1],vince.comp.scores))
+spare<-as.data.frame(cbind(vince[,1],vince.comp.scores[,c(1:20)]))
 
 
 #remove factors from vince
@@ -80,20 +80,33 @@ pdf()
 
 min.dist=0
 
-# while (min.dist < dc){
+dismat<-as.matrix(dist(spare))
+diag(dismat)<-NA
+itnumber<-nrow(spare)
+original<-spare
+
+while (min.dist < dc){
   
-  dismat<-as.matrix(dist(spare))
-  diag(dismat)<-NA
+  plot(spare[,1],spare[,2],xlim=c(-3,3),ylim=c(-3,5),main=new.name)
+  #points(original[,1],original[,2],colour=9)
   min.dismat<-arrayInd(which.min(dismat),dim(dismat))
-#   max.dismat<-arrayInd(which.max(dismat),dim(dismat))
-#   str(min.dismat)
-#   min.dismat[1]
-#   min.dismat[2]
-#   a<-ncol(spare)
+  
+#
+  itnumber<-itnumber-1
+  message(itnumber)
  
   #spare[min.dismat[1],2:a]<-(spare[min.dismat[2],2:ncol(spare)]+spare[min.dismat[1],2:ncol(spare)])/2 
   # The new, averaged, centroid
   average<-(spare[min.dismat[1],]+spare[min.dismat[2],])/2
+  
+  source1<-(spare[min.dismat[1],])
+  source2<-(spare[min.dismat[2],])
+  
+  
+  points(source1[1],source1[2],col="blue")
+  points(source2[1],source2[2],col="blue")
+  
+  points(average[1],average[2],col=10)
   n=colnames(dismat)[min.dismat]
 #   n.2=colnames(dismat)[min.dismat[2]]
   
@@ -105,52 +118,22 @@ min.dist=0
   new.name<-paste0(concat[min.dismat[1]],"-",concat[min.dismat[2]])
   spare=rbind(spare, average)
   rownames(spare)[nrow(spare)] <- new.name
+
+  
+  
   
   ###spare[min.dismat[1],]<-average##check for a factor column, if there is one, you have to start at column 2
   
   #spare[min.dismat[1],2:ncol(spare)]<-(re.fac[min.dismat[2],]+re.fac[min.dismat[1],])/2#average of closest points in euclidean space
   
-  
-#   message(new.name)
-  
-  #Remove the old names
-#   concat=concat[-min.dismat[1]]
-#   concat=concat[-min.dismat[2]]
-#   
-#   # Add the new name to the end of the vector
-#   concat=c(concat,new.name)
-#   
-  ###concat[min.dismat[1]]<-newline
+  dismat<-as.matrix(dist(spare))
+  diag(dismat)<-NA
 
   min.dist=min(dismat, na.rm=TRUE)
-  message(min.dist)
-  
-  
-  #concat[min.dismat[1]] <- paste0(concat[min.dismat[2]], "-", concat[min.dismat[1]])#stick names together
-  
-#   spare[min.dismat[2],]<-NA
-#   concat[min.dismat[2]]<-NA
-#   
-#   
-#   spare<-na.exclude(spare)
-#   concat<-na.exclude(concat)
-  
-#   re.fac<-spare[,2:ncol(spare)]
-  #making an active plot
-#   plot(spare1[,1],spare1[,2],xlim=c(-3,3),ylim=c(-1,5))
-#   points(spare[,1],spare[,2],col=10)  
-#   spare1<-spare
-  
- 
-#   dcII<-which.min(dismat)*factor
-#   sum<-dcII-dc
-#   b<-b-1
-#   message(b, " rows remaining")
-  rm(min.dismat)
-  rm(average)
-
-   
-  
+  message(min.dist) 
+  points(average[1],average[2],col=10)
+ #dismat<-as.matrix(dist(spare)) 
+  message(n)
 }
 
 
@@ -158,7 +141,7 @@ min.dist=0
 # #120,261
 # 
 # ##this algorithm is banging the previous concatinated object into the line instead of the new row.
-# dev.off()
+dev.off()
 # nrow(spare)
 # 
 # ##Alex wants to concatinate the names of the soil orders so he can see what is related to what.
