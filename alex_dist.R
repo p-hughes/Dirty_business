@@ -49,6 +49,7 @@ spare<-scale(spare[2:ncol(spare)])
 ## spare without the factor column
 dist.vince<-dist(spare) ## distance matrix of all the soil groups
 dc<-mean(dist.vince) ##mean of distances (I will use this as my completion criterion until told otherwise)
+#dc<-10###i had better change this back after.
 
 #arrayInd(which.max(dist(vince)),dim(dist(vince)))
 #dist(vince)
@@ -79,35 +80,42 @@ rownames(spare)=concat
 pdf()
 
 min.dist=0
+#create a second object to mess with
+tree<-as.matrix(spare[,1])
 
 dismat<-as.matrix(dist(spare))
 diag(dismat)<-NA
 itnumber<-nrow(spare)
 original<-spare
+n<-"first iteration"
+factor=.7
+dc<-dc*factor
 
 while (min.dist < dc){
   
-  plot(spare[,1],spare[,2],xlim=c(-3,3),ylim=c(-3,5),main=new.name)
+  plot(spare[,1],spare[,2],xlim=c(-3,3),ylim=c(-3,5),main=n)
   #points(original[,1],original[,2],colour=9)
   min.dismat<-arrayInd(which.min(dismat),dim(dismat))
   
-#
-  itnumber<-itnumber-1
+  itnumber<-itnumber-1#the number of possible remaining iterations
   message(itnumber)
  
   #spare[min.dismat[1],2:a]<-(spare[min.dismat[2],2:ncol(spare)]+spare[min.dismat[1],2:ncol(spare)])/2 
   # The new, averaged, centroid
   average<-(spare[min.dismat[1],]+spare[min.dismat[2],])/2
   
+  
   source1<-(spare[min.dismat[1],])
   source2<-(spare[min.dismat[2],])
-  
-  
+    
   points(source1[1],source1[2],col="blue")
   points(source2[1],source2[2],col="blue")
   
   points(average[1],average[2],col=10)
   n=colnames(dismat)[min.dismat]
+  
+  #creating the tree database
+  tree
 #   n.2=colnames(dismat)[min.dismat[2]]
   
   #remove the old rows
@@ -115,7 +123,8 @@ while (min.dist < dc){
 #   spare=spare[!rownames(spare) %in% n.1,]
   
   #rbind the new centroid to spare
-  new.name<-paste0(concat[min.dismat[1]],"-",concat[min.dismat[2]])
+  new.name<-paste0(n, collapse="-")
+  #new.name<-paste0(concat[min.dismat[1]],"-",concat[min.dismat[2]])
   spare=rbind(spare, average)
   rownames(spare)[nrow(spare)] <- new.name
 
