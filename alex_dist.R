@@ -114,8 +114,8 @@ while (min.dist < dc){
   points(average[1],average[2],col=10)
   n=colnames(dismat)[min.dismat]
   
-  #creating the tree database
-  tree
+  #creating the tree database---this bit is broken!
+  tree.1<-
 #   n.2=colnames(dismat)[min.dismat[2]]
   
   #remove the old rows
